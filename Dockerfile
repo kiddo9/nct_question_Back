@@ -21,7 +21,7 @@ FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=frontend-build /app/build /usr/share/nginx/html
+COPY --from=frontend-build /app /usr/share/nginx/html
 
 COPY --from=backend-build /app /app
 
