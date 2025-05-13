@@ -1,0 +1,102 @@
+import React, { useState } from "react";
+import Authentication from "../../components/security/Authentication";
+
+const Verify = () => {
+  const [Input, setInput] = useState(["", "", "", "", "", ""]);
+
+  const handleInput = (e, index) => {
+    const newInputs = [...Input];
+    newInputs[index] = e.target.value;
+
+    if (index !== "") {
+      const next = e.target.nextElementSibling;
+
+      if (next) {
+        next.focus();
+      }
+    } else {
+      return (e.target.value = "");
+    }
+
+    setInput(newInputs);
+  };
+
+  const handleKeyUp = (e) => {
+    const target = e.target;
+    const key = e.key.toLowerCase();
+
+    if (key == "backspace" || key == "delete") {
+      target.value = "";
+      const prev = target.previousElementSibling;
+      if (prev) {
+        prev.focus();
+      }
+      return;
+    }
+  };
+
+  const otp = Input.join("");
+  return (
+    <div className=" h-screen pb-10 pt-20 flex mx-auto">
+      {/* <Authentication /> */}
+      <div className="rounded-lg py-5 transition-opacity duration-300 ease-in shadow-2xl px-3 h-[27rem] bg-white mx-auto">
+        <div className="logo-container flex items-center">
+          <img
+            src="/Screenshot 2025-04-30 at 2.11.36 PM.png"
+            alt="Company Logo"
+            className="w-20 h-20 object-cover rounded-full"
+          />
+          <h6 className="mb-0 text-xl text-dark">Neo Clouds Technologies</h6>
+        </div>
+
+        <p className="text-center font-bold">Auth Verification</p>
+        <div className="gap-2 mt-2 flex text-center flex-row justify-center py-3 px-3">
+          {Input.map((input, index) => (
+            <input
+              onChange={(e) => handleInput(e, index)}
+              key={index}
+              value={input}
+              maxLength={1}
+              type="text"
+              onKeyUp={(e) => handleKeyUp(e)}
+              className="w-14 h-11 text-lg rounded-md text-center border-2 border-[#6699ff] text-[#6699ff] "
+            />
+          ))}
+        </div>
+
+        <div className="flex flex-col px-2 mt-10 gap-2">
+          <button
+            type="submit"
+            className="w-full bg-[#6699ff] text-white rounded-md py-2"
+          >
+            <i className="fas fa-sign-in-alt me-2"></i>Sign In
+          </button>
+          <button
+            type="submit"
+            className="w-full flex gap-4 justify-center items-center text-black rounded-md py-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
+            resend Token
+          </button>
+
+          <p className="text-center">00:44</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Verify;
