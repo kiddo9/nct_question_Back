@@ -6,7 +6,7 @@ WORKDIR /app
 COPY client/package*.json ./
 RUN npm install
 COPY client ./
-RUN cd client && npm run build
+RUN npm run build
 
 #stage two BUild the server side
 FROM node:18 AS backend-build
