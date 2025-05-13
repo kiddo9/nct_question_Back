@@ -1,30 +1,37 @@
-#using mulit stage dockerization
-#stage one Build the client side
+# Stage 1: Build React App
 FROM node:18 AS frontend-build
 
 WORKDIR /app
-COPY client/dist ./dist
+COPY client/package*.json ./client/
+RUN cd client && npm install
+COPY client ./client
+# RUN cd client && npm run build
 
-
-#stage two BUild the server side
+# Stage 2: Build Node.js Backend
 FROM node:18 AS backend-build
 
-WORKDIR /app
-COPY server/package*json ./
+WORKDIR /app/server
+COPY server/package*.json ./
 RUN npm install
 COPY server ./
 
-
+# Stage 3: NGINX + Backend
 FROM nginx:alpine
 
+# Copy NGINX config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=frontend-build /app /usr/share/nginx/html
+# Copy React build
+COPY --from=frontend-build /app/client/dist /usr/share/nginx/html
 
-COPY --from=backend-build /app /app
+# Copy backend files
+COPY --from=backend-build /app/server /app/server
 
+# Set working dir
 WORKDIR /app/server
-RUN apk add --no-cache nodejs npm 
+
+# Install Node.js to run backend (can also be separate container in Compose)
+RUN apk add --no-cache nodejs npm
 
 EXPOSE 80
 
