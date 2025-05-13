@@ -22,7 +22,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy React build
-COPY --from=frontend-build /app/client/dist /usr/share/nginx/html
+COPY --from=frontend-build /app/dist /usr/share/nginx/html
 
 # Copy backend files
 COPY --from=backend-build /app/server /app/server
