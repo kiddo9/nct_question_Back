@@ -25,7 +25,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=frontend-build /app/client/dist /usr/share/nginx/html
 
 # Copy backend files
-COPY --from=backend-build /app/server /app/server
+COPY --from=backend-build /app /app
 
 # Set working dir
 WORKDIR /app/server
