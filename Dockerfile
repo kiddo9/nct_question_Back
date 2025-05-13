@@ -30,4 +30,4 @@ RUN apk add --no-cache nodejs npm
 
 EXPOSE 80
 
-CMD sh -c "node app.js & nginx -g 'daemon off;'"
+CMD sh -c "npm start & nginx -g 'daemon off;'"
