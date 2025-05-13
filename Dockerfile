@@ -10,7 +10,7 @@ RUN cd client && npm run build
 # Stage 2: Build Node.js Backend
 FROM node:18 AS backend-build
 
-WORKDIR /app/server
+WORKDIR /app
 COPY server/package*.json ./
 RUN npm install
 COPY server ./
