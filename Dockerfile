@@ -29,6 +29,5 @@ WORKDIR /app/server
 RUN apk add --no-cache nodejs npm 
 
 EXPOSE 80
-EXPOSE 3000
 
 CMD sh -c "node app.js & nginx -g 'daemon off;'"
