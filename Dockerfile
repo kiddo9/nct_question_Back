@@ -3,27 +3,27 @@
 FROM node:18 AS frontend-build
 
 WORKDIR /app
-COPY client/package*.json ./client/
+COPY client/package*.json ./
 RUN cd client && npm install
-COPY client ./client
+COPY client ./
 RUN cd client && npm run build
 
 #stage two BUild the server side
 FROM node:18 AS backend-build
 
 WORKDIR /app
-COPY server/package*json ./server/
+COPY server/package*json ./
 RUN cd server && npm install
-COPY server ./server
+COPY server ./
 
 
 FROM nginx:alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=frontend-build /app/client/build /usr/share/nginx/html
+COPY --from=frontend-build /app/build /usr/share/nginx/html
 
-COPY --from=backend-build /app/server /app/server
+COPY --from=backend-build /app /app
 
 WORKDIR /app/server
 RUN apk add --no-cache nodejs npm 
