@@ -4,7 +4,7 @@ FROM node:18 AS frontend-build
 
 WORKDIR /app
 COPY client/package*.json ./
-RUN cd client && npm install
+RUN npm install
 COPY client ./
 RUN cd client && npm run build
 
@@ -13,7 +13,7 @@ FROM node:18 AS backend-build
 
 WORKDIR /app
 COPY server/package*json ./
-RUN cd server && npm install
+RUN npm install
 COPY server ./
 
 
