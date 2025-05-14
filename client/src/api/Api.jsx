@@ -3,9 +3,7 @@ import axios from "axios";
 let firstDomain = "https://cbtquestion-production.up.railway.app/api/v3/u/";
 
 const Api = axios.create({
-  baseURL:
-    firstDomain ||
-    "https://nctquestionback-production.up.railway.app/api/v3/u/",
+  baseURL: firstDomain,
   withCredentials: true,
 });
 

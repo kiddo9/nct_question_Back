@@ -12,6 +12,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
+  //const sitekeyone = "6LcLITorAAAAAD3awuWCg4U3-I2tMwIKXv9-Vpcm";
+  const sitekeytwo = "6LeOHzorAAAAACA9rLeBi5ZVWDMAKsu62BAoaNh9";
+
   const handleSubmittion = async () => {
     setLoading(true);
     try {
@@ -149,7 +152,7 @@ const Login = () => {
             </div>
             <div className="flex items-center mb-2">
               <ReCAPTCHA
-                sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+                sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY || sitekeytwo}
                 onChange={(token) => setCaptchaToken(token)}
               />
             </div>
