@@ -14,7 +14,7 @@ const useSectionHook = () => {
         return;
       }
 
-      toast.error("unable to fetch data");
+      toast.error(response.message);
     }
 
     getSections();

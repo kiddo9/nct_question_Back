@@ -3,12 +3,8 @@ import Table from "../components/Table";
 import Loader from "../components/Loader";
 
 const Index = () => {
-  const [loading, setLoading] = useState(false);
-
   return (
     <div>
-      {loading && <Loader />}
-
       <div className="mt-24">
         <header className="px-5 flex gap-6 flex-wrap items-center justify-between py-6">
           <p className="text-2xl font-medium">

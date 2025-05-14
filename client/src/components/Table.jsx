@@ -3,30 +3,24 @@ import Pagination from "./Pagination";
 import useQuestionHook from "../hooks/questionHook";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
+import TLoader from "./Loader";
 
 const Table = () => {
   const [Table, setTable] = useState([]);
-  const { question } = useQuestionHook();
-  const { questionGroups } = useQuestionGroupHook();
+  const { question, Loader } = useQuestionHook();
+  const { questionGroups } = useQuestionGroupHook(null);
   const { section } = useSectionHook();
-  const [perPage, setPerPage] = useState(10);
+  const perPage = 10;
 
   useEffect(() => {
     if (question.length > 0) {
       setTable(question.slice(0, perPage));
     }
-
-    const periodicCheck = setInterval(() => {
-      const per = localStorage.getItem("perPage");
-      if (parseInt(per) !== null) {
-        setPerPage(parseInt(per));
-      }
-    }, 1000);
-
-    return () => clearInterval(periodicCheck);
   }, [question, perPage]);
   return (
     <>
+      {Loader && <TLoader />}
+
       <div className="md:px-4 overflow-x-scroll Scroll md:overflow-x-hidden">
         <table className="w-[200%] sm:w-full border border-[#6699ff] shadow-lg">
           <thead>
@@ -51,7 +45,7 @@ const Table = () => {
                 <td className="px-2 py-10  text-center">
                   {questionGroups.map((groups) => {
                     if (data.q_group_id === groups.id) {
-                      return <p>{groups.title}</p>;
+                      return <p key={groups.id}>{groups.title}</p>;
                     }
                   })}
                 </td>

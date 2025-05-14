@@ -7,18 +7,20 @@ import React, { useState } from "react";
 import Warning from "../components/Warning";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
+import PLoader from "./../components/Loader";
 
 const Preview = () => {
   const { id } = useParams();
   const { opt } = useOpt();
-  const { getEachQuestion } = useQuestionHook(id);
+  const { getEachQuestion, Loader } = useQuestionHook(id);
   const { questionGroups } = useQuestionGroupHook();
   const { section } = useSectionHook();
   const [open, setOpen] = React.useState(false);
   const [Delete, setDelete] = useState(false);
 
   return (
-    <div className="mt-24">
+    <div className=" fixed z-50 bg-white inset-0 overflow-y-auto">
+      {Loader && <PLoader />}
       <div
         className={`fixed ${
           Delete == true ? "translate-y-0" : "-translate-y-[100%]"
@@ -35,7 +37,7 @@ const Preview = () => {
           <i>Question Preview</i>
         </h1>
 
-        <BackButton />
+        <BackButton path={"/admin/user/dash"} />
       </header>
 
       <div className="mt-5 px-5">

@@ -30,7 +30,7 @@ COPY --from=backend-build /app /app
 # Set working dir
 WORKDIR /app/server
 
-# Install Node.js to run backend (can also be separate container in Compose)
+# Install Node.js to run backend
 RUN apk add --no-cache nodejs npm
 
 EXPOSE 80

@@ -3,7 +3,6 @@ import Index from "./pages/Index";
 import Nav from "./components/Nav";
 import Create from "./pages/create";
 import Notfound from "./components/Notfound";
-import { useEffect, useState } from "react";
 import Loader from "./components/Loader";
 import Login from "./pages/Auth/Login";
 import Verify from "./pages/Auth/verify";
@@ -12,26 +11,13 @@ import { Admins } from "./pages/Admins";
 import CreateAdmins from "./pages/CreateAdmins";
 import Authentication from "./components/security/Authentication";
 import Preview from "./pages/Preview";
+import { Suspense } from "react";
 
 function App() {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    function rediect() {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-    }
-    rediect();
-  }, []);
-
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <BrowserRouter>
+      <BrowserRouter>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route index element={<Auth />} />
             <Route
@@ -68,8 +54,8 @@ function App() {
 
             <Route path="*" element={<Notfound />} />
           </Routes>
-        </BrowserRouter>
-      )}
+        </Suspense>
+      </BrowserRouter>
     </>
   );
 }

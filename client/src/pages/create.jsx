@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import Loader from "../components/Loader";
+import PLoader from "../components/Loader";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
 import Api from "../api/Api";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../components/BackButton";
 
 const Create = () => {
   const [group, setGroup] = useState("");
@@ -26,9 +27,9 @@ const Create = () => {
   const [searchGroup, setSearchGroup] = useState("");
 
   //set loader
-  const [loader, setLoader] = useState(false);
+  const [Loader, setLoader] = useState(false);
 
-  const { questionGroups } = useQuestionGroupHook();
+  const { questionGroups, loader } = useQuestionGroupHook();
 
   const { section } = useSectionHook();
 
@@ -105,14 +106,17 @@ const Create = () => {
   };
 
   return (
-    <div className="Scroll pb-96 md:px-24">
+    <div className="Scroll fixed z-50 bg-white inset-0 overflow-y-auto pb-96 md:px-24">
       <ToastContainer />
-      {loader && <Loader preload={true} />}
-      <div className="mt-24">
+      {loader && <PLoader />}
+      {Loader && <PLoader preload={true} />}
+      <div className="">
         <header className="px-5 flex gap-6 flex-wrap items-center justify-between py-6">
           <h1 className="text-2xl font-medium">
             <i>Create Questions</i>
           </h1>
+
+          <BackButton path={"/admin/user/dash"} />
         </header>
 
         <div className="mx-3 flex flex-col md:gap-5">
@@ -292,7 +296,7 @@ const Create = () => {
                 <select
                   name=""
                   id=""
-                  className="border-[#6699ff] border-2 cursor-pointer px-5 py-3 flex  w-full justify-between"
+                  className="border-[#6699ff] rounded-xl border-2 cursor-pointer px-5 py-3 flex  w-full justify-between"
                   onChange={(e) => setType(e.target.value)}
                 >
                   <option>select type</option>
@@ -408,7 +412,7 @@ const Create = () => {
           <button
             onClick={() => handleQuestionCreation()}
             type="submit"
-            className="bg-[#6699ff] py-2 text-center mt-10 flex justify-center items-center gap-4 text-white cursor-pointer"
+            className="bg-[#6699ff] rounded-xl py-2 text-center mt-10 flex justify-center items-center gap-4 text-white cursor-pointer"
           >
             Upload{" "}
             <svg

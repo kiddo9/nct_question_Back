@@ -105,13 +105,13 @@ const Edit = ({ id }) => {
   };
 
   return (
-    <div className=" px-6 md:px-24">
+    <div className=" md:px-24">
       <ToastContainer />
       {loader && <Loader preload={true} />}
-      <div className="mt-18 bg-white absolute inset-0 mx-auto overflow-y-scroll pb-6 h-[40rem] Scroll">
+      <div className="mt-18 bg-white absolute left-10 px-5 md:px-10 right-10 rounded-xl  mx-auto overflow-y-scroll pb-6 h-[40rem] ">
         <header className="px-5 flex gap-6 flex-wrap items-center justify-between py-6">
           <h1 className="text-2xl font-medium">
-            <i>Create Questions</i>
+            <i>Edit Question</i>
           </h1>
         </header>
 
@@ -121,32 +121,11 @@ const Edit = ({ id }) => {
               <label htmlFor="group" className="text-lg font-medium">
                 Group
               </label>
-              <p
-                onClick={() => setDropGroup(!dropGroup)}
-                className="border-[#6699ff] border-2 cursor-pointer px-5 py-3 flex justify-between"
-              >
-                {group == "" ? "Select Group" : group}{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </p>
-              <div
+              <select
                 name=""
                 id=""
-                className={`border-2 border-[#6699ff] ${
-                  dropGroup == true ? "h-64" : "h-0"
-                } overflow-hidden transition-all duration-300 ease-in shadow-2xl`}
+                className="border-[#6699ff] w-full border-2 cursor-pointer rounded-xl px-5 py-3 "
+                value={getEachQuestion.q_group_id}
               >
                 <input
                   type="text"
@@ -156,64 +135,40 @@ const Edit = ({ id }) => {
                   }}
                 />
 
-                <div className="flex flex-col gap-3 px-3 mt-5 Scroll h-44 pb-10 overflow-y-auto">
-                  {questionGroups
-                    .filter((items) => {
-                      return items.title.toLowerCase().includes(searchGroup);
-                    })
-                    .map((group) => (
-                      <div
-                        className={`${
-                          GroupId == group.id
-                            ? "bg-[#6699ff] shadow-2xl shadow-gray-500 text-white rounded-lg"
-                            : ""
-                        } cursor-pointer px-3 hover:bg-[#6699ff] hover:text-white duration-300 hover:shadow-2xl ease-in-out hover:rounded-lg py-2`}
-                        onClick={() => {
-                          setGroup(group.title);
-                          setDropGroup(!dropGroup);
-                          setGroupId(group.id);
-                          setSearchGroup("");
-                        }}
-                        key={group.id}
-                      >
-                        {group.title}
-                      </div>
-                    ))}
-                </div>
-              </div>
+                {questionGroups
+                  .filter((items) => {
+                    return items.title.toLowerCase().includes(searchGroup);
+                  })
+                  .map((group) => (
+                    <option
+                      className={`${
+                        GroupId == group.id
+                          ? "bg-[#6699ff] shadow-2xl shadow-gray-500 text-white rounded-lg"
+                          : ""
+                      } cursor-pointer px-3 hover:bg-[#6699ff] hover:text-white duration-300 hover:shadow-2xl ease-in-out hover:rounded-lg py-2`}
+                      onClick={() => {
+                        setGroup(group.title);
+                        setDropGroup(!dropGroup);
+                        setGroupId(group.id);
+                        setSearchGroup("");
+                      }}
+                      key={group.id}
+                      value={group.id}
+                    >
+                      {group.title}
+                    </option>
+                  ))}
+              </select>
             </div>
 
-            <div className="mt-5 md:mt-0 md:w-full">
+            <div className="mt-5 md:mt-0 md:w-full flex flex-col">
               <label htmlFor="quater" className="text-lg font-medium">
                 Quater
               </label>
-              <p
-                onClick={() => setDropQuater(!dropQuater)}
-                className="border-[#6699ff] border-2 cursor-pointer px-5 py-3 flex justify-between"
-              >
-                {quater == "" ? "Select Quater" : quater}{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </p>
-
-              <div
+              <select
                 name=""
                 id=""
-                className={`border-2 border-[#6699ff] ${
-                  dropQuater == true ? "h-64" : "h-0"
-                } overflow-hidden transition-all duration-300 ease-in shadow-2xl`}
+                className="mt-2 border-[#6699ff] w-full border-2 cursor-pointer rounded-xl px-5 py-3 "
               >
                 <input
                   type="text"
@@ -223,34 +178,32 @@ const Edit = ({ id }) => {
                   }}
                 />
 
-                <div className="flex flex-col gap-2 px-3 mt-5 Scroll h-44 overflow-y-auto">
-                  {section
-                    .filter((items) => {
-                      return items.section_name
-                        .toLowerCase()
-                        .includes(searchGroup);
-                    })
-                    .map((group) => (
-                      <div
-                        className={`${
-                          QuaterId == group.id ||
-                          getEachQuestion.section_id == group.id
-                            ? "bg-[#6699ff] shadow-2xl shadow-gray-500 text-white rounded-lg"
-                            : ""
-                        } cursor-pointer px-3 hover:bg-[#6699ff] hover:text-white duration-300 hover:shadow-2xl ease-in-out hover:rounded-lg py-2`}
-                        onClick={() => {
-                          setQuater(group.section_name);
-                          setDropQuater(!dropQuater);
-                          setSearchGroup("");
-                          setQuaterId(group.id);
-                        }}
-                        key={group.id}
-                      >
-                        {group.section_name}
-                      </div>
-                    ))}
-                </div>
-              </div>
+                {section
+                  .filter((items) => {
+                    return items.section_name
+                      .toLowerCase()
+                      .includes(searchGroup);
+                  })
+                  .map((group) => (
+                    <option
+                      className={`${
+                        QuaterId == group.id ||
+                        getEachQuestion.section_id == group.id
+                          ? "bg-[#6699ff] shadow-2xl shadow-gray-500 text-white rounded-lg"
+                          : ""
+                      } cursor-pointer px-3 hover:bg-[#6699ff] hover:text-white duration-300 hover:shadow-2xl ease-in-out hover:rounded-lg py-2`}
+                      onClick={() => {
+                        setQuater(group.section_name);
+                        setDropQuater(!dropQuater);
+                        setSearchGroup("");
+                        setQuaterId(group.id);
+                      }}
+                      key={group.id}
+                    >
+                      {group.section_name}
+                    </option>
+                  ))}
+              </select>
             </div>
           </div>
 

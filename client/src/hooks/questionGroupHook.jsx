@@ -2,21 +2,25 @@ import React, { useEffect, useState } from "react";
 import Api from "../api/Api";
 import { toast } from "react-toastify";
 
-export const useQuestionGroupHook = () => {
+export const useQuestionGroupHook = (id) => {
   const [questionGroups, setQuestions] = useState([]);
-  const [eachQuestionGroup, setEachQuestions] = useState([]);
+  const [eachQuestionGroup, setEachQuestions] = useState({});
+  const [loader, setLoader] = useState(false);
   useEffect(() => {
+    setLoader(true);
     const fetchQuestionsGroup = async () => {
       try {
         const fetchQuestionsGroup = await Api.get("/questions/group");
         const response = fetchQuestionsGroup.data;
-        if (response.status !== true) {
-          toast.error("unable to fetch request");
+        if (response.status == true) {
+          setQuestions(response.questionGroups);
           return;
         }
-        setQuestions(response.questionGroups);
+        toast.error(response.message);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoader(false);
       }
     };
 
@@ -24,12 +28,12 @@ export const useQuestionGroupHook = () => {
   }, []);
 
   useEffect(() => {
-    const fetchEachQuestionsGroup = async ({ id }) => {
+    const fetchEachQuestionsGroup = async () => {
       try {
         const fetchEachQuestionsGroup = await Api.get("/questions/group/" + id);
         const response = fetchEachQuestionsGroup.data;
         if (response.status !== true) {
-          toast.error("unable to fetch request");
+          //toast.error(response.message);
           return;
         }
         setEachQuestions(response.questionGroups);
@@ -39,6 +43,6 @@ export const useQuestionGroupHook = () => {
     };
 
     fetchEachQuestionsGroup();
-  }, []);
-  return { questionGroups, eachQuestionGroup };
+  }, [id]);
+  return { questionGroups, eachQuestionGroup, loader };
 };

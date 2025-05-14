@@ -7,10 +7,10 @@ const Warning = ({ Decline, Accept }) => {
         <p className="text-red-500 font-bold">
           Are you sure you want to delete?
         </p>
-        <div className="flex justify-between w-96 px-10 mt-10">
+        <div className="flex justify-between w-96 gap-10 px-10 mt-10">
           <button
             onClick={Accept}
-            className="bg-red-500 text-white w-20 px-4 py-2 rounded-lg"
+            className="bg-red-500 text-white w-44 px-4 py-2 rounded-lg"
           >
             Yes
           </button>
