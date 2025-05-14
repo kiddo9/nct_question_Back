@@ -51,16 +51,7 @@ export const createQuestions = async (req, res) => {
   } = req.body;
 
   try {
-    if (
-      !type ||
-      !question ||
-      !mark ||
-      !options ||
-      !numberOfOptions ||
-      !QuaterId ||
-      !answer ||
-      !GroupId
-    ) {
+    if (!type || !question || !mark || !QuaterId || !answer || !GroupId) {
       return res.json({ status: false, message: "unable to create question " });
     }
 
@@ -111,13 +102,11 @@ export const createQuestions = async (req, res) => {
       }
     }
 
-    return res
-      .status(201)
-      .json({
-        status: true,
-        Id: createQuestion.id,
-        message: "Question has been created",
-      });
+    return res.status(201).json({
+      status: true,
+      Id: createQuestion.id,
+      message: "Question has been created",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ status: false, message: "internal error" });
