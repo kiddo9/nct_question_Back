@@ -111,7 +111,13 @@ export const createQuestions = async (req, res) => {
       }
     }
 
-    return res.status(201).json({ status: true, Id: createQuestion.id });
+    return res
+      .status(201)
+      .json({
+        status: true,
+        Id: createQuestion.id,
+        message: "Question has been created",
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ status: false, message: "internal error" });
