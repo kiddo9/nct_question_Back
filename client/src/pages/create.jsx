@@ -311,7 +311,6 @@ const Create = () => {
                   >
                     True or False
                   </option>
-                  <option value="F">Fill the blanks</option>
                 </select>
               </div>
 
