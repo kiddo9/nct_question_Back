@@ -40,7 +40,7 @@ const Nav = ({ children }) => {
   return (
     <div className="">
       {loader && <Loader />}
-      <header className="flex justify-between items-center p-4 bg-white sticky top-0 left-0 right-0 bg-whitez-10">
+      <header className="flex justify-between items-center p-4 bg-white sticky top-0 left-0 right-0  z-10 shadow-xl">
         <div className="flex items-center gap-4">
           <img
             src="https://techneo.ng/wp-content/uploads/2023/04/Artboard-1.png"
