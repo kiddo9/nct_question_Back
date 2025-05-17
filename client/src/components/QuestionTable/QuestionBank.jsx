@@ -4,6 +4,7 @@ import QuestionPagination from './QuestionPagination';
 import QuestionTable from './QuestionTable';
 import useQuestionHook from '../../hooks/questionHook';
 import { useQuestionGroupHook } from '../../hooks/questionGroupHook';
+import AddButton from '../AddButton';
 // Sample data 
 
 
@@ -86,15 +87,12 @@ export default function QuestionBank() {
 
 
   return (
-    <div className="rounded-lg p-10 max-w-[calc(100vw-245px)]">
-      <div className="flex flex-col space-y-4 bg-white rounded-lg shadow px-10 py-6">
+    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:max-w-[calc(100vw-245px)]">
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow px-10 py-6">
         {/* Header section */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-(--primary-color)">Question Bank</h2>
-          <button className="bg-blue-600 transition duration-300 ease-in hover:bg-(--primary-color) cursor-pointer text-white px-4 py-2 rounded-md flex items-center space-x-2">
-            <Plus size={16} />
-            <span>Add Question</span>
-          </button>
+          <AddButton>Add Question</AddButton>
         </div>
         
         {/* Search and filters */}
