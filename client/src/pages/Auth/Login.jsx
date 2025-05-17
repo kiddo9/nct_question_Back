@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { ToastContainer, toast } from "react-toastify";
 import Api from "../../api/Api";
@@ -11,6 +11,22 @@ const Login = () => {
   const [captchaToken, setCaptchaToken] = useState("");
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
+
+  useEffect(() => {
+    const checktoken = async () => {
+      try {
+        const send = await Api.get("/");
+        if (send.data.status == true) {
+          nav("/admin/user/dash");
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    checktoken();
+  }, [nav]);
 
   const sitekeyone = "6LcLITorAAAAAD3awuWCg4U3-I2tMwIKXv9-Vpcm";
   //const sitekeytwo = "6LeOHzorAAAAACA9rLeBi5ZVWDMAKsu62BAoaNh9";
@@ -28,7 +44,7 @@ const Login = () => {
       if (responseData.status == true) {
         toast.success(responseData.message);
         setTimeout(() => {
-          nav("/auth/admin/verify");
+          nav(`/auth/admin/verify?vt=${responseData.token}`);
         }, 3000);
         return;
       }

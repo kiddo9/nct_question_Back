@@ -1,7 +1,11 @@
 import express from "express";
 const router = express.Router();
 
-import { loginController } from "../controllers/Auth/auth.js";
+import {
+  loginController,
+  Logout,
+  otpValidation,
+} from "../controllers/Auth/auth.js";
 import {
   createQuestions,
   getAllQuestions,
@@ -12,18 +16,24 @@ import {
   getQuestionGroupById,
 } from "../controllers/questionGroup.js";
 import tokenVerify from "../middleware/tokenValidation.js";
+import credValidation from "../middleware/credValidation.js";
 import { getAllSections } from "../controllers/sections.js";
 import { options } from "../controllers/opt.js";
 
-router.get("/", tokenVerify);
+router.get("/", tokenVerify, async (req, res) => {
+  res.status(200).json({ status: true });
+});
 router.post("/login", loginController);
-router.get("/questions/bank", getAllQuestions);
+router.get("/questions/bank", tokenVerify, getAllQuestions);
 
-router.get("/questions/group", getAllQuestionGroups);
-router.get("/sections", getAllSections);
-router.get("/opt", options);
-router.get("/questions/group/:id", getQuestionGroupById);
-router.get("/question/bank/:id", getEachQuestionById);
+router.get("/questions/group", tokenVerify, getAllQuestionGroups);
+router.get("/sections", tokenVerify, getAllSections);
+router.get("/opt", tokenVerify, options);
+router.get("/validate", credValidation);
+router.get("/questions/group/:id", tokenVerify, getQuestionGroupById);
+router.get("/question/bank/:id", tokenVerify, getEachQuestionById);
 
-router.post("/create/questions", createQuestions);
+router.post("/auth/validate", otpValidation);
+router.post("/create/questions", tokenVerify, createQuestions);
+router.post("/logout", tokenVerify, Logout);
 export default router;

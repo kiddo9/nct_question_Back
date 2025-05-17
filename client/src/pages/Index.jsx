@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import Table from "../components/Table";
 import Loader from "../components/Loader";
 
 const Index = () => {
   return (
     <div>
-      <div className="mt-24">
+      <div className="">
         <header className="px-5 flex gap-6 flex-wrap items-center justify-between py-6">
-          <p className="text-2xl font-medium">
-            <i>Question Bank List</i>
-          </p>
+          <p className="text-2xl font-medium">Question Bank</p>
           <a
             className="text-white bg-[#6699ff] gap-2 items-center flex rounded-lg drop-shadow-gry-300 drop-shadow-2xl py-2 px-3"
             href="/admin/user/create"

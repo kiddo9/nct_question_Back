@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Index from "./pages/Index";
 import Nav from "./components/Nav";
 import Create from "./pages/create";
@@ -24,17 +24,24 @@ function App() {
               path="/admin/user/*"
               element={
                 <>
-                  <Nav />
-                  {/* <Authentication> */}
-                  <Routes>
-                    <Route path="/dash" element={<Index />} />
-                    <Route path="/create" element={<Create />} />
-                    <Route path="/admins" element={<Admins />} />
-                    <Route path="/create_admin" element={<CreateAdmins />} />
-                    <Route path="/preview/:id" element={<Preview />} />
-                    <Route path="*" element={<Notfound />} />
-                  </Routes>
-                  {/* </Authentication> */}
+                  <Authentication>
+                    <Nav>
+                      <Routes>
+                        <Route path="/dash" element={<Index />} />
+                        <Route path="/create" element={<Create />} />
+                        <Route path="/admins" element={<Admins />} />
+                        <Route path="/section" element={<Admins />} />
+                        <Route path="/roles" element={<Admins />} />
+                        <Route path="/groups" element={<Admins />} />
+                        <Route
+                          path="/create_admin"
+                          element={<CreateAdmins />}
+                        />
+                        <Route path="/preview/:id" element={<Preview />} />
+                        <Route path="*" element={<Notfound />} />
+                      </Routes>
+                    </Nav>
+                  </Authentication>
                 </>
               }
             />

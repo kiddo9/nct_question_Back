@@ -9,10 +9,9 @@ const Authentication = ({ children }) => {
       const requestAuth = await Api.get(`/`);
 
       if (requestAuth.data.status !== true) {
-        nav("/admin/user/dash");
+        nav("/auth/admin/login");
         return;
       }
-      nav("/auth/admin/login");
     } catch (error) {
       nav("/auth/admin/login");
       console.log(error);

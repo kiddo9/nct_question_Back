@@ -1,8 +1,16 @@
 import React, { useState } from "react";
-import Authentication from "../../components/security/Authentication";
+import Loader from "../../components/Loader";
+import useValidation from "../../components/security/Validations";
+import { useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import Api from "../../api/Api";
+import { useNavigate } from "react-router-dom";
 
 const Verify = () => {
   const [Input, setInput] = useState(["", "", "", "", "", ""]);
+  const { load, email, id, type } = useValidation();
+  const [loader, setLoader] = useState();
+  const nav = useNavigate();
 
   const handleInput = (e, index) => {
     const newInputs = [...Input];
@@ -34,11 +42,46 @@ const Verify = () => {
       return;
     }
   };
-
   const otp = Input.join("");
+
+  useEffect(() => {
+    if (otp.length == 6) {
+      const submittion = async () => {
+        setLoader(true);
+        try {
+          const rerquestTo = await Api.post("/auth/validate", {
+            email,
+            id,
+            type,
+            otp,
+          });
+
+          const response = rerquestTo.data;
+
+          if (response.status !== true) {
+            toast.error(response.message);
+            setInput(["", "", "", "", "", ""]);
+            return;
+          }
+
+          nav("/admin/user/dash");
+        } catch (error) {
+          console.log(error);
+          toast.error("An error occourd");
+        } finally {
+          setLoader(false);
+        }
+      };
+
+      submittion();
+    }
+  }, [otp.length, email, nav, id, type, otp]);
+
   return (
     <div className=" h-screen pb-10 pt-20 flex mx-auto">
-      {/* <Authentication /> */}
+      {load && <Loader />}
+      {loader && <Loader preload={true} />}
+      <ToastContainer />
       <div className="rounded-lg py-5 transition-opacity duration-300 ease-in shadow-2xl px-3 h-[27rem] bg-white mx-auto">
         <div className="logo-container flex items-center">
           <img
