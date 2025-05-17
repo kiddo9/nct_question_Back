@@ -6,7 +6,7 @@ import Loader from "./Loader";
 
 const Nav = ({ children }) => {
   const menus = [
-    { id: 1, name: "Questions", path: "/admin/user/dash" },
+    { id: 1, name: "Questions", path: "/admin/user/questions" },
     { id: 2, name: "Section", path: "/admin/user/section" },
     { id: 3, name: "Users", path: "/admin/user/admins" },
     { id: 4, name: "Roles", path: "/admin/user/roles" },

@@ -28,7 +28,7 @@ function App() {
                     <Nav>
                       {/* <Suspense fallback={<Loader />}> */}
                         <Routes>
-                          <Route path="/dash" element={<Index />} />
+                          <Route path="/questions" element={<Index />} />
                           <Route path="/questions/create" element={<CreateQuestions />} />
                           <Route path="/admins" element={<Admins />} />
                           <Route path="/admins/create" element={<CreateAdmins />} />
