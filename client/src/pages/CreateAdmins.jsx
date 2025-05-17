@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import CreateHeader from "../components/CreateHeader";
 import CustomSelect from "../components/CustomSelect";
+import {z} from "zod"
+import { ToastContainer, toast } from "react-toastify";
 
 const CreateAdmins = () => {
   const roles = [
@@ -18,12 +20,28 @@ const CreateAdmins = () => {
   const [role, setRole] = useState('')
   const [password, setPassword] = useState('')
 
+  const credentials = z.object({
+    name: z.string().min(1, {message: "Name is required"}), 
+    email: z.string().email({required_error: "Email is required", message: "Invalid email"}), 
+    role: z.string().min(1, {message: "Role is required"}),
+    password: z.string().min(8, {message: "Password must be at least 8 characters long"}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"}),
+  })
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(name, email, role, password)
+    const result = credentials.safeParse({name, email, role, password})
+
+    if(result.success) {
+      console.log(result.data)
+    }
+    else{
+      result.error.issues.map((issue) => toast.error(issue.message))
+    }
+
   }
   return (
     <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+      <ToastContainer/>
       <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2">
         <CreateHeader>Create New Admin User</CreateHeader>
         <div className="px-4">
@@ -41,6 +59,7 @@ const CreateAdmins = () => {
               <fieldset className="mb-4 flex flex-col gap-2">
                 <label className="text-sm" htmlFor="password">Password</label>
                 <input onChange={(e) => setPassword(e.target.value)} value={password} className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" type="text" id="password" name="name" placeholder="Enter 8 digit password"/>
+                <span className="text-[#6674BB] text-xs">Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character</span>
               </fieldset>
               <CustomSelect label="Role" options={roles} placeholder={"Select Role"} value={role} setValue={setRole}/>
             </div>
