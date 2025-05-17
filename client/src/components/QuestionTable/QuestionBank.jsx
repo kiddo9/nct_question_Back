@@ -5,6 +5,8 @@ import QuestionTable from './QuestionTable';
 import useQuestionHook from '../../hooks/questionHook';
 import { useQuestionGroupHook } from '../../hooks/questionGroupHook';
 import AddButton from '../AddButton';
+import useSectionHook from '../../hooks/sectionHook';
+import { Link } from 'react-router-dom';
 // Sample data 
 
 
@@ -12,10 +14,14 @@ import AddButton from '../AddButton';
 export default function QuestionBank() {
   const { getQuestion, loader } = useQuestionHook()
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
+  const { sections } = useSectionHook()
+
+  
 
   const questionsWithGroup = getQuestion.map(question => ({
     ...question,
     group: questionGroups.find(group => group.id === question.q_group_id)?.title,
+    section: sections.find(section => section.id == question.section_id)?.section_name
   }))
 
   const [questions, setQuestions] = useState([]);
@@ -35,9 +41,8 @@ export default function QuestionBank() {
 
   useEffect(() => {
     setQuestions(questionsWithGroup);
+    // console.log(questionsWithGroup);
   }, [loader, groupLoader]);
-
-  console.log(filteredQuestions);
 
   // Handle sorting
   const requestSort = (key) => {
@@ -87,12 +92,14 @@ export default function QuestionBank() {
 
 
   return (
-    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:max-w-[calc(100vw-245px)]">
+    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
       <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow px-10 py-6">
         {/* Header section */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-(--primary-color)">Question Bank</h2>
-          <AddButton>Add Question</AddButton>
+          <Link to={'/admin/user/questions/create'}>
+            <AddButton>Add Question</AddButton>
+          </Link>
         </div>
         
         {/* Search and filters */}

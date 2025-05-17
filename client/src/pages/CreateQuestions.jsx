@@ -7,7 +7,7 @@ import Api from "../api/Api";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton";
 
-const Create = () => {
+const CreateQuestions = () => {
   const [group, setGroup] = useState("");
   const [quater, setQuater] = useState([]);
   const [question, setQuestion] = useState("");
@@ -31,7 +31,7 @@ const Create = () => {
 
   const { questionGroups, loader } = useQuestionGroupHook();
 
-  const { section } = useSectionHook();
+  const { sections } = useSectionHook();
 
   const handleChange = (index, value) => {
     const updatedOptions = [...options];
@@ -228,7 +228,7 @@ const Create = () => {
                 />
 
                 <div className="flex flex-col gap-2 px-3 mt-5 Scroll h-44 overflow-y-auto">
-                  {section
+                  {sections
                     .filter((items) => {
                       return items.section_name
                         .toLowerCase()
@@ -435,4 +435,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default CreateQuestions;

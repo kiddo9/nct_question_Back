@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Index from "./pages/Index";
 import Nav from "./components/Nav";
-import Create from "./pages/create";
+import CreateQuestions from "./pages/CreateQuestions";
 import Notfound from "./components/Notfound";
 import Loader from "./components/Loader";
 import Login from "./pages/Auth/Login";
@@ -29,8 +29,9 @@ function App() {
                       {/* <Suspense fallback={<Loader />}> */}
                         <Routes>
                           <Route path="/dash" element={<Index />} />
-                          <Route path="/create" element={<Create />} />
+                          <Route path="/questions/create" element={<CreateQuestions />} />
                           <Route path="/admins" element={<Admins />} />
+                          <Route path="/admins/create" element={<CreateAdmins />} />
                           <Route path="/section" element={<Admins />} />
                           <Route path="/roles" element={<Admins />} />
                           <Route path="/groups" element={<Admins />} />

@@ -2,7 +2,7 @@ import React from 'react'
 
 const AddButton = ({children}) => {
   return (
-    <button className="px-4 py-2 bg-[#6674BB] text-white rounded-lg flex items-center gap-2 hover:bg-[#6674BB] transition-colors">
+    <button className="px-4 py-2 cursor-pointer bg-[#6674BB] text-white rounded-lg flex items-center gap-2 hover:bg-[#6674BB] transition-colors">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
