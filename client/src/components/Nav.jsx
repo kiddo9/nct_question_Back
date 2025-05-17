@@ -43,9 +43,9 @@ const Nav = ({ children }) => {
       <header className="flex justify-between items-center p-4 bg-white sticky top-0 left-0 right-0  z-10 shadow-xl">
         <div className="flex items-center gap-4">
           <img
-            src="https://techneo.ng/wp-content/uploads/2023/04/Artboard-1.png"
+            src="/logo.svg"
             className="w-56 h-14 object-cover"
-            alt=""
+            alt="logo"
           />
         </div>
 
