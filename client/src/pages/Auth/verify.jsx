@@ -64,7 +64,7 @@ const Verify = () => {
             return;
           }
 
-          nav("/admin/user/dash");
+          nav("/admin/user/questions");
         } catch (error) {
           console.log(error);
           toast.error("An error occourd");
