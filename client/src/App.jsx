@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Suspense fallback={<Loader />}>
+        
           <Routes>
             <Route index element={<Auth />} />
             <Route
@@ -26,20 +26,22 @@ function App() {
                 <>
                   <Authentication>
                     <Nav>
-                      <Routes>
-                        <Route path="/dash" element={<Index />} />
-                        <Route path="/create" element={<Create />} />
-                        <Route path="/admins" element={<Admins />} />
-                        <Route path="/section" element={<Admins />} />
-                        <Route path="/roles" element={<Admins />} />
-                        <Route path="/groups" element={<Admins />} />
-                        <Route
-                          path="/create_admin"
-                          element={<CreateAdmins />}
-                        />
-                        <Route path="/preview/:id" element={<Preview />} />
-                        <Route path="*" element={<Notfound />} />
-                      </Routes>
+                      {/* <Suspense fallback={<Loader />}> */}
+                        <Routes>
+                          <Route path="/dash" element={<Index />} />
+                          <Route path="/create" element={<Create />} />
+                          <Route path="/admins" element={<Admins />} />
+                          <Route path="/section" element={<Admins />} />
+                          <Route path="/roles" element={<Admins />} />
+                          <Route path="/groups" element={<Admins />} />
+                          <Route
+                            path="/create_admin"
+                            element={<CreateAdmins />}
+                          />
+                          <Route path="/preview/:id" element={<Preview />} />
+                          <Route path="*" element={<Notfound />} />
+                        </Routes>
+                      {/* </Suspense> */}
                     </Nav>
                   </Authentication>
                 </>
@@ -61,7 +63,6 @@ function App() {
 
             <Route path="*" element={<Notfound />} />
           </Routes>
-        </Suspense>
       </BrowserRouter>
     </>
   );

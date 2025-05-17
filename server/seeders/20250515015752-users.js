@@ -13,7 +13,7 @@ module.exports = {
         email_verified: 1,
         otp: 0,
         otpType: "",
-        otpExpiryTime: "",
+        otpExpiryTime: null,
         loggedIn: 0,
         createdAt: new Date(),
         updatedAt: new Date(),

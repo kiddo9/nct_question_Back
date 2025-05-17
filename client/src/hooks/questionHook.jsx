@@ -3,9 +3,9 @@ import Api from "../api/Api";
 import { toast } from "react-toastify";
 
 const useQuestionHook = (id) => {
-  const [question, setQuestions] = useState([]);
+  const [getQuestion, setGetQuestions] = useState([]);
   const [getEachQuestion, setGetEachQuestion] = useState({});
-  const [Loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     setLoader(true);
@@ -17,7 +17,7 @@ const useQuestionHook = (id) => {
           toast.error("unable to fetch request");
           return;
         }
-        setQuestions(response.questions);
+        setGetQuestions(response.questions);
       } catch (error) {
         console.log(error);
       } finally {
@@ -31,6 +31,7 @@ const useQuestionHook = (id) => {
   useEffect(() => {
     setLoader(true);
     async function fetchEachQuestion() {
+      if (!id) return;
       try {
         const fetchQuestions = await Api.get("/question/bank/" + id);
         const response = fetchQuestions.data;
@@ -49,7 +50,7 @@ const useQuestionHook = (id) => {
     fetchEachQuestion();
   }, [id]);
 
-  return { question, getEachQuestion, Loader };
+  return { getQuestion, getEachQuestion, loader };
 };
 
 export default useQuestionHook;

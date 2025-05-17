@@ -29,6 +29,7 @@ export const useQuestionGroupHook = (id) => {
 
   useEffect(() => {
     const fetchEachQuestionsGroup = async () => {
+      if (!id) return;
       try {
         const fetchEachQuestionsGroup = await Api.get("/questions/group/" + id);
         const response = fetchEachQuestionsGroup.data;
