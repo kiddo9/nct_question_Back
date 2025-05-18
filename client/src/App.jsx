@@ -12,6 +12,7 @@ import CreateAdmins from "./pages/CreateAdmins";
 import Authentication from "./components/security/Authentication";
 import Preview from "./pages/Preview";
 import { Suspense } from "react";
+import PasswordRest from "./pages/Auth/PasswordRest";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
                   <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/verify" element={<Verify />} />
+                    <Route path="/reset" element={<PasswordRest />} />
                     <Route path="*" element={<Notfound />} />
                   </Routes>
                 </>
