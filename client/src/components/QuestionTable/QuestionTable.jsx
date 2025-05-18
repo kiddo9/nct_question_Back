@@ -54,11 +54,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('quarter')}
+                  onClick={() => requestSort('section')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Quarter</span>
-                    {sortConfig.key === 'quarter' && (
+                    <span>Section</span>
+                    {sortConfig.key === 'section' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>

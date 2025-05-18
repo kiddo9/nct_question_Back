@@ -1,24 +1,28 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 const Notfound = () => {
   return (
-    <div className="fixed inset-0 z-50 bg-white flex flex-col justify-center items-center">
+    <div className="inset-0 w-full fixed z-50 bg-white flex flex-col justify-center items-center">
       <img
-        src="/Screenshot 2025-04-30 at 2.11.36 PM.png"
-        alt="Not Found"
-        className="w-20 h-20 rounded-full object-cover mb-10"
+        src="/logo-icon.svg"
+        alt="logo"
+        className="w-16 h-16 mx-auto"
       />
-      <div className="flex justify-center items-center">
-        <h1 className="text-4xl font-bold text-gray-800">404</h1>
-        <p className="text-lg text-gray-600">Page Not Found</p>
-      </div>
+      <header className="text-center flec flex-col gap-2">
+        <h1 className="text-7xl font-bold text-gray-800">404</h1>
+ 
+        <p className="text-5xl text-gray-600 mt-5 mb-2">Page Not Found</p>
+        <span className="text-gray-600 text-xl">The page you are looking for does not exist</span>
+      </header>
 
-      <a
-        href="/admin/user/dash"
-        className="flex justify-center items-center bg-[#6699ff] text-white w-32 h-10 rounded-lg mx-auto mt-4"
+      <Link
+        to="/admin/user/questions"
+        className="flex justify-center items-center bg-[#6699ff] text-white px-2 py-4 font-semibold hover:shadow-2xl transition duration-300 ease-in rounded-lg mx-auto mt-4"
       >
-        GO BACK
-      </a>
+        GO TO DASHBOARD
+      </Link>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const Login = () => {
       try {
         const send = await Api.get("/");
         if (send.data.status == true) {
-          nav("/admin/user/dash");
+          nav("/admin/user/questions");
           return;
         }
       } catch (error) {
