@@ -6,13 +6,13 @@ const jwtValidation = async (req, res) => {
 
   try {
     if (!vtToken) {
-      res.json({ status: false, message: "token no provided" });
+      return res.json({ status: false, message: "token no provided" });
     }
 
     const decode = jwt.verify(vtToken, process.env.JWT_SECRET_KEY);
     req.user = decode;
 
-    res.json({
+    return res.json({
       status: true,
       message: "an otp was sent to your email",
       cred: req.user,

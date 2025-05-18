@@ -3,6 +3,7 @@ import usersModel from "../../../models/users.js"; // import the usermodel
 import jwt from "jsonwebtoken"; //import the jwt module
 import emailSender from "../../email/email.js"; //import the emailsender function
 import Otp_Gen from "otp-generator";
+import bcrypt from "bcrypt";
 
 //Login controller authentication logic
 export const loginController = async (req, res) => {
@@ -27,8 +28,13 @@ export const loginController = async (req, res) => {
       return;
     }
 
+    const checkPasswordMatch = await bcrypt.compare(
+      password,
+      userExist.password
+    );
+
     //return response if entered password those match the one  in the database
-    if (password !== userExist.password) {
+    if (!checkPasswordMatch) {
       res.json({
         status: false,
         message: "authurization failed. access denied",
@@ -211,6 +217,7 @@ export const createAdminUser = async (req, res) => {
       digits: true,
     });
 
+    //encryptedId generation
     const encryptedId = Otp_Gen.generate(25, {
       upperCaseAlphabets: true,
       specialChars: true,
@@ -272,6 +279,116 @@ export const createAdminUser = async (req, res) => {
   }
 };
 
+//new user verification email
+export const newUserEmailVerification = async (req, res) => {
+  const token = req.query.verificationToken; // get the query params
+
+  //using try catch block
+  try {
+    //return error if token does not exist
+    if (!token) {
+      return res.json({ status: false, message: "invalid request" });
+    }
+
+    //decode token
+    const decodeUser = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    //return error if not a valid token
+    if (!decodeUser) {
+      return res.json({ status: false, message: "invalid request" });
+    }
+
+    //set decoded data
+    req.user = decodeUser;
+
+    //validate email exists
+    const validatedEmail = await usersModel.findOne({
+      where: { encryptedId: req.user.id },
+    });
+
+    //return error if email those not exist
+    if (!validatedEmail) {
+      return res.json({
+        status: false,
+        message: "Something went wrong while processing your request",
+      });
+    }
+
+    if (req.user.email !== validatedEmail.email) {
+      return res.json({
+        status: false,
+        message: "Something went wrong while processing your request",
+      });
+    }
+
+    //check if otp type is verify
+    if (req.user.otpType !== "verify") {
+      return res.json({
+        status: false,
+        message: "we are unable to process your request. ",
+      });
+    }
+
+    //match with database
+    if (validatedEmail.otpType !== req.user.otpType) {
+      return res.json({
+        status: false,
+        message: "we are unable to process your request",
+      });
+    }
+
+    //check db if otp matches
+    if (parseInt(req.user.otp) !== validatedEmail.otp) {
+      return res.json({
+        status: false,
+        message: "unprocessable url",
+      });
+    }
+
+    //check if email is already verified
+    if (validatedEmail.email_verified == 1) {
+      if (validatedEmail.password !== null) {
+        return res.json({
+          status: false,
+          message: "Link has expired",
+        });
+      }
+    }
+
+    //update cred if email is not verified
+    const updateEmailVerifiedStatus = await usersModel.update(
+      { email_verified: 1 },
+      { where: { encryptedId: req.user.id } }
+    );
+
+    //return error if cred was unable to update
+    if (!updateEmailVerifiedStatus) {
+      return res.json({
+        status: false,
+        message: "unable to verify email. Please try again",
+      });
+    }
+
+    //create set password token
+    const passwordSetToken = jwt.sign(
+      { id: validatedEmail.encryptedId, type: "pass-set" },
+      process.env.JWT_SECRET_KEY
+    );
+
+    //return reponse
+    res.status(200).json({
+      status: true,
+      message:
+        "Email verification successfull. Please click the button to create your password",
+      token: passwordSetToken,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: "invalid request" });
+  }
+};
+
+//controller to get list of users
 export const usersList = async (req, res) => {
   try {
     const getListOfUsers = await usersModel.findAll();
@@ -287,6 +404,7 @@ export const usersList = async (req, res) => {
   }
 };
 
+//log out controller
 export const Logout = async (req, res) => {
   try {
     res.clearCookie("token", {

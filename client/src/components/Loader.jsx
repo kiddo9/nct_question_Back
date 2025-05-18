@@ -36,7 +36,7 @@ export default function Loader({ preload }) {
             style={{ textShadow: "0 0 10px #6699ff" }}
           >
             <img
-              src="/Screenshot 2025-04-30 at 2.11.36 PM.png"
+              src="/Artboard 1 copy.png"
               alt=""
               className="w-36 h-36 rounded-full object-cover opacity-30 animate-pulse"
               style={{ opacity: opacity }}
