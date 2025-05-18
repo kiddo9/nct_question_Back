@@ -50,7 +50,7 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
       {question.group}
     </td>
     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-      {question.quarter}
+      {question.section}
     </td>
     <td className="px-4 py-4 text-sm text-gray-700 max-w-xs truncate">
       {question.question}

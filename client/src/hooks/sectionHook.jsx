@@ -3,14 +3,14 @@ import Api from "../api/Api";
 import { toast } from "react-toastify";
 
 const useSectionHook = () => {
-  const [section, setSection] = useState([]);
+  const [sections, setSections] = useState([]);
   useEffect(() => {
     async function getSections() {
       const resquest = await Api.get("/sections");
       const response = resquest.data;
 
       if (response.status == true) {
-        setSection(response.sections);
+        setSections(response.sections);
         return;
       }
 
@@ -18,8 +18,8 @@ const useSectionHook = () => {
     }
 
     getSections();
-  });
-  return { section };
+  }, []);
+  return { sections };
 };
 
 export default useSectionHook;

@@ -14,7 +14,7 @@ const Auth = () => {
           return;
         }
 
-        nav("/admin/user/dash");
+        nav("/admin/user/questions");
       } catch (error) {
         console.log(error);
         nav("/auth/admin/login");
