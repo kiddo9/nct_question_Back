@@ -204,7 +204,7 @@ export const createAdminUser = async (req, res) => {
     }
 
     //generate Otp
-    const generateOtp = Otp_Gen.generate(11, {
+    const generateOtp = Otp_Gen.generate(7, {
       upperCaseAlphabets: false,
       specialChars: false,
       lowerCaseAlphabets: false,
@@ -226,6 +226,7 @@ export const createAdminUser = async (req, res) => {
       name,
       email,
       roles: role,
+      email_verified: 0,
       otp: generateOtp,
       otpType: otpType,
       encryptedId,
@@ -268,6 +269,21 @@ export const createAdminUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.json({ status: false, message: "internal server error" });
+  }
+};
+
+export const usersList = async (req, res) => {
+  try {
+    const getListOfUsers = await usersModel.findAll();
+
+    if (!getListOfUsers || getListOfUsers.length <= 0) {
+      return res.json({ status: false, message: "no data found" });
+    }
+
+    return res.status(201).json({ status: true, lists: getListOfUsers });
+  } catch (error) {
+    console.log(error);
+    res.status().json({ status: false, message: "internal server error" });
   }
 };
 
