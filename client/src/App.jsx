@@ -13,6 +13,7 @@ import Authentication from "./components/security/Authentication";
 import Preview from "./pages/Preview";
 import { Suspense } from "react";
 import PasswordRest from "./pages/Auth/PasswordRest";
+import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
 
 function App() {
   return (
@@ -63,7 +64,7 @@ function App() {
                 </>
               }
             />
-
+            <Route path="/email/verify" element={<VerifyEmailButton />} />
             <Route path="*" element={<Notfound />} />
           </Routes>
       </BrowserRouter>

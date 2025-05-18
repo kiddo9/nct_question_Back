@@ -10,14 +10,14 @@ import UserPagination from './UserPagination';
 // Main component
 export default function Users({ getUsers, status, loader }) {
 
-  const [questions, setQuestions] = useState([]);
+  // const [questions, setQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [numberPerPage, setNumberPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
 
-  console.log(getUsers);
+  // console.log(getUsers);
 
   // Filter questions based on search term
   const filteredUsers = getUsers.filter(user => 
@@ -69,7 +69,7 @@ export default function Users({ getUsers, status, loader }) {
 
   // Handle bulk delete
   const handleBulkDelete = () => {
-    setQuestions(questions.filter(question => !selectedRows.includes(question.id)));
+    // Perform bulk delete logic
     setSelectedRows([]);
   };
 
@@ -122,7 +122,7 @@ export default function Users({ getUsers, status, loader }) {
             <input
               type="text"
               className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Search questions..."
+              placeholder="Search users..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

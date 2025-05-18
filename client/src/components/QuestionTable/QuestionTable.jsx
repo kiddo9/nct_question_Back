@@ -166,7 +166,7 @@ const QuestionTable = ({
               />
             ))
         )}
-        {!loader && !groupLoader && !load && sortedQuestions.length === 0 && (
+        {!loader && !groupLoader && !load && sortedQuestions.length <= 0 && (
           <tr>
             <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
               No questions found. Try adjusting your search or filters.

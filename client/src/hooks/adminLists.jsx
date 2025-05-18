@@ -19,6 +19,7 @@ const useAdminLists = () => {
         }
 
         toast.error(response.message);
+        return
       } catch (error) {
         console.log(error);
         toast.error(error.message || "Internal server error");
