@@ -1,438 +1,165 @@
 import React, { useEffect, useState } from "react";
+import CreateHeader from "../components/CreateHeader";
+import CustomSelect from "../components/CustomSelect";
+import {z} from "zod"
 import { ToastContainer, toast } from "react-toastify";
-import PLoader from "../components/Loader";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
-import Api from "../api/Api";
-import { useNavigate } from "react-router-dom";
-import BackButton from "../components/BackButton";
 
 const CreateQuestions = () => {
-  const [group, setGroup] = useState("");
-  const [quater, setQuater] = useState([]);
-  const [question, setQuestion] = useState("");
-  const [type, setType] = useState("");
-  const [options, setOptions] = useState([]);
-  const [answer, setAnswer] = useState("");
-  const [mark, setMark] = useState("");
-  const [GroupId, setGroupId] = useState("");
-  const [QuaterId, setQuaterId] = useState("");
-  const [numberOfOptions, setNumberOfOptions] = useState(); // number of options
-  const navigate = useNavigate();
-  // boolean for dropdown group
 
-  const [dropGroup, setDropGroup] = useState(false);
-  const [dropQuater, setDropQuater] = useState(false);
+  const [group, setGroup] = useState('')
+  const [section, setSection] = useState('')
+  const [question, setQuestion] = useState('')
+  const [mark, setMark] = useState('')
+  const [type, setType] = useState('')
+  const [typeOpen, setTypeOpen] = useState(false) //for the custom select component
+  const [numberOfOptions, setNumberOfOptions] = useState('')
+  const [options, setOptions] = useState([])
+  const [answer, setAnswer] = useState('')
 
-  const [searchGroup, setSearchGroup] = useState("");
+  const {questionGroups } = useQuestionGroupHook()
+  const {sections} = useSectionHook()
 
-  //set loader
-  const [Loader, setLoader] = useState(false);
+  const questionSchema = z.object({
+    group: z.string().min(1, {message: "Group is required"}), 
+    section: z.string().min(1, {message: "Section is required"}),
+    question: z.string().min(1, {message: "Question is required"}),
+    mark: z.string().min(1, {message: "Mark is required"}),
+    type: z.string().min(1, {message: "Type is required"}),
+    numberOfOptions: z.string().min(1, {message: "Number of options is required"}),
+    options: z.array(z.object({label: z.string(), value: z.string()})).min(2, {message: "At least two options are required"}),
+    answer: z.string().min(1, {message: "Answer is required"}),
+  })
 
-  const { questionGroups, loader } = useQuestionGroupHook();
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const result = questionSchema.safeParse({group, section, question, mark, type, numberOfOptions, options, answer})
 
-  const { sections } = useSectionHook();
+    if(result.success) {
+      {/* API CALL GOES HERE */}
+      console.log(result.data)
+    }
+    else{
+     return result.error.issues.map((issue) => toast.error(issue.message))
+    }
+    if(options.length != Number(numberOfOptions)){
+       return toast.error('Number of options provided does not match the number of options in the question')
+    }
 
-  const handleChange = (index, value) => {
-    const updatedOptions = [...options];
-    updatedOptions[index] = value;
-    setOptions(updatedOptions);
-  };
+  }
 
+  const switchType = (q_type) => {
+    switch (q_type) {
+      case "M":
+        return 'Multiple Choice'
+      case "T":
+        return 'True/False'
+      default:
+        return ''
+    }
+  }
+
+  {/* Generate True Or False Options */}
+  const generateTrueFalseOptions = () => {
+    return [
+      {
+        label: 'True',
+        value: 'true'
+      },
+      {
+        label: 'False',
+        value: 'false'
+      } 
+  ]
+  }
+
+  {/* Generate Multiple Choice Options */}
+  const generateMultipleChoiceOptions = (number) => {
+    if(!number) return ''
+    return Array.from({ length: Number(number) }, (_, index) => ({
+      label: `Option ${index + 1}`,
+      value: ''
+    }))
+  }
+
+  {/* Update the Options when nubmer of options changes */}
   useEffect(() => {
-    if (numberOfOptions <= 0) {
-      if (options.length > 0) setOptions([]);
-      toast.error("Cannot enter number of options less than or equal to 0.");
-      return;
+    setAnswer('')
+    if(type === 'M') {
+      setOptions(generateMultipleChoiceOptions(numberOfOptions))
+    } else if(type === 'T') {
+      setOptions(generateTrueFalseOptions())
     }
-
-    if (isNaN(numberOfOptions)) {
-      setOptions([]);
-    }
-
-    // Add empty strings until length matches numberOfOptions
-    if (options.length < numberOfOptions) {
-      setOptions((prev) => [
-        ...prev,
-        ...Array(numberOfOptions - prev.length).fill(""),
-      ]);
-    }
-
-    // Remove excess options if numberOfOptions was reduced
-    if (options.length > numberOfOptions) {
-      setOptions((prev) => prev.slice(0, numberOfOptions));
-    }
-  }, [numberOfOptions, options.length]);
-
-  const handleQuestionCreation = async () => {
-    setLoader(true);
-
-    if (!GroupId || !QuaterId || !question || !mark || !answer) {
-      toast.error("fill all fields");
-      setLoader(false);
-      return;
-    }
-    try {
-      const values = {
-        GroupId,
-        QuaterId,
-        question,
-        numberOfOptions,
-        mark,
-        options,
-        answer,
-        type,
-      };
-
-      const sendData = await Api.post("/create/questions", values);
-      const response = sendData.data;
-
-      if (response.status == true) {
-        setLoader(false);
-        toast.success(response.message);
-        setTimeout(() => {
-          navigate(`/admin/user/preview/${response.Id}`);
-        }, 2000);
-        return;
-      }
-
-      toast.error(response.message);
-    } catch (error) {
-      console.error(error);
-      toast.error("internal error");
-    } finally {
-      setLoader(false);
-    }
-  };
-
+  }, [type,numberOfOptions])
   return (
-    <div className="Scroll fixed z-50 bg-white inset-0 overflow-y-auto pb-96 md:px-24">
-      <ToastContainer />
-      {loader && <PLoader />}
-      {Loader && <PLoader preload={true} />}
-      <div className="">
-        <header className="px-5 flex gap-6 flex-wrap items-center justify-between py-6">
-          <h1 className="text-2xl font-medium">
-            <i>Create Questions</i>
-          </h1>
-
-          <BackButton path={"/admin/user/dash"} />
-        </header>
-
-        <div className="mx-3 flex flex-col md:gap-5">
-          <div className="md:flex gap-10">
-            <div className="md:w-full">
-              <label htmlFor="group" className="text-lg font-medium">
-                Group
-              </label>
-              <p
-                onClick={() => setDropGroup(!dropGroup)}
-                className="border-[#6699ff] border-2 cursor-pointer px-5 py-3 flex justify-between"
-              >
-                {group == "" ? "Select Group" : group}{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </p>
-              <div
-                name=""
-                id=""
-                className={`border-2 border-[#6699ff] ${
-                  dropGroup == true ? "h-64" : "h-0"
-                } overflow-hidden transition-all duration-300 ease-in shadow-2xl`}
-              >
-                <input
-                  type="text"
-                  className="border-2 border-gray-300 w-[95%] mt-4 flex mx-auto py-2 px-4 rounded-xl"
-                  onChange={(e) => {
-                    setSearchGroup(e.target.value);
-                  }}
-                />
-
-                <div className="flex flex-col gap-3 px-3 mt-5 Scroll h-44 pb-10 overflow-y-auto">
-                  {questionGroups
-                    .filter((items) => {
-                      return items.title.toLowerCase().includes(searchGroup);
-                    })
-                    .map((group) => (
-                      <div
-                        className={`${
-                          GroupId == group.id
-                            ? "bg-[#6699ff] shadow-2xl shadow-gray-500 text-white rounded-lg"
-                            : ""
-                        } cursor-pointer px-3 hover:bg-[#6699ff] hover:text-white duration-300 hover:shadow-2xl ease-in-out hover:rounded-lg py-2`}
-                        onClick={() => {
-                          setGroup(group.title);
-                          setDropGroup(!dropGroup);
-                          setGroupId(group.id);
-                          setSearchGroup("");
-                        }}
-                        key={group.id}
-                      >
-                        {group.title}
-                      </div>
-                    ))}
+    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+      <ToastContainer/>
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2">
+        <CreateHeader>Create New Question</CreateHeader>
+        <div className="px-4">
+          <h2>Fill in the fields below</h2>
+          <form onSubmit={(e) => handleSubmit(e)} className="mt-4 w-full flex flex-col justify-between pb-5 h-fit">
+            <div className="grid grid-cols-2 gap-10 ">
+              <CustomSelect label="Group" options={questionGroups.map((group) => group.title)} placeholder="Select Group" value={group} setValue={setGroup}/>
+              <CustomSelect label="Section" options={sections.map((section) => section.section_name)} placeholder="Select Section" value={section} setValue={setSection}/>
+              <fieldset className="flex flex-col gap-2 col-span-2">
+                <label className="text-sm" htmlFor="question">Question</label>
+                <textarea onChange={(e) => setQuestion(e.target.value)} value={question} className="rounded-lg px-4 py-2 resize-none h-[20vh] outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" id="question" name="question" placeholder="Enter Question"></textarea>
+              </fieldset>
+              <fieldset className="mb-4 flex flex-col gap-2">
+                <label className="text-sm" htmlFor="mark">Mark</label>
+                <input onChange={(e) => setMark(e.target.value <= 0 ? 0 : e.target.value)} value={mark} className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" type="number" id="mark" name="mark"/>
+              </fieldset>
+              <fieldset className="flex flex-col gap-2">
+                <label className="text-sm" htmlFor="type">Type</label>
+                {/* Custom Select Component for Consistency */}
+                <div  className="cursor-pointer relative rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" name="role" id="role">
+                    <p type='button' onClick={() => {setTypeOpen(!typeOpen); }} className={`${type ? 'text-black' : 'text-gray-500'} w-full`}>{switchType(type) || 'Select Question Type'}</p>
+                    {typeOpen && (
+                        <ul className="absolute z-10 w-full left-0 max-h-[300px] overflow-y-scroll top-12 rounded-lg flex flex-col gap-2 bg-white border-2 border-gray-300 shadow-xl">
+                            <li><p onClick={() => {setType('M'); setTypeOpen(false); setNumberOfOptions(''); }} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >Multiple Choice</p></li>
+                            <li><p onClick={() => {setType('T'); setNumberOfOptions('2'); setTypeOpen(false);}} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >True/False</p></li>
+                        </ul>
+                    )}
                 </div>
-              </div>
-            </div>
-
-            <div className="mt-5 md:mt-0 md:w-full">
-              <label htmlFor="quater" className="text-lg font-medium">
-                Quater
-              </label>
-              <p
-                onClick={() => setDropQuater(!dropQuater)}
-                className="border-[#6699ff] border-2 cursor-pointer px-5 py-3 flex justify-between"
-              >
-                {quater == "" ? "Select Quater" : quater}{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </p>
-
-              <div
-                name=""
-                id=""
-                className={`border-2 border-[#6699ff] ${
-                  dropQuater == true ? "h-64" : "h-0"
-                } overflow-hidden transition-all duration-300 ease-in shadow-2xl`}
-              >
-                <input
-                  type="text"
-                  className="border-2 border-gray-300 w-[95%] mt-4 flex mx-auto py-2 px-4 rounded-xl"
-                  onChange={(e) => {
-                    setSearchGroup(e.target.value);
-                  }}
-                />
-
-                <div className="flex flex-col gap-2 px-3 mt-5 Scroll h-44 overflow-y-auto">
-                  {sections
-                    .filter((items) => {
-                      return items.section_name
-                        .toLowerCase()
-                        .includes(searchGroup);
-                    })
-                    .map((group) => (
-                      <div
-                        className={`${
-                          QuaterId == group.id
-                            ? "bg-[#6699ff] shadow-2xl shadow-gray-500 text-white rounded-lg"
-                            : ""
-                        } cursor-pointer px-3 hover:bg-[#6699ff] hover:text-white duration-300 hover:shadow-2xl ease-in-out hover:rounded-lg py-2`}
-                        onClick={() => {
-                          setQuater(group.section_name);
-                          setDropQuater(!dropQuater);
-                          setSearchGroup("");
-                          setQuaterId(group.id);
-                        }}
-                        key={group.id}
-                      >
-                        {group.section_name}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-5 md:mt-0">
-            <label htmlFor="question" className="text-lg font-medium">
-              Question
-            </label>
-            <textarea
-              name="question"
-              id="question"
-              type="text"
-              className="border-2 border-[#6699ff] w-full mt-2 h-60 flex mx-auto py-2 px-4 rounded-xl"
-              onChange={(e) => {
-                setQuestion(e.target.value);
-              }}
-            />
-          </div>
-
-          <div className="md:flex gap-10">
-            <div className="mt-5 md:mt-0 md:w-full">
-              <label htmlFor="question" className="text-lg font-medium">
-                Marks
-              </label>
-              <input
-                name="question"
-                id="question"
-                type="text"
-                className="border-2 border-[#6699ff] w-full mt-2 flex mx-auto py-2 px-4 rounded-xl"
-                onChange={(e) => {
-                  setMark(e.target.value);
-                }}
-              />
-            </div>
-
-            <div className="md:w-full">
-              <div className="mt-5 md:mt-0">
-                <label htmlFor="quater" className="text-lg font-medium">
-                  Type
-                </label>
-                <select
-                  name=""
-                  id=""
-                  className="border-[#6699ff] rounded-xl border-2 cursor-pointer px-5 py-3 flex  w-full justify-between"
-                  onChange={(e) => setType(e.target.value)}
-                >
-                  <option>select type</option>
-                  <option value="M">Multi choice</option>
-                  <option
-                    value="T"
-                    onClick={() => {
-                      setOptions([]);
-                      setNumberOfOptions("");
-                      setAnswer("");
-                    }}
-                  >
-                    True or False
-                  </option>
-                </select>
-              </div>
-
-              <div className="md:w-full">
-                {type == "M" ||
-                  (type == "T" && (
-                    <label htmlFor="option" className="text-lg font-medium">
-                      <p className="mt-5">Options</p>
-                    </label>
-                  ))}
-                {type == "M" && (
-                  <div>
-                    <div className="flex flex-col mt-3">
-                      <label htmlFor="">Number of options</label>
-                      <input
-                        type="number"
-                        onChange={(e) => {
-                          setNumberOfOptions(parseInt(e.target.value));
-                        }}
-                        className="border-[#6699ff] border-2 cursor-pointer px-5 py-2 flex  w-full justify-between"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 shadow-2xl px-3 mt-5 pb-3">
-                      {options.map((option, index) => (
-                        <div key={index} className="mt-5 md:mt-0 flex flex-col">
-                          <label
-                            htmlFor={`option-${index}`}
-                            className="text-lg font-medium"
-                          >
-                            Option {index + 1}
-                          </label>
-
-                          <div
-                            key={index}
-                            className="flex flex-row-reverse items-center gap-3"
-                          >
-                            <label
-                              htmlFor={`option-${index}`}
-                              className="flex items-center gap-3 cursor-pointer"
-                            >
-                              <input
-                                type="radio"
-                                name="answer"
-                                value={index}
-                                checked={answer === option}
-                                onChange={() => setAnswer(option)} // Sets the selected option
-                                className="accent-[#6699ff] w-5 h-5"
-                              />
-                            </label>
-                            <input
-                              id={`option-${index}`}
-                              type="text" // Display option only if selected
-                              onChange={(e) =>
-                                handleChange(index, e.target.value)
-                              } // Update input value for selected option
-                              className="border-2 border-[#6699ff] w-full mt-2 flex mx-auto py-2 px-4 rounded-xl"
-                            />
-                          </div>
-                        </div>
+                {/* Multiple Choice Options */}
+                {
+                  type === 'M' && (
+                    <>
+                      <CustomSelect label="Number of Options" options={['2', '3', '4', '5', '6']} placeholder="Select Number of Options" value={numberOfOptions} setValue={setNumberOfOptions}/>
+                      {
+                        options.length && options.length > 0 && options.map((option, index) => (
+                          <fieldset className="mb-4 flex gap-2">
+                            <input checked={option.value === answer} onChange={(e) => setAnswer(e.target.value)} type="radio" id={option.label} name="option" key={index} value={option.value} />
+                            <input value={option.value} onChange={(e) => setOptions(options.map((option, i) => i === index ? {...option, value: e.target.value} : option))} type="text" placeholder={`Option ${index + 1}`} className="px-4 py-2 rounded-lg outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" />
+                          </fieldset>
+                      ))}
+                    </>
+                  )
+                }
+                {/* True/False Options */}
+                {
+                  type === 'T' && (
+                    <div className="mb-4">
+                      <p>Choose Correct Option</p>
+                      {options.length && options.length > 0 && options.map((option, index) => (
+                        <fieldset className="mb-4 flex gap-2">
+                          <input checked={option.value === answer} onChange={(e) => setAnswer(e.target.value)} type="radio" id={option.label} name="option" key={index} value={option.value} />
+                          <label htmlFor={option.label}>{option.label}</label>
+                        </fieldset>
                       ))}
                     </div>
-                  </div>
-                )}
-                {type == "T" && (
-                  <div className="flex flex-col gap-2 shadow-2xl px-3 mt-5 pb-3 rounded-lg bg-white">
-                    <label className="text-lg font-semibold mt-4">Answer</label>
-                    <div className="mt-4 space-y-3">
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="trueFalseAnswer"
-                          value="T"
-                          checked={answer === "T"}
-                          onChange={(e) => setAnswer(e.target.value)}
-                          className="accent-green-600 w-5 h-5"
-                        />
-                        <span className="text-gray-800">True</span>
-                      </label>
-
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input
-                          type="radio"
-                          name="trueFalseAnswer"
-                          value="F"
-                          checked={answer === "F"}
-                          onChange={(e) => setAnswer(e.target.value)}
-                          className="accent-red-600 w-5 h-5"
-                        />
-                        <span className="text-gray-800">False</span>
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
+                  )
+                }
+              </fieldset>
             </div>
-          </div>
-
-          <button
-            onClick={() => handleQuestionCreation()}
-            type="submit"
-            className="bg-[#6699ff] rounded-xl py-2 text-center mt-10 flex justify-center items-center gap-4 text-white cursor-pointer"
-          >
-            Upload{" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
-              />
-            </svg>
-          </button>
+            <button type="submit" className="border-2 border-[#6674BB] mt-4 mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">Upload Question</button>
+          </form>
         </div>
       </div>
     </div>
-  );
+  )
 };
 
 export default CreateQuestions;

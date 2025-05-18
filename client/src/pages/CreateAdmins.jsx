@@ -32,6 +32,8 @@ const CreateAdmins = () => {
     const result = credentials.safeParse({name, email, role, password})
 
     if(result.success) {
+      
+      {/* API CALL GOES HERE */}
       console.log(result.data)
     }
     else{
