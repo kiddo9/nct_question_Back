@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import QuestionRow from './QuestionRow'
 import Loader from '../Loader'
 
-const QuestionTable = ( { sortedQuestions, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage, loader, groupLoader }) => {
+const QuestionTable = ( { sortedQuestions, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage, loader, groupLoader, sectionLoader }) => {
   const [load, setLoad] = useState(false);
 useEffect(() => {
   setLoad(true);
@@ -129,12 +129,12 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 w-full">
-              {loader || groupLoader || load ? <Loader /> 
+              {loader || groupLoader || load || sectionLoader ? <Loader /> 
                 :
                 sortedQuestions.slice((currentPage - 1) * numberPerPage, currentPage * numberPerPage).map((question, index) => (
                     <QuestionRow key={question.id} question={question} index={index} selectedRows={selectedRows} toggleSelectRow={toggleSelectRow} currentPage={currentPage} numberPerPage={numberPerPage} />
                 ))}
-                {!loader && !groupLoader && !load && sortedQuestions.length === 0 && (
+                {!loader && !groupLoader && !load && !sectionLoader && sortedQuestions.length === 0 && (
                   <tr>
                     <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
                       No questions found. Try adjusting your search or filters.

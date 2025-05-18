@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 export default function QuestionBank() {
   const { getQuestion, loader } = useQuestionHook()
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
-  const { sections } = useSectionHook()
+  const { sections, loader: sectionLoader } = useSectionHook()
 
   
 
@@ -137,6 +137,7 @@ export default function QuestionBank() {
           <QuestionTable 
             loader={loader}
             groupLoader={groupLoader}
+            sectionLoader={sectionLoader}
             sortedQuestions={sortedQuestions} 
             selectedRows={selectedRows} 
             toggleSelectRow={toggleSelectRow} 
