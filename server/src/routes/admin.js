@@ -2,9 +2,11 @@ import express from "express";
 const router = express.Router();
 
 import {
+  createAdminUser,
   loginController,
   Logout,
   otpValidation,
+  usersList,
 } from "../controllers/Auth/auth.js";
 import {
   createQuestions,
@@ -25,6 +27,7 @@ router.get("/", tokenVerify, async (req, res) => {
 });
 router.post("/login", loginController);
 router.get("/questions/bank", tokenVerify, getAllQuestions);
+router.get("/admin/user/lists", tokenVerify, usersList);
 
 router.get("/questions/group", tokenVerify, getAllQuestionGroups);
 router.get("/sections", tokenVerify, getAllSections);
@@ -35,5 +38,6 @@ router.get("/question/bank/:id", tokenVerify, getEachQuestionById);
 
 router.post("/auth/validate", otpValidation);
 router.post("/create/questions", tokenVerify, createQuestions);
+router.post("/admin/create", tokenVerify, createAdminUser);
 router.post("/logout", tokenVerify, Logout);
 export default router;
