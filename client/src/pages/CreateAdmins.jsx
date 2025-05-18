@@ -42,14 +42,14 @@ const CreateAdmins = () => {
 
   }
   return (
-    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+    <div className="rounded-lg lg:px-2 py-8 ">
       <ToastContainer/>
-      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2">
+      <div className="flex flex-col space-y-4 mx-auto bg-white w-[97vw] lg:w-[calc(100vw-245px)] rounded-2xl shadow py-2">
         <CreateHeader>Create New Admin User</CreateHeader>
         <div className="px-4">
           <h2>Enter User Details</h2>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-4 w-full flex flex-col justify-between pb-10 h-[60vh]">
-            <div className="grid grid-cols-2 gap-10 ">
+            <div className="md:grid flex flex-col grid-cols-2 gap-10 ">
               <fieldset className="mb-4 flex flex-col gap-2">
                 <label className="text-sm" htmlFor="name">Name</label>
                 <input onChange={(e) => setName(e.target.value)} value={name} className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" type="text" id="name" name="name" placeholder="John Doe"/>
@@ -65,7 +65,7 @@ const CreateAdmins = () => {
               </fieldset> */}
               <CustomSelect label="Role" options={roles} placeholder={"Select Role"} value={role} setValue={setRole}/>
             </div>
-            <button type="submit" className="border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">Create User</button>
+            <button type="submit" className="border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl mt-5">Create User</button>
           </form>
         </div>
       </div>
