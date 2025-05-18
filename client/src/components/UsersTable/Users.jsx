@@ -8,7 +8,7 @@ import UserPagination from './UserPagination';
 
 
 // Main component
-export default function Users({ getUsers, status }) {
+export default function Users({ getUsers, status, loader }) {
 
   const [questions, setQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,10 +17,12 @@ export default function Users({ getUsers, status }) {
   const [numberPerPage, setNumberPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
 
+  console.log(getUsers);
+
   // Filter questions based on search term
   const filteredUsers = getUsers.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    // user.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
   
   );
@@ -147,6 +149,7 @@ export default function Users({ getUsers, status }) {
         {/* Table */}
         <div className="overflow-x-auto w-full">
           <UsersTable
+            loader={loader}
             sortedUsers={sortedUsers} 
             selectedRows={selectedRows} 
             toggleSelectRow={toggleSelectRow} 

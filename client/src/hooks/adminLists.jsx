@@ -4,12 +4,15 @@ import Api from "../api/Api";
 
 const useAdminLists = () => {
   const [users, setUsers] = useState([]);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
+    setLoader(true);
     const fetchAllUsers = async () => {
-      const request = await Api.get("/admin/user/lists");
-      const response = request.data;
       try {
+        const request = await Api.get("/admin/user/lists");
+        const response = request.data;
+        
         if (response.status === true) {
           setUsers(response.lists);
           return;
@@ -18,13 +21,16 @@ const useAdminLists = () => {
         toast.error(response.message);
       } catch (error) {
         console.log(error);
-        toast.error(response.message || "internal server error");
+        toast.error(error.message || "Internal server error");
+      }
+      finally {
+        setLoader(false);
       }
     };
 
     fetchAllUsers();
-  });
-  return { users };
+  }, []);
+  return { users, loader };
 };
 
 export default useAdminLists;

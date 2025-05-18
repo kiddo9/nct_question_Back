@@ -3,7 +3,7 @@ import useOpt from "../hooks/opt";
 import useQuestionHook from "../hooks/questionHook";
 import BackButton from "../components/BackButton";
 import Edit from "../components/Edit";
-import React, { useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Warning from "../components/Warning";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
@@ -11,16 +11,19 @@ import PLoader from "./../components/Loader";
 
 const Preview = () => {
   const { id } = useParams();
+  console.log(id);
   const { opt } = useOpt();
-  const { getEachQuestion, Loader } = useQuestionHook(id);
+  const { getEachQuestion, loader } = useQuestionHook(id);
   const { questionGroups } = useQuestionGroupHook();
-  const { section } = useSectionHook();
+  const { sections } = useSectionHook();
   const [open, setOpen] = React.useState(false);
   const [Delete, setDelete] = useState(false);
 
+
+
   return (
     <div className=" fixed z-50 bg-white inset-0 overflow-y-auto">
-      {Loader && <PLoader />}
+      {loader && <PLoader />}
       <div
         className={`fixed ${
           Delete == true ? "translate-y-0" : "-translate-y-[100%]"
@@ -58,7 +61,7 @@ const Preview = () => {
             <label htmlFor="" className="text-xl">
               section:
             </label>
-            {section.map((sec) => {
+            {sections.map((sec) => {
               if (getEachQuestion.section_id == sec.id) {
                 return <p>{sec.section_name}</p>;
               }
@@ -180,7 +183,7 @@ const Preview = () => {
             d="M6 18 18 6M6 6l12 12"
           />
         </svg>
-        <Edit id={id} />
+        {/* <Edit id={id} /> */}
       </div>
     </div>
   );
