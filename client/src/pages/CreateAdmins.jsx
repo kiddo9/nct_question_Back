@@ -64,10 +64,10 @@ const CreateAdmins = () => {
     }
   };
   return (
-    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+    <div className="rounded-lg lg:px-2 py-8 ">
       <ToastContainer />
       {loader && <Loader preload={true} />}
-      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2">
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2 mx-auto w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Create New Admin User</CreateHeader>
         <div className="px-4">
           <h2>Enter User Details</h2>
