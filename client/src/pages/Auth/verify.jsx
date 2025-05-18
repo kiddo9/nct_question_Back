@@ -64,6 +64,7 @@ const Verify = () => {
             return;
           }
 
+          toast.success('Successfully Authenticated');
           nav("/admin/user/questions");
         } catch (error) {
           console.log(error);
@@ -82,14 +83,13 @@ const Verify = () => {
       {load && <Loader />}
       {loader && <Loader preload={true} />}
       <ToastContainer />
-      <div className="rounded-lg py-5 transition-opacity duration-300 ease-in shadow-2xl px-3 h-[27rem] bg-white mx-auto">
+      <div className="rounded-[20px] slideDown py-5 transition-opacity duration-300 ease-in shadow-2xl px-3 h-[27rem] bg-white/30 backdrop-blur-xs mx-auto">
         <div className="logo-container flex items-center">
           <img
-            src="/Screenshot 2025-04-30 at 2.11.36 PM.png"
+            className="w-[400px] -mb-[3rem] mx-auto"
+            src="/NCT-MainLogo-2.png"
             alt="Company Logo"
-            className="w-20 h-20 object-cover rounded-full"
           />
-          <h6 className="mb-0 text-xl text-dark">Neo Clouds Technologies</h6>
         </div>
 
         <p className="text-center font-bold">Auth Verification</p>
@@ -102,7 +102,7 @@ const Verify = () => {
               maxLength={1}
               type="text"
               onKeyUp={(e) => handleKeyUp(e)}
-              className="w-14 h-11 text-lg rounded-md text-center border-2 border-[#6699ff] text-[#6699ff] "
+              className="w-14 h-11 text-lg rounded-md text-center border-2 bg-white/10 border-[#6699ff] text-[#6699ff] focus:shadow-2xl  outline-none"
             />
           ))}
         </div>

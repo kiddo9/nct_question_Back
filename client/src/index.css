@@ -38,12 +38,17 @@ body {
 }
 
 .login-card {
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 15px;
+  border-radius: 20px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   max-width: 400px;
   width: 90%;
   padding: 2rem;
+  transform: translateY(-50px);
+  opacity: 0;
+  animation: slideDown 0.8s ease-out forwards;
+}
+
+.slideDown {
   transform: translateY(-50px);
   opacity: 0;
   animation: slideDown 0.8s ease-out forwards;
@@ -57,8 +62,7 @@ body {
 }
 
 .logo-container {
-  text-align: center;
-  margin-bottom: 1.5rem;
+  width: 100%;
 }
 
 .logo {
@@ -103,7 +107,6 @@ body {
 }
 
 .captcha-container {
-  background-color: #fff;
   border-radius: 8px;
   padding: 0.8rem;
   margin-bottom: 1.2rem;
@@ -148,6 +151,6 @@ body {
 
 .form-label {
   margin-bottom: 0.3rem;
-  color: #495057;
+  color: #000;
   font-weight: 500;
 }

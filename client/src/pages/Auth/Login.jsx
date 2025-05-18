@@ -62,25 +62,24 @@ const Login = () => {
   };
 
   return (
-    <div className="  pb-10 pt-20 flex mx-auto">
+    <div className="w-screen h-screen " style={{backgroundImage: "url(/login-bg.svg", backgroundRepeat: "no-repeat"}}>
+    <div className="  pt-20 pb-10 flex mx-auto">
       <ToastContainer />
       {loading && <Loader preload={true} />}
-      <div className="login-card bg-white mx-auto">
+      <div className="login-card bg-white/30 backdrop-blur-xs rounded-lg shadow-lg p-6 mx-auto">
         <div className="logo-container flex items-center">
           <img
-            src="/Screenshot 2025-04-30 at 2.11.36 PM.png"
+            src="/NCT-MainLogo-2.png"
             alt="Company Logo"
-            className="w-20 h-20 object-cover rounded-full"
           />
-          <h6 className="mb-0 text-xl text-dark">Neo Clouds Technologies</h6>
         </div>
 
         <div id="loginForm">
-          <div className="mb-3">
+          <div className="mb-3 ">
             <label for="email" className="form-label">
               Email Address
             </label>
-            <div className="flex border-2 border-[#6699ff] px-2 py-2 rounded-lg">
+            <div className="flex border-2 border-[#6699ff] bg-white/10 backdrop-blur-xs px-2 py-2 rounded-lg">
               <input
                 type="email"
                 className=" w-[90%] outline-0 border-0 focus:outline-0"
@@ -110,7 +109,7 @@ const Login = () => {
             <label for="password" className="form-label">
               Password
             </label>
-            <div className="input-group flex border-2 border-[#6699ff] px-2 py-2 rounded-lg">
+            <div className="input-group flex border-2 border-[#6699ff] bg-white/10 backdrop-blur-xs px-2 py-2 rounded-lg">
               <input
                 type="password"
                 className="outline-0 w-[90%]"
@@ -161,11 +160,8 @@ const Login = () => {
             </div>
           </div>
 
-          <div className="captcha-container border-[#6699ff]">
+          <div className="captcha-container border-[#6699ff] bg-white/10 backdrop-blur-xs">
             <label className="form-label">Security Verification</label>
-            <div className="captcha-image mb-2" id="captchaImage">
-              CAPTCHA
-            </div>
             <div className="flex items-center mb-2">
               <ReCAPTCHA
                 sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY || sitekeyone}
@@ -183,7 +179,7 @@ const Login = () => {
           <div className="flex flex-col  gap-2">
             <button
               type="submit"
-              className="w-full bg-[#6699ff] text-white rounded-md py-2"
+              className="w-full bg-[#6699ff] text-white rounded-md py-2 cursor-pointer hover:shadow-2xl transition duration-300 ease-in"
               onClick={() => handleSubmittion()}
             >
               <i className="fas fa-sign-in-alt me-2"></i>Sign In
@@ -191,6 +187,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
