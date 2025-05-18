@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Search, Filter, Trash2, Plus } from 'lucide-react';
 import QuestionPagination from './QuestionPagination';
 import QuestionTable from './QuestionTable';
@@ -24,7 +24,7 @@ export default function QuestionBank() {
     section: sections.find(section => section.id == question.section_id)?.section_name
   }))
 
-  const [questions, setQuestions] = useState([]);
+  // const [questions, setQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
@@ -32,17 +32,17 @@ export default function QuestionBank() {
   const [currentPage, setCurrentPage] = useState(1);
 
   // Filter questions based on search term
-  const filteredQuestions = questions.filter(question => 
+  const filteredQuestions = questionsWithGroup.filter(question => 
     question.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
     question.group.toLowerCase().includes(searchTerm.toLowerCase()) ||
     question.type.toLowerCase().includes(searchTerm.toLowerCase())
   
   );
 
-  useEffect(() => {
-    setQuestions(questionsWithGroup);
-    // console.log(questionsWithGroup);
-  }, [loader, groupLoader]);
+  // useEffect(() => {
+  //   setQuestions(questionsWithGroup);
+  //   // console.log(questionsWithGroup);
+  // }, [loader, groupLoader]);
 
   // Handle sorting
   const requestSort = (key) => {
@@ -84,7 +84,8 @@ export default function QuestionBank() {
 
   // Handle bulk delete
   const handleBulkDelete = () => {
-    setQuestions(questions.filter(question => !selectedRows.includes(question.id)));
+    // setQuestions(questions.filter(question => !selectedRows.includes(question.id)));
+    // Perform bulk delete logic
     setSelectedRows([]);
   };
 
@@ -92,7 +93,7 @@ export default function QuestionBank() {
 
 
   return (
-    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+    <div className="rounded-lg lg:px-2 py-8 mx-auto max-w-[97vw] lg:w-[calc(100vw-245px)]">
       <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow px-10 py-6">
         {/* Header section */}
         <div className="flex justify-between items-center">

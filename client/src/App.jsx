@@ -12,6 +12,8 @@ import CreateAdmins from "./pages/CreateAdmins";
 import Authentication from "./components/security/Authentication";
 import Preview from "./pages/Preview";
 import { Suspense } from "react";
+import PasswordRest from "./pages/Auth/PasswordRest";
+import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
 
 function App() {
   return (
@@ -56,12 +58,13 @@ function App() {
                   <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/verify" element={<Verify />} />
+                    <Route path="/reset" element={<PasswordRest />} />
                     <Route path="*" element={<Notfound />} />
                   </Routes>
                 </>
               }
             />
-
+            <Route path="/email/verify" element={<VerifyEmailButton />} />
             <Route path="*" element={<Notfound />} />
           </Routes>
       </BrowserRouter>

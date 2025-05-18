@@ -18,6 +18,7 @@ const useQuestionHook = (id) => {
           return;
         }
         setGetQuestions(response.questions);
+        return
       } catch (error) {
         console.log(error);
       } finally {

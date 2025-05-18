@@ -4,7 +4,7 @@ import Loader from '../Loader'
 import { User } from 'lucide-react';
 
 
-const UsersTable = ( { sortedUsers, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage}) => {
+const UsersTable = ( { sortedUsers, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage, loader}) => {
   const [load, setLoad] = useState(false);
 useEffect(() => {
   setLoad(true);
@@ -131,11 +131,11 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 w-full">
-              {load ? <Loader/>
+              {load || loader ? <Loader/>
                 : sortedUsers.slice((currentPage - 1) * numberPerPage, currentPage * numberPerPage).map((user, index) => (
                     <UserRow key={user.id} user={user} index={index} selectedRows={selectedRows} toggleSelectRow={toggleSelectRow} currentPage={currentPage} numberPerPage={numberPerPage} />
                 ))}
-                {sortedUsers.length <= 0 && (
+                {!load && !loader && sortedUsers.length <= 0 && (
                   <tr>
                     <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
                       No questions found. Try adjusting your search or filters.

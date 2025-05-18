@@ -17,6 +17,7 @@ export const useQuestionGroupHook = (id) => {
           return;
         }
         toast.error(response.message);
+        return
       } catch (error) {
         console.log(error);
       } finally {

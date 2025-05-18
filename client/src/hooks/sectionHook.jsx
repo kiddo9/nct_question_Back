@@ -18,6 +18,7 @@ const useSectionHook = () => {
         }
 
         toast.error(response.message);
+        return
       } catch (error) {
         console.log(error);
       }

@@ -12,10 +12,10 @@ export const Admins = () => {
     { id: 4, name: "users without password", status: "" },
   ];
 
-  const { users } = useAdminLists();
+  const { users, loader } = useAdminLists();
   return (
     <>
-      <Users getUsers={users} status={status} />
+      <Users getUsers={users} status={status} loader={loader} />
     </>
   );
 };

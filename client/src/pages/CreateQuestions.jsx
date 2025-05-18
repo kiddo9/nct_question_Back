@@ -93,14 +93,14 @@ const CreateQuestions = () => {
     }
   }, [type,numberOfOptions])
   return (
-    <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+    <div className="rounded-lg lg:px-2 py-8">
       <ToastContainer/>
-      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2">
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Create New Question</CreateHeader>
         <div className="px-4">
           <h2>Fill in the fields below</h2>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-4 w-full flex flex-col justify-between pb-5 h-fit">
-            <div className="grid grid-cols-2 gap-10 ">
+            <div className="md:grid flex flex-col grid-cols-2 gap-10 ">
               <CustomSelect label="Group" options={questionGroups.map((group) => group.title)} placeholder="Select Group" value={group} setValue={setGroup}/>
               <CustomSelect label="Section" options={sections.map((section) => section.section_name)} placeholder="Select Section" value={section} setValue={setSection}/>
               <fieldset className="flex flex-col gap-2 col-span-2">
@@ -154,7 +154,7 @@ const CreateQuestions = () => {
                 }
               </fieldset>
             </div>
-            <button type="submit" className="border-2 border-[#6674BB] mt-4 mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">Upload Question</button>
+            <button type="submit" className="border-2 border-[#6674BB] mt-5 mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">Upload Question</button>
           </form>
         </div>
       </div>
