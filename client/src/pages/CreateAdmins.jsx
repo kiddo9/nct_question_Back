@@ -75,7 +75,7 @@ const CreateAdmins = () => {
             onSubmit={(e) => handleSubmit(e)}
             className="mt-4 w-full flex flex-col justify-between pb-10 h-[60vh]"
           >
-            <div className="grid grid-cols-2 gap-10 ">
+            <div className="md:grid flex flex-col grid-cols-2 gap-10 ">
               <fieldset className="mb-4 flex flex-col gap-2">
                 <label className="text-sm" htmlFor="name">
                   Name
