@@ -18,18 +18,18 @@ const CreateAdmins = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState('')
-  const [password, setPassword] = useState('')
+  // const [password, setPassword] = useState('')
 
   const credentials = z.object({
     name: z.string().min(1, {message: "Name is required"}), 
     email: z.string().email({required_error: "Email is required", message: "Invalid email"}), 
     role: z.string().min(1, {message: "Role is required"}),
-    password: z.string().min(8, {message: "Password must be at least 8 characters long"}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"}),
+    // password: z.string().min(8, {message: "Password must be at least 8 characters long"}).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {message: "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character"}),
   })
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const result = credentials.safeParse({name, email, role, password})
+    const result = credentials.safeParse({name, email, role})
 
     if(result.success) {
       
@@ -58,11 +58,11 @@ const CreateAdmins = () => {
                 <label className="text-sm" htmlFor="email">Email</label>
                 <input onChange={(e) => setEmail(e.target.value)} value={email} className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" type="email" id="email" name="email" placeholder="3lMw1@example.com"/>
               </fieldset>
-              <fieldset className="mb-4 flex flex-col gap-2">
+              {/* <fieldset className="mb-4 flex flex-col gap-2">
                 <label className="text-sm" htmlFor="password">Password</label>
                 <input onChange={(e) => setPassword(e.target.value)} value={password} className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" type="text" id="password" name="name" placeholder="Enter 8 digit password"/>
                 <span className="text-[#6674BB] text-xs">Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character</span>
-              </fieldset>
+              </fieldset> */}
               <CustomSelect label="Role" options={roles} placeholder={"Select Role"} value={role} setValue={setRole}/>
             </div>
             <button type="submit" className="border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">Create User</button>
