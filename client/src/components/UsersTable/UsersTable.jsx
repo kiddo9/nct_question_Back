@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import QuestionRow from './QuestionRow'
+import UserRow from './UserRow';
 import Loader from '../Loader'
+import { User } from 'lucide-react';
 
-const QuestionTable = ( { sortedQuestions, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage, loader, groupLoader }) => {
+
+const UsersTable = ( { sortedUsers, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage}) => {
   const [load, setLoad] = useState(false);
 useEffect(() => {
   setLoad(true);
@@ -23,7 +25,7 @@ useEffect(() => {
                   <input
                     type="checkbox"
                     className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    checked={selectedRows.length === sortedQuestions.length && sortedQuestions.length > 0}
+                    checked={selectedRows.length === sortedUsers.length && sortedUsers.length > 0}
                     onChange={toggleSelectAll}
                   />
                 </th>
@@ -42,11 +44,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('group')}
+                  onClick={() => requestSort('name')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Group</span>
-                    {sortConfig.key === 'group' && (
+                    <span>Name</span>
+                    {sortConfig.key === 'name' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>
@@ -54,11 +56,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('section')}
+                  onClick={() => requestSort('role')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Section</span>
-                    {sortConfig.key === 'section' && (
+                    <span>Role</span>
+                    {sortConfig.key === 'role' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>
@@ -66,11 +68,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('question')}
+                  onClick={() => requestSort('email')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Question</span>
-                    {sortConfig.key === 'question' && (
+                    <span>Email</span>
+                    {sortConfig.key === 'email' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>
@@ -78,11 +80,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('type')}
+                  onClick={() => requestSort('loggedIn')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Type</span>
-                    {sortConfig.key === 'type' && (
+                    <span>Logged In</span>
+                    {sortConfig.key === 'loggedIn' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>
@@ -90,11 +92,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('difficulty')}
+                  onClick={() => requestSort('passwordSet')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Difficulty</span>
-                    {sortConfig.key === 'difficulty' && (
+                    <span>Password Set</span>
+                    {sortConfig.key === 'passwordSet' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>
@@ -114,11 +116,11 @@ useEffect(() => {
                 <th 
                   scope="col" 
                   className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                  onClick={() => requestSort('lastUpdated')}
+                  onClick={() => requestSort('createdAt')}
                 >
                   <div className="flex items-center space-x-1">
-                    <span>Last Updated</span>
-                    {sortConfig.key === 'lastUpdated' && (
+                    <span>Created At</span>
+                    {sortConfig.key === 'createdAt' && (
                       <span>{sortConfig.direction === 'ascending' ? '↑' : '↓'}</span>
                     )}
                   </div>
@@ -129,12 +131,11 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 w-full">
-              {loader || groupLoader || load ? <Loader /> 
-                :
-                sortedQuestions.slice((currentPage - 1) * numberPerPage, currentPage * numberPerPage).map((question, index) => (
-                    <QuestionRow key={question.id} question={question} index={index} selectedRows={selectedRows} toggleSelectRow={toggleSelectRow} currentPage={currentPage} numberPerPage={numberPerPage} />
+              {load ? <Loader/>
+                : sortedUsers.slice((currentPage - 1) * numberPerPage, currentPage * numberPerPage).map((user, index) => (
+                    <UserRow key={user.id} user={user} index={index} selectedRows={selectedRows} toggleSelectRow={toggleSelectRow} currentPage={currentPage} numberPerPage={numberPerPage} />
                 ))}
-                {!loader && !groupLoader && !load && sortedQuestions.length === 0 && (
+                {sortedUsers.length <= 0 && (
                   <tr>
                     <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
                       No questions found. Try adjusting your search or filters.
@@ -146,4 +147,4 @@ useEffect(() => {
   )
 }
 
-export default QuestionTable
+export default UsersTable
