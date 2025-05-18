@@ -1,7 +1,9 @@
 import React from 'react'
 import { Edit, Trash2, Eye} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
+    const nav = useNavigate();
     const StatusBadge = ({ status }) => {
         let bgColor = '';
         let statusText = '';
@@ -69,10 +71,10 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
     </td>
     <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
       <div className="flex justify-end space-x-2">
-        <button className="text-blue-600 hover:text-blue-900">
+        <button onClick={() => nav(`/admin/user/questions/preview/${question.id}`)} className="text-blue-600 hover:text-blue-900 cursor-pointer">
           <Eye size={18} />
         </button>
-        <button className="text-green-600 hover:text-green-900">
+        <button onClick={() => nav(`/admin/user/questions/edit/${question.id}`)} className="text-green-600 hover:text-green-900">
           <Edit size={18} />
         </button>
         <button className="text-red-600 hover:text-red-900">
