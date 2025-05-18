@@ -4,22 +4,32 @@ import { toast } from "react-toastify";
 
 const useSectionHook = () => {
   const [sections, setSections] = useState([]);
+  const [loader, setLoader] = useState(false);
   useEffect(() => {
     async function getSections() {
-      const resquest = await Api.get("/sections");
-      const response = resquest.data;
+      setLoader(true);
+      try {
+        const resquest = await Api.get("/sections");
+        const response = resquest.data;
 
-      if (response.status == true) {
-        setSections(response.sections);
-        return;
+        if (response.status == true) {
+          setSections(response.sections);
+          return;
+        }
+
+        toast.error(response.message);
+      } catch (error) {
+        console.log(error);
       }
-
-      toast.error(response.message);
+      finally {
+        setLoader(false);
+      }
+      
     }
 
     getSections();
   }, []);
-  return { sections };
+  return { sections, loader };
 };
 
 export default useSectionHook;
