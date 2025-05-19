@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CreateHeader from "../../components/CreateHeader";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { RotateCcwKey } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -10,16 +10,24 @@ const PasswordRest = () => {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  
+}
+
+const query = useQuery();
+const freshUser = query.get("newPassword");
+
   const handleSubmit = (e) =>{
     e.preventDefault()
 
-    if(!currentPassword || !newPassword || !confirmPassword){
+    if((freshUser !== "true" && !currentPassword) || !newPassword || !confirmPassword){
       toast.error("All fields are required")
       return
     }
     if(newPassword == confirmPassword){
       toast.success("Password changed successfully")
-      navigate("/auth/login")
+      // navigate("/auth/login")
     }
     else{
       toast.error("Passwords do not match")
@@ -37,7 +45,9 @@ const PasswordRest = () => {
         <RotateCcwKey className="mx-auto mt-5" size={50} />
         <p className="text-xs mx-auto text-center max-w-[300px] mt-2">Please Confirm changes to avoid getting locked out</p>
         <form className="px-3" onSubmit={handleSubmit}>
-          <div className="mb-6 mt-6">
+          {
+            freshUser !== "true" &&
+            <div className="mb-6 mt-6">
               <label for="password" className="form-label text-sm">
                 Current Password
               </label>
@@ -91,8 +101,7 @@ const PasswordRest = () => {
                 </span>
               </div>
             </div>
-
-
+          }
             <div className="mb-6 mt-6">
               <label for="password" className="form-label text-sm">
                 New Password
@@ -129,7 +138,7 @@ const PasswordRest = () => {
 
             <div className="flex flex-col mb-6 gap-2">
             <button
-              disabled={!currentPassword || !newPassword || !confirmPassword}
+              disabled={(freshUser !== "true" && !currentPassword) || !newPassword || !confirmPassword}
               type="submit"
               className="w-full disabled:bg-[#6699ff]/30 bg-[#6699ff] active:bg-[#D7DDFF]  text-white font-bold rounded-md py-2 cursor-pointer hover:shadow-2xl transition duration-300 ease-in"
             >
