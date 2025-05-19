@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import useOpt from "../hooks/opt";
 import useQuestionHook from "../hooks/questionHook";
 import BackButton from "../components/BackButton";
-import Edit from "../components/Edit";
-import React, { use, useEffect, useState } from "react";
+import Edit from "./EditQuestion";
+import React, { useState } from "react";
 import Warning from "../components/Warning";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
@@ -14,16 +14,15 @@ const Preview = () => {
   console.log(id);
   const { opt } = useOpt();
   const { getEachQuestion, loader } = useQuestionHook(id);
-  const { questionGroups } = useQuestionGroupHook();
-  const { sections } = useSectionHook();
+  const { questionGroups, loader: groupLoader } = useQuestionGroupHook();
+  const { sections, loader: sectionLoader } = useSectionHook();
   const [open, setOpen] = React.useState(false);
   const [Delete, setDelete] = useState(false);
 
 
-
   return (
     <div className=" fixed z-50 bg-white inset-0 overflow-y-auto">
-      {loader && <PLoader />}
+      {loader || groupLoader || sectionLoader && <PLoader />}
       <div
         className={`fixed ${
           Delete == true ? "translate-y-0" : "-translate-y-[100%]"
