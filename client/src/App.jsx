@@ -16,6 +16,8 @@ import PasswordRest from "./pages/Auth/PasswordRest";
 import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
 import EditQuestion from "./pages/EditQuestion";
 import EditAdmins from "./pages/EditAdmin";
+import Roles from "./pages/Roles";
+import Groups from "./pages/Groups";
 
 function App() {
   return (
@@ -37,8 +39,8 @@ function App() {
                           <Route path="/admins" element={<Admins />} />
                           <Route path="/admins/create" element={<CreateAdmins />} />
                           <Route path="/section" element={<Admins />} />
-                          <Route path="/roles" element={<Admins />} />
-                          <Route path="/groups" element={<Admins />} />
+                          <Route path="/roles" element={<Roles />} />
+                          <Route path="/groups" element={<Groups />} />
                           <Route
                             path="/create_admin"
                             element={<CreateAdmins />}
