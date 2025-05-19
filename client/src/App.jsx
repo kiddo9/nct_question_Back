@@ -15,6 +15,7 @@ import { Suspense } from "react";
 import PasswordRest from "./pages/Auth/PasswordRest";
 import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
 import EditQuestion from "./pages/EditQuestion";
+import EditAdmins from "./pages/EditAdmin";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
                           />
                           <Route path="/questions/preview/:id" element={<Preview />} />
                           <Route path="/questions/edit/:id" element={<EditQuestion />} />
+                          <Route path="/admins/edit/:id" element={<EditAdmins />} />
                           <Route path="*" element={<Notfound />} />
                         </Routes>
                       {/* </Suspense> */}

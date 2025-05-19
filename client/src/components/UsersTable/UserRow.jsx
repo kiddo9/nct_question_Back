@@ -1,7 +1,9 @@
 import React from 'react'
 import { Edit, Trash2, Eye} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
+    const nav = useNavigate();
     const StatusBadge = ({ status }) => {
         let bgColor = '';
         let statusText = '';
@@ -105,7 +107,7 @@ const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
         <button className="text-blue-600 hover:text-blue-900">
           <Eye size={18} />
         </button>
-        <button className="text-green-600 hover:text-green-900">
+        <button onClick={() => nav(`/admin/user/admins/edit/${user.id}`)} className="text-green-600 hover:text-green-900">
           <Edit size={18} />
         </button>
         <button className="text-red-600 hover:text-red-900">
