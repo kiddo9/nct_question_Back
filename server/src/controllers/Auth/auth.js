@@ -48,7 +48,7 @@ export const loginController = async (req, res) => {
 
     //return response if it falied
     if (data.success !== true) {
-      res.json({ success: false, message: "CAPTCHA failed" });
+      res.json({ status: false, message: "CAPTCHA failed" });
       return;
     }
 
