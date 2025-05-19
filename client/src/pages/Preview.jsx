@@ -95,6 +95,7 @@ const Preview = () => {
           
 
           <button
+              onClick={() => nav("/admin/user/questions")}
               type="submit"
               className="mt-10  border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
             >
