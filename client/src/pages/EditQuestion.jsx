@@ -38,6 +38,7 @@ const EditQuestions = () => {
   const [numberOfOptions, setNumberOfOptions] = useState('')
   const [options, setOptions] = useState([])
   const [answer, setAnswer] = useState('')
+  const [manual, setManual] = useState(false)
 
   useEffect(() => {
     setGroup(fullQuestion?.group?.title)
@@ -70,10 +71,13 @@ const EditQuestions = () => {
       const updateQuestion = { //data to update question database
         ...fullQuestion,
         q_group_id: questionGroups?.find((gr) => gr?.title == group)?.id,
+        options,
         section_id: sections?.find((sec) => sec?.section_name == section)?.id,
+        trueFalse: type == "T" ? answer : null,
+        marks: mark,
       }
       {/* Data to Update Options Database */}
-      const updateOptions = fullQuestion.options.map((option, i) => ({...option, status: options[i]?.value == answer ? 1 : 0, title: options[i]?.value, question_bank_id: updateQuestion?.id}))
+      const updateOptions =type == "M" && updateQuestion.options.map((option, i) => ({...option, status: options[i]?.value == answer ? 1 : 0, title: options[i]?.value, question_bank_id: updateQuestion?.id}))
       console.log(updateQuestion)
       console.log(updateOptions)
       console.log(result.data)
@@ -81,7 +85,7 @@ const EditQuestions = () => {
     else{
      return result.error.issues.map((issue) => toast.error(issue.message))
     }
-    if(options.length != Number(numberOfOptions)){
+    if(type == "M" && options.length != Number(numberOfOptions)){
        return toast.error('Number of options provided does not match the number of options in the question')
     }
 
@@ -123,14 +127,14 @@ const EditQuestions = () => {
   }
 
   {/* Update the Options when nubmer of options changes */}
-  // useEffect(() => {
-  //   setAnswer('')
-  //   if(type === 'M') {
-  //     setOptions(generateMultipleChoiceOptions(numberOfOptions))
-  //   } else if(type === 'T') {
-  //     setOptions(generateTrueFalseOptions())
-  //   }
-  // }, [type,numberOfOptions, answer])
+  useEffect(() => {
+    setAnswer('')
+    if(type === 'M') {
+      setOptions(generateMultipleChoiceOptions(numberOfOptions))
+    } else if(type === 'T') {
+      setOptions(generateTrueFalseOptions())
+    }
+  }, [manual, numberOfOptions])
   return (
     <div className="rounded-lg lg:px-2 py-8">
       <ToastContainer/>
@@ -157,8 +161,8 @@ const EditQuestions = () => {
                     <p type='button' onClick={() => {setTypeOpen(!typeOpen); }} className={`${type ? 'text-black' : 'text-gray-500'} w-full`}>{switchType(type) || 'Select Question Type'}</p>
                     {typeOpen && (
                         <ul className="absolute z-10 w-full left-0 max-h-[300px] overflow-y-scroll top-12 rounded-lg flex flex-col gap-2 bg-white border-2 border-gray-300 shadow-xl">
-                            <li><p onClick={() => {setType('M'); setTypeOpen(false); setNumberOfOptions(''); }} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >Multiple Choice</p></li>
-                            <li><p onClick={() => {setType('T'); setNumberOfOptions('2'); setTypeOpen(false);}} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >True/False</p></li>
+                            <li><p onClick={() => {setType('M'); setTypeOpen(false); setNumberOfOptions(''); setManual(!manual);}} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >Multiple Choice</p></li>
+                            <li><p onClick={() => {setType('T'); setNumberOfOptions('2'); setTypeOpen(false);  setManual(!manual);}} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >True/False</p></li>
                         </ul>
                     )}
                 </div>
