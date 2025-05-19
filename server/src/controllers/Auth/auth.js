@@ -114,13 +114,14 @@ export const loginController = async (req, res) => {
 //otp validation and authorization logic
 export const otpValidation = async (req, res) => {
   //destructure the body
-  const { email, id, type, otp } = req.body;
+  const { otp } = req.body;
+  const data = req.user;
 
   //using try catch block
   try {
     //validate email exists
     const validatedEmail = await usersModel.findOne({
-      where: { email: email },
+      where: { email: data.email },
     });
 
     //return error if email does not exist
@@ -128,11 +129,11 @@ export const otpValidation = async (req, res) => {
       res.json({ status: false, message: "invalid request" });
       return;
     }
-
     //check if type is auth, reset or p-reset
-    if (type == "auth" || type == "reset") {
+    if (data.type == "auth" || data.type == "reset") {
       //return error if type is not matching
-      if (validatedEmail.otpType !== type) {
+
+      if (validatedEmail.otpType !== data.type) {
         res.json({ status: false, message: "invalid Request" });
         return;
       }
@@ -165,7 +166,10 @@ export const otpValidation = async (req, res) => {
       });
 
       //set logged in to 1
-      await usersModel.update({ loggedIn: 1 }, { where: { encryptedId: id } });
+      await usersModel.update(
+        { loggedIn: 1 },
+        { where: { encryptedId: data.id } }
+      );
 
       res.status(201).json({ status: true, id: validatedEmail.encryptedId });
     } else if (type == "p_reset") {
@@ -404,7 +408,21 @@ export const usersList = async (req, res) => {
 
 //log out controller
 export const Logout = async (req, res) => {
+  const details = req.user;
+
   try {
+    const logoutUser = await usersModel.findOne({
+      where: { encryptedId: details.id },
+    });
+
+    if (logoutUser) {
+      await usersModel.update(
+        {
+          loggedIn: 0,
+        },
+        { where: { encryptedId: details.id } }
+      );
+    }
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.APP_MODE === "production",

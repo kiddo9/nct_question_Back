@@ -45,7 +45,7 @@ const useValidation = () => {
 
     validate();
   }, [token, nav]);
-  return { load, email, id, type };
+  return { load, email, id, type, token };
 };
 
 export default useValidation;

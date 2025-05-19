@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const jwtValidation = async (req, res) => {
+const jwtValidation = async (req, res, next) => {
   const vtToken = req.query.vt;
   console.log(vtToken);
 
@@ -12,11 +12,7 @@ const jwtValidation = async (req, res) => {
     const decode = jwt.verify(vtToken, process.env.JWT_SECRET_KEY);
     req.user = decode;
 
-    return res.json({
-      status: true,
-      message: "an otp was sent to your email",
-      cred: req.user,
-    });
+    next();
   } catch (error) {
     console.log(error);
     res.json({ status: false });

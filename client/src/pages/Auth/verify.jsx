@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const Verify = () => {
   const [Input, setInput] = useState(["", "", "", "", "", ""]);
-  const { load, email, id, type } = useValidation();
+  const { load, email, id, type, token } = useValidation();
   const [loader, setLoader] = useState();
   const nav = useNavigate();
 
@@ -49,10 +49,7 @@ const Verify = () => {
       const submittion = async () => {
         setLoader(true);
         try {
-          const rerquestTo = await Api.post("/auth/validate", {
-            email,
-            id,
-            type,
+          const rerquestTo = await Api.post(`/auth/validate?vt=${token}`, {
             otp,
           });
 
@@ -64,7 +61,7 @@ const Verify = () => {
             return;
           }
 
-          toast.success('Successfully Authenticated');
+          toast.success("Successfully Authenticated");
           nav("/admin/user/questions");
         } catch (error) {
           console.log(error);
@@ -76,7 +73,7 @@ const Verify = () => {
 
       submittion();
     }
-  }, [otp.length, email, nav, id, type, otp]);
+  }, [otp.length, email, token, nav, id, type, otp]);
 
   return (
     <div className=" h-screen pb-10 pt-20 flex mx-auto">

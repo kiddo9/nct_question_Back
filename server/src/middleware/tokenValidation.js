@@ -15,7 +15,13 @@ const tokenValidation = async (req, res, next) => {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decode;
 
-    if (decode.verified == true) {
+    const exist = await usersModel.findOne({
+      where: {
+        encryptedId: req.user.id,
+      },
+    });
+
+    if (decode.verified == true && exist) {
       next();
       return;
     }
@@ -28,7 +34,7 @@ const tokenValidation = async (req, res, next) => {
       { loggedIn: 0 },
       {
         where: {
-          id: req.user.id,
+          encryptedId: req.user.id,
         },
       }
     );
