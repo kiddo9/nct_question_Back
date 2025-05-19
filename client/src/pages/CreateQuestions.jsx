@@ -53,21 +53,21 @@ const CreateQuestions = () => {
       setLoader(true);
       try {
         const requestTo = await Api.post("/create/questions", {
-          group,
-          section,
+          type,
           question,
           mark,
-          type,
+          options: options.map((option) => option.value),
           numberOfOptions,
-          options,
+          QuaterId: sections?.find((sec) => sec?.section_name == section)?.id,
           answer,
+          GroupId: questionGroups?.find((gr) => gr?.title == group)?.id,
         });
 
         const response = requestTo.data;
 
         if (response.status == true) {
           toast.success(response.message);
-          nav(`/questions/preview/${response.Id}`);
+          nav(`/admin/user/questions/preview/${response.Id}`);
           return;
         }
 
