@@ -17,13 +17,13 @@ const connectDB = new Sequelize(
   }
 );
 
-connectDB
-  .authenticate()
-  .then(() => {
-    console.log("Database connected successfully");
-  })
-  .catch((err) => {
-    console.log("Database connection failed: ", err);
-  });
+(async () => {
+  try {
+    await connectDB.authenticate();
+    console.log("connection sucessfull");
+  } catch (error) {
+    console.log("Database connection failed: ", error);
+  }
+})();
 
 export default connectDB;
