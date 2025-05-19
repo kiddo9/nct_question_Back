@@ -60,8 +60,6 @@ export const loginController = async (req, res) => {
       digits: true,
     });
 
-    console.log(generateOtp);
-
     //set otp expiry time
     const otpExpiresIn = new Date(Date.now() + 180 * 1000); //expires in three minute
     //set otpType to auth for authentication

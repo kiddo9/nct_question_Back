@@ -15,12 +15,12 @@ export const passwordSetAndReset = async (req, res) => {
       return res.json({ status: false, message: "Passwords do not match." });
     }
 
-    // if (newPassword.length < 8) {
-    //   return res.json({
-    //     status: false,
-    //     message: "Password should be at least 8 characters long.",
-    //   });
-    // }
+    if (newPassword.length < 8) {
+      return res.json({
+        status: false,
+        message: "Password should be at least 8 characters long.",
+      });
+    }
 
     // Check link validity (only if it's a "pass-set" operation)
     if (id.type === "pass-set") {
@@ -28,24 +28,12 @@ export const passwordSetAndReset = async (req, res) => {
         where: { encryptedId: id.id },
       });
 
-      if (userRecord.password !== null) {
+      if (userRecord.password) {
         return res.json({
           status: false,
           message:
             "Unable to process password change. It seems the link has expired.",
         });
-      }
-    }
-
-    // Check if password is already in use
-    const users = await usersModel.findAll();
-
-    for (const user of users) {
-      if (!user.password) continue;
-
-      const isSamePassword = await bcrypt.compare(newPassword, user.password);
-      if (isSamePassword) {
-        return res.json({ status: false, message: "Password already in use." });
       }
     }
 

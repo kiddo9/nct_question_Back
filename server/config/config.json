@@ -1,11 +1,11 @@
 {
   "development": {
     "username": "root",
-    "password": "syyleDoftlmBLXLTiupFrKWHbUExLnsW",
+    "password": "aunrQAKlmqwdUOrOtdZPmJNVpybTrNHH",
     "database": "railway",
-    "host": "tramway.proxy.rlwy.net",
+    "host": "trolley.proxy.rlwy.net",
     "dialect": "mysql",
-    "port": "38019"
+    "port": "34494"
   },
   "test": {
     "username": "root",
