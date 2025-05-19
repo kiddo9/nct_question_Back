@@ -46,10 +46,9 @@ const EditQuestions = () => {
     setMark(String(fullQuestion?.marks))
     setType(fullQuestion?.type)
     setNumberOfOptions(String(fullQuestion?.options?.length))
-    setOptions(fullQuestion?.options.map((option) => ({label: option?.title, value: option?.title})))
-    setAnswer(fullQuestion?.options?.find((option) => option?.status == 1)?.title)
+    setOptions(type== "T" ? [{label: 'True', value: 'T'}, {label: 'False', value: 'F'}] : fullQuestion?.options.map((option) => ({label: option?.title, value: option?.title})))
+    setAnswer(type == "T" ? fullQuestion?.trueFalse : fullQuestion?.options?.find((option) => option?.status == 1)?.title)
   }, [loader, groupLoader, sectionLoader, optLoader])
-
 
   const questionSchema = z.object({
     group: z.string().min(1, {message: "Group is required"}), 
@@ -104,11 +103,11 @@ const EditQuestions = () => {
     return [
       {
         label: 'True',
-        value: 'true'
+        value: 'T'
       },
       {
         label: 'False',
-        value: 'false'
+        value: 'F'
       } 
   ]
   }
@@ -124,14 +123,14 @@ const EditQuestions = () => {
   }
 
   {/* Update the Options when nubmer of options changes */}
-  useEffect(() => {
-    setAnswer('')
-    if(type === 'M') {
-      setOptions(generateMultipleChoiceOptions(numberOfOptions))
-    } else if(type === 'T') {
-      setOptions(generateTrueFalseOptions())
-    }
-  }, [type,numberOfOptions])
+  // useEffect(() => {
+  //   setAnswer('')
+  //   if(type === 'M') {
+  //     setOptions(generateMultipleChoiceOptions(numberOfOptions))
+  //   } else if(type === 'T') {
+  //     setOptions(generateTrueFalseOptions())
+  //   }
+  // }, [type,numberOfOptions, answer])
   return (
     <div className="rounded-lg lg:px-2 py-8">
       <ToastContainer/>
@@ -183,10 +182,10 @@ const EditQuestions = () => {
                   type === 'T' && (
                     <div className="mb-4">
                       <p>Choose Correct Option</p>
-                      {options.length && options.length > 0 && options.map((option, index) => (
+                      {options.length && options.length > 0 && options?.map((option, index) => (
                         <fieldset className="mb-4 flex gap-2">
-                          <input checked={option.value === answer} onChange={(e) => setAnswer(e.target.value)} type="radio" id={option.label} name="option" key={index} value={option.value} />
-                          <label htmlFor={option.label}>{option.label}</label>
+                          <input checked={option?.value == answer} onChange={(e) => setAnswer(e.target.value)} type="radio" id={option?.label} name="option" key={index} value={option?.value} />
+                          <label htmlFor={option?.label}>{option?.label}</label>
                         </fieldset>
                       ))}
                     </div>
