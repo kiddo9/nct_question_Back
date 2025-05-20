@@ -13,6 +13,12 @@ const tokenValidation = async (req, res, next) => {
 
   try {
     const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if (!decode) {
+      res.json({
+        status: false,
+        message: "access denied. unauthorized access",
+      });
+    }
     req.user = decode;
 
     const exist = await usersModel.findOne({
@@ -22,6 +28,16 @@ const tokenValidation = async (req, res, next) => {
     });
 
     if (decode.verified == true && exist) {
+      if (exist.loggedIn !== 1) {
+        await usersModel.update(
+          { loggedIn: 1 },
+          {
+            where: {
+              encryptedId: req.user.id,
+            },
+          }
+        );
+      }
       next();
       return;
     }

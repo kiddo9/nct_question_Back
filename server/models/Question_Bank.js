@@ -33,11 +33,11 @@ const questionBankModel = connectDB.define(
       allowNull: false,
     },
     created_at: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     updated_at: {
-      type: DataTypes.TIME,
+      type: DataTypes.DATE,
       allowNull: true,
     },
     q_group_id: {

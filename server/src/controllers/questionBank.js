@@ -198,3 +198,102 @@ export const deleteQuestion = async (req, res) => {
     return res.json({ status: false, message: "internal server error" });
   }
 };
+
+export const updateQuestion = async (req, res) => {
+  //destructure the body and retrive all data
+  const {
+    id,
+    type,
+    question,
+    mark,
+    options,
+    numberOfOptions,
+    QuaterId,
+    answer,
+    GroupId,
+  } = req.body;
+
+  //using try catch block
+  try {
+    //if details are empty return error
+    if (
+      !type ||
+      !id ||
+      !question ||
+      !mark ||
+      !QuaterId ||
+      !answer ||
+      !GroupId
+    ) {
+      return res.json({ status: false, message: "unable to update question " });
+    }
+
+    //update the question
+    const updateQuestion = await questionBank.update(
+      {
+        type,
+        question,
+        marks: mark,
+        trueFalse: type == "T" ? answer : null, //check if the type is T for true or false question
+        suitable_words: null,
+        number_of_option: numberOfOptions,
+        active_status: 1,
+        q_group_id: GroupId,
+        class_id: 1,
+        section_id: QuaterId,
+        created_by: 1,
+        updated_by: 1,
+        school_id: 1,
+        academic_id: 1,
+      },
+      { where: { id: id } }
+    );
+
+    //if question was on able to update return error
+    if (!updateQuestion) {
+      return res.json({
+        status: "",
+        message: "unable to update and and add question",
+      });
+    }
+
+    //check is the type is M for muilt questions
+    if (type == "M") {
+      //check if the options is an array
+      if (Array.isArray(options)) {
+        //update and set answer in the options table
+        await Promise.all(
+          options.map((option) =>
+            questionOptionModel.update(
+              {
+                title: option,
+                status: answer == option ? 1 : 0,
+                active_status: 1,
+                question_bank_id: id,
+                created_by: 1,
+                updated_by: 1,
+                school_id: 1,
+                academic_id: 1,
+              },
+              { where: { question_bank_id: id } }
+            )
+          )
+        );
+      } else {
+        //return error if options is not an array
+        return res
+          .status(422)
+          .json({ status: false, message: "unprocessable content" });
+      }
+    }
+
+    //return successful message
+    return res.status(201).json({
+      status: true,
+      message: "Question edited successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: "internal error" });
+  }
+};
