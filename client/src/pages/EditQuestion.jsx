@@ -128,13 +128,17 @@ const EditQuestions = () => {
 
   {/* Update the Options when nubmer of options changes */}
   useEffect(() => {
-    setAnswer('')
-    if(type === 'M') {
-      setOptions(generateMultipleChoiceOptions(numberOfOptions))
-    } else if(type === 'T') {
-      setOptions(generateTrueFalseOptions())
+    
+    if(numberOfOptions != options.length){
+      setAnswer('')
+      if(type === 'M') {
+        setOptions(generateMultipleChoiceOptions(numberOfOptions))
+      } else if(type === 'T') {
+        setOptions(generateTrueFalseOptions())
+      }
     }
-  }, [manual, numberOfOptions])
+    
+  }, [manual,numberOfOptions])
   return (
     <div className="rounded-lg lg:px-2 py-8">
       <ToastContainer/>
