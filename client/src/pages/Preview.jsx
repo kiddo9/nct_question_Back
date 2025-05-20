@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import useQuestionHook from '../hooks/questionHook'
 import { useNavigate, useParams } from 'react-router-dom';
 import useOpt from '../hooks/opt';
@@ -7,6 +7,7 @@ import useSectionHook from '../hooks/sectionHook';
 import Loader from '../components/Loader';
 import { ToastContainer } from 'react-toastify';
 import { Edit, Trash2 } from 'lucide-react';
+import DeleteQuestion from '../components/DeleteModals/DeleteQuestion';
 
 const Preview = () => {
   const nav = useNavigate();
@@ -15,6 +16,7 @@ const Preview = () => {
   const { getEachQuestion, loader: questionLoader } = useQuestionHook(id);
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook();
   const { sections, loader: sectionLoader } = useSectionHook();
+  const [openDelete, setOpenDelete] = useState(false);
 
   const fullQuestion = {
     ...getEachQuestion,
@@ -40,8 +42,9 @@ const Preview = () => {
               <Edit  size={15} />
               Edit
             </span>
-            <span className='flex items-center text-lg gap-2 text-[#FF0000]/70 hover:text-[#FF0000] cursor-pointer'>
-              <Trash2 onClick={null} size={15} />
+            <span onClick={() => setOpenDelete(true)} className='flex items-center text-lg gap-2 text-[#FF0000]/70 hover:text-[#FF0000] cursor-pointer'>
+
+              <Trash2  size={15} />
               Delete
             </span>
           </div>
@@ -105,6 +108,7 @@ const Preview = () => {
         </div>
         
       </div>
+      {openDelete && <DeleteQuestion id={id} setOpenDelete={setOpenDelete} />}
     </div>
   )
 }
