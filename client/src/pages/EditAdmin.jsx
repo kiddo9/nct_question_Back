@@ -7,33 +7,41 @@ import { ToastContainer, toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import useAdminLists from "../hooks/adminLists";
+import useRoleHook from "../hooks/roleHook";
 
 const EditAdmins = () => {
-  const roles = [
-    { id: 1, label: "UI/UX", value: "ui-ux" },
-    { id: 2, label: "Developer", value: "developer" },
-    { id: 3, label: "Cloud Computing", value: "cloud-computing" },
-    { id: 4, label: "Data Analyst", value: "data-analyst" },
-    { id: 5, label: "Data Scientist", value: "data-scientist" },
-    { id: 6, label: "Digital Marketing", value: "digital-marketing" },
-    { id: 7, label: "Cyber Security", value: "cyber-security" },
-  ];
+  
+  // const roles = [
+  //   { id: 1, label: "UI/UX", value: "ui-ux" },
+  //   { id: 2, label: "Developer", value: "developer" },
+  //   { id: 3, label: "Cloud Computing", value: "cloud-computing" },
+  //   { id: 4, label: "Data Analyst", value: "data-analyst" },
+  //   { id: 5, label: "Data Scientist", value: "data-scientist" },
+  //   { id: 6, label: "Digital Marketing", value: "digital-marketing" },
+  //   { id: 7, label: "Cyber Security", value: "cyber-security" },
+  // ];
   const { id } = useParams();
   const { users, loader: adminLoader } = useAdminLists();
-  const admin = users.find((admin) => admin.id == id);
+  const { getRoles, loader: roleLoader } = useRoleHook();
+  const admin = users?.find((admin) => admin?.id == id);
+
   {/* would also fetch the roles and merge with admins here */}
+  const fullAdmin = {
+    ...admin, 
+    role: getRoles?.find((role) => role?.id == admin?.roles)?.roles
+  };
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    if (admin) {
-      setName(admin.name);
-      setEmail(admin.email);
-      setRole(admin.role);
+    if (fullAdmin) {
+      setName(fullAdmin.name);
+      setEmail(fullAdmin.email);
+      setRole(fullAdmin.role);
     }
-  }, [admin, adminLoader]);
+  }, [roleLoader, adminLoader]);
 
   const credentials = z.object({
     name: z.string().min(1, { message: "Name is required" }),
@@ -95,7 +103,7 @@ const EditAdmins = () => {
               </fieldset>
               <CustomSelect
                 label="Role"
-                options={roles}
+                options={getRoles.map((role) => role?.roles)}
                 placeholder={"Select Role"}
                 value={role}
                 setValue={setRole}

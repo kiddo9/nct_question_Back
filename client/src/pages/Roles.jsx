@@ -5,10 +5,12 @@ import AddButton from '../components/AddButton'
 import { Link } from 'react-router-dom'
 import { CircleX } from 'lucide-react'
 import useRoleHook from '../hooks/roleHook'
+import CreateRoles from '../components/CreateModals/CreateRoles'
 
 const Roles = () => {
     const { getRoles, loader: roleLoader } = useRoleHook()
-    console.log(getRoles);
+    const [openCreate, setOpenCreate] = React.useState(false);
+    
 
     const StatusBadge = ({ status }) => {
         let bgColor = '';
@@ -48,14 +50,14 @@ const Roles = () => {
                     <img src="/edit.svg" alt="edit" width={25} height={25} />
                 </div>
                 
-                <Link to={'/admin/user/groups/create'}>
+                <Link to={''} onClick={() => setOpenCreate(true)}>
                     <AddButton>Add Role</AddButton>
                 </Link>
             </div>
             <div className=' overflow-y-scroll max-h-[calc(100vh-232px)]'>
             {
                 getRoles.map((role) => (
-                    <div className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
+                    <div key={role.id} className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
                         <h1 className='md:text-lg text-[16px]  text-black'>{role.roles}</h1>
                         <div className='flex gap-10 items-center'>
                             <StatusBadge status={role.active_status} />
@@ -68,14 +70,10 @@ const Roles = () => {
             }
             </div>
         </div>
+        {openCreate && <CreateRoles setOpenCreate={setOpenCreate} />}
     </div>
   )
 }
 
-const AddGroupModal = () => {
-  return (
-    <div>AddGroupModal</div>
-  )
-}
 
 export default Roles
