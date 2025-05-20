@@ -91,7 +91,7 @@ const EditQuestions = () => {
           type: type,
           question: question,
           mark: mark,
-          options: updateOptions.map((option) => option.value),
+          options: updateOptions?.map((option) => option.value) || options.map((option) => option.value),
           numberOfOptions: numberOfOptions,
           QuaterId: updateQuestion.section_id,
           answer: answer,
