@@ -8,7 +8,6 @@ import { CircleX } from 'lucide-react'
 
 const Groups = () => {
     const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
-    console.log(questionGroups)
 
     const StatusBadge = ({ status }) => {
         let bgColor = '';
