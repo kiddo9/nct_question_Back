@@ -66,6 +66,7 @@ const Verify = () => {
         } catch (error) {
           console.log(error);
           toast.error("An error occourd");
+          nav("/admin/user/questions");
         } finally {
           setLoader(false);
         }

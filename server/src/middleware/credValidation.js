@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 const jwtValidation = async (req, res, next) => {
   const vtToken = req.query.vt;
-  console.log(vtToken);
 
   try {
     if (!vtToken) {
@@ -10,6 +9,9 @@ const jwtValidation = async (req, res, next) => {
     }
 
     const decode = jwt.verify(vtToken, process.env.JWT_SECRET_KEY);
+    if (!decode) {
+      return res.json({ status: false, message: "invalid request" });
+    }
     req.user = decode;
 
     next();

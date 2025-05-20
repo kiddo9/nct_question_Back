@@ -11,6 +11,7 @@ import {
 } from "../controllers/Auth/auth.js";
 import {
   createQuestions,
+  deleteQuestion,
   getAllQuestions,
   getEachQuestionById,
 } from "../controllers/questionBank.js";
@@ -64,4 +65,6 @@ router.post("/admin/create", tokenVerify, createAdminUser);
 router.post("/logout", tokenVerify, Logout);
 
 router.put("/password/update", passwordTokenValidation, passwordSetAndReset);
+
+router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
 export default router;
