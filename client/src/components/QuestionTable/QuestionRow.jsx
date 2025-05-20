@@ -60,9 +60,9 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
       {question.type}
     </td>
-    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+    {/* <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
       {question.difficulty}
-    </td>
+    </td> */}
     <td className="px-4 py-4 whitespace-nowrap">
       <StatusBadge status={question.active_status} />
     </td>
