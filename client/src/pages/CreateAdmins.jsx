@@ -6,17 +6,19 @@ import Api from "../api/Api";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
+import useRoleHook from "../hooks/roleHook";
 
 const CreateAdmins = () => {
-  const roles = [
-    { id: 1, label: "UI/UX", value: "ui-ux" },
-    { id: 2, label: "Developer", value: "developer" },
-    { id: 3, label: "Cloud Computing", value: "cloud-computing" },
-    { id: 4, label: "Data Analyst", value: "data-analyst" },
-    { id: 5, label: "Data Scientist", value: "data-scientist" },
-    { id: 6, label: "Digital Marketing", value: "digital-marketing" },
-    { id: 7, label: "Cyber Security", value: "cyber-security" },
-  ];
+  const { getRoles, loader: roleLoader } = useRoleHook();
+  // const roles = [
+  //   { id: 1, label: "UI/UX", value: "ui-ux" },
+  //   { id: 2, label: "Developer", value: "developer" },
+  //   { id: 3, label: "Cloud Computing", value: "cloud-computing" },
+  //   { id: 4, label: "Data Analyst", value: "data-analyst" },
+  //   { id: 5, label: "Data Scientist", value: "data-scientist" },
+  //   { id: 6, label: "Digital Marketing", value: "digital-marketing" },
+  //   { id: 7, label: "Cyber Security", value: "cyber-security" },
+  // ];
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -66,7 +68,7 @@ const CreateAdmins = () => {
   return (
     <div className="rounded-lg lg:px-2 py-8 ">
       <ToastContainer />
-      {loader && <Loader preload={true} />}
+      {loader || roleLoader && <Loader preload={true} />}
       <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2 mx-auto w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Create New Admin User</CreateHeader>
         <div className="px-4">
@@ -111,7 +113,7 @@ const CreateAdmins = () => {
               </fieldset> */}
               <CustomSelect
                 label="Role"
-                options={roles}
+                options={getRoles.map((role) => role?.roles)}
                 placeholder={"Select Role"}
                 value={role}
                 setValue={setRole}
