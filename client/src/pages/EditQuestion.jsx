@@ -84,14 +84,14 @@ const EditQuestions = () => {
         marks: mark,
       }
       {/* Data to Update Options Database */}
-      const updateOptions =type == "M" && updateQuestion.options.map((option, i) => ({...option, status: options[i]?.value == answer ? 1 : 0, title: options[i]?.value, question_bank_id: updateQuestion?.id}))
+      // const updateOptions =type == "M" && updateQuestion.options.map((option, i) => ({...option, status: options[i]?.value == answer ? 1 : 0, title: options[i]?.value, question_bank_id: updateQuestion?.id}))
       try {
         const request = await Api.put(`/question/bank/update`, {
           id: updateQuestion.id,
           type: type,
           question: question,
           mark: mark,
-          options: updateOptions?.map((option) => option.value) || options.map((option) => option.value),
+          options: options.map((option) => option.value),
           numberOfOptions: numberOfOptions,
           QuaterId: updateQuestion.section_id,
           answer: answer,
