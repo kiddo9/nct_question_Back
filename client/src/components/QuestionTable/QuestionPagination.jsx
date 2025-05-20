@@ -11,15 +11,21 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
                 setNumberPerPage(parseInt(e.target.value))
                 setCurrentPage(1)
             }} name="numberPerPage" id="">
-              <option value="6">6</option>
+              <option value="5">5</option>
               <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
             </select>
             {sortedQuestions.length > numberPerPage && (
             <>
               <button disabled={currentPage <= 1} onClick={() => setCurrentPage(currentPage - 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
                 Previous
               </button>
-              {Array.from({ length: Math.ceil(questions.length / numberPerPage) }, (_, index) => (
+              
+              {Array.from({ length: Math.ceil(sortedQuestions.length / numberPerPage) }, (_, index) => (
+                (index + 1 < currentPage + 3 && index + 1 > currentPage - 3 ) ?
                 <button
                   key={index}
                   className={`px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md ${
@@ -29,8 +35,23 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
                 >
                   {index + 1}
                 </button>
+                : (index + 1 == Math.ceil(sortedQuestions.length / numberPerPage) || index + 1 == 1) &&
+                <>
+                  {currentPage <= Math.ceil(sortedQuestions.length / numberPerPage) -4 && index + 1 == Math.ceil(sortedQuestions.length / numberPerPage) && (<span>...</span>)}
+                  <button
+                    key={index}
+                    className={`px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md ${
+                      currentPage === index + 1 ? "bg-[#6674BB] text-white" : "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50"
+                    }`}
+                    onClick={() => setCurrentPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                  {currentPage > 4 && index + 1 == 1 &&  (<span>...</span>)}
+                </>
               ))}
-              <button disabled={currentPage >= Math.ceil(questions.length / numberPerPage)} onClick={() => setCurrentPage(currentPage + 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
+              
+              <button disabled={currentPage >= Math.ceil(sortedQuestions.length / numberPerPage)} onClick={() => setCurrentPage(currentPage + 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
                 Next
               </button>
             </>
