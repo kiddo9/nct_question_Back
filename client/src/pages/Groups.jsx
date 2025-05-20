@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import Loader from '../components/Loader'
 import AddButton from '../components/AddButton'
 import { Link } from 'react-router-dom'
 import { useQuestionGroupHook } from '../hooks/questionGroupHook'
 import { CircleX } from 'lucide-react'
+import CreateGroups from '../components/CreateModals/CreateGroups'
 
 const Groups = () => {
     const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
+    const [openCreate, setOpenCreate] = useState(false);
 
     const StatusBadge = ({ status }) => {
         let bgColor = '';
@@ -47,14 +49,14 @@ const Groups = () => {
                     <img src="/edit.svg" alt="edit" width={25} height={25} />
                 </div>
                 
-                <Link to={'/admin/user/groups/create'}>
+                <Link to={''} onClick={() => setOpenCreate(true)}>
                     <AddButton>Add Group</AddButton>
                 </Link>
             </div>
             <div className=' overflow-y-scroll max-h-[calc(100vh-232px)]'>
             {
                 questionGroups.map((group) => (
-                    <div className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
+                    <div key={group.id} className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
                         <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
                         <div className='flex gap-10 items-center'>
                             <StatusBadge status={group.active_status} />
@@ -67,14 +69,10 @@ const Groups = () => {
             }
             </div>
         </div>
+        {openCreate && <CreateGroups setOpenCreate={setOpenCreate} />}
     </div>
   )
 }
 
-const AddGroupModal = () => {
-  return (
-    <div>AddGroupModal</div>
-  )
-}
 
 export default Groups
