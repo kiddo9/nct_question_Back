@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import Loader from '../components/Loader'
 import AddButton from '../components/AddButton'
@@ -7,11 +7,20 @@ import { CircleX } from 'lucide-react'
 import CreateRoles from '../components/CreateModals/CreateRoles'
 import useSectionHook from '../hooks/sectionHook'
 import CreateSections from '../components/CreateModals/CreateSections'
+import DeleteEnum from '../components/DeleteModals/DeleteEnum'
 
 const Sections = () => {
     const { sections, loader: sectionLoader } = useSectionHook()
-    const [openCreate, setOpenCreate] = React.useState(false);
-    // console.log(sections)
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteName, setDeleteName] = useState(null);
+    
+    const handleDelete = (id, name) => {
+        setOpenDelete(true);
+        setDeleteName(name);
+        setDeleteId(id);
+    };
     
 
     const StatusBadge = ({ status }) => {
@@ -63,7 +72,7 @@ const Sections = () => {
                         <h1 className='md:text-lg text-[16px]  text-black'>{section.section_name}</h1>
                         <div className='flex gap-10 items-center'>
                             <StatusBadge status={section.active_status} />
-                            <CircleX className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                            <CircleX onClick={() => handleDelete(section.id, section.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
                         </div>
                                             
                     </div>
@@ -73,6 +82,7 @@ const Sections = () => {
             </div>
         </div>
         {openCreate && <CreateSections setOpenCreate={setOpenCreate} />}
+        {openDelete && <DeleteEnum type='section' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
     </div>
   )
 }
