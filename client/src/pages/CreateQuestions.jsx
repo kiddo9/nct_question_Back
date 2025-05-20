@@ -106,11 +106,11 @@ const CreateQuestions = () => {
     return [
       {
         label: "True",
-        value: "true",
+        value: "T",
       },
       {
         label: "False",
-        value: "false",
+        value: "F",
       },
     ];
   };
