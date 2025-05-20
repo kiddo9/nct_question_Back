@@ -18,6 +18,7 @@ import EditQuestion from "./pages/EditQuestion";
 import EditAdmins from "./pages/EditAdmin";
 import Roles from "./pages/Roles";
 import Groups from "./pages/Groups";
+import Sections from "./pages/Sections";
 
 function App() {
   return (
@@ -38,7 +39,7 @@ function App() {
                           <Route path="/questions/create" element={<CreateQuestions />} />
                           <Route path="/admins" element={<Admins />} />
                           <Route path="/admins/create" element={<CreateAdmins />} />
-                          <Route path="/section" element={<Admins />} />
+                          <Route path="/section" element={<Sections />} />
                           <Route path="/roles" element={<Roles />} />
                           <Route path="/groups" element={<Groups />} />
                           <Route
