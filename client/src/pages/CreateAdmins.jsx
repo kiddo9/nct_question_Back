@@ -43,7 +43,7 @@ const CreateAdmins = () => {
     if (result.success) {
       setLoader(true);
       try {
-        const request = await Api.post("/admin/create", { name, email, role });
+        const request = await Api.post("/admin/create", { name, email, role: getRoles?.find((ro) => ro?.roles == role)?.id });
         const response = request.data;
 
         if (response.status !== true) {
