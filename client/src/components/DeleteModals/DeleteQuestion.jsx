@@ -20,7 +20,7 @@ const DeleteQuestion = ({id, setOpenDelete}) => {
             setTimeout(() => {
                 setOpenDelete(false)
                 nav('/admin/user/questions')
-            }, 2000)
+            }, 1000)
         } catch (error) {
             toast.error("An error occurred while deleting question");
             console.log(error);
@@ -38,10 +38,10 @@ const DeleteQuestion = ({id, setOpenDelete}) => {
             </header>
             <p className='text-center mt-5 mb-2'>Are you sure you want to delete this question?</p>
             <div className='flex justify-center gap-4 px-10 pb-3'>
-                <button onClick={handleDelete} className='bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-red-600'>
+                <button disabled={loader} onClick={handleDelete} className='bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-red-600'>
                     {loader ? 'Deleting...' : 'Yes'}
                 </button>
-                <button onClick={() => setOpenDelete(false)} className='bg-[#6699ff] text-white px-4 py-2 rounded-lg cursor-pointer hover:shadow-2xl'>No</button>
+                <button disabled={loader} onClick={() => setOpenDelete(false)} className='bg-[#6699ff] text-white px-4 py-2 rounded-lg cursor-pointer hover:shadow-2xl'>No</button>
             </div>
        </div>
     </div>
