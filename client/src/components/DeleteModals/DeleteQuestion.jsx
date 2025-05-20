@@ -35,7 +35,6 @@ const DeleteQuestion = ({id, setOpenDelete}) => {
                 <button onClick={() => setOpenDelete(false)} className='bg-[#6699ff] text-white px-4 py-2 rounded-lg cursor-pointer hover:shadow-2xl'>No</button>
             </div>
        </div>
-
     </div>
   )
 }
