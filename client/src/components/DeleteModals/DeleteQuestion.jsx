@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import Api from '../../api/Api'
 
 const DeleteQuestion = ({id, setOpenDelete}) => {
     const [loader, setLoader] = useState(false)
@@ -8,16 +9,25 @@ const DeleteQuestion = ({id, setOpenDelete}) => {
     const handleDelete = async () => {
         setLoader(true)
         {/*DELETE API GOES HERE */}
-
-            
-        toast.success(`question with id ${id} deleted`)
-        
-            
-        setTimeout(() => {
+        try {
+            const response = await Api.delete(`/questions/bank/delete/${id}`)
+            const result = response.data
+            if(result.status !== true) {
+                toast.error(result.message)
+                return
+            }
+            toast.success(result.message)  
+            setTimeout(() => {
+                setOpenDelete(false)
+                nav('/admin/user/questions')
+            }, 2000)
+        } catch (error) {
+            toast.error("An error occurred while deleting question");
+            console.log(error);
+        }finally {
             setLoader(false)
-            setOpenDelete(false)
-            nav('/admin/user/questions')
-        }, 2000)
+        }
+        
         
     }
   return (
