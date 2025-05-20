@@ -191,7 +191,7 @@ const EditQuestions = () => {
                     <div className="mb-4">
                       <p>Choose Correct Option</p>
                       {options.length && options.length > 0 && options?.map((option, index) => (
-                        <fieldset className="mb-4 flex gap-2">
+                        <fieldset key={index} className="mb-4 flex gap-2">
                           <input checked={option?.value == answer} onChange={(e) => setAnswer(e.target.value)} type="radio" id={option?.label} name="option" key={index} value={option?.value} />
                           <label htmlFor={option?.label}>{option?.label}</label>
                         </fieldset>
