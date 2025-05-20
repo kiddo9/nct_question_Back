@@ -200,7 +200,6 @@ export const deleteQuestion = async (req, res) => {
 };
 
 export const updateQuestion = async (req, res) => {
-  //destructure the body and retrive all data
   const {
     id,
     type,
@@ -213,9 +212,7 @@ export const updateQuestion = async (req, res) => {
     GroupId,
   } = req.body;
 
-  //using try catch block
   try {
-    //if details are empty return error
     if (
       !type ||
       !id ||
@@ -225,16 +222,15 @@ export const updateQuestion = async (req, res) => {
       !answer ||
       !GroupId
     ) {
-      return res.json({ status: false, message: "unable to update question " });
+      return res.json({ status: false, message: "unable to update question" });
     }
 
-    //update the question
     const updateQuestion = await questionBank.update(
       {
         type,
         question,
         marks: mark,
-        trueFalse: type == "T" ? answer : null, //check if the type is T for true or false question
+        trueFalse: type == "T" ? answer : null,
         suitable_words: null,
         number_of_option: numberOfOptions,
         active_status: 1,
@@ -249,45 +245,46 @@ export const updateQuestion = async (req, res) => {
       { where: { id: id } }
     );
 
-    //if question was on able to update return error
-    if (!updateQuestion) {
+    if (updateQuestion[0] === 0) {
       return res.json({
-        status: "",
-        message: "unable to update and and add question",
+        status: false,
+        message: "unable to update and add question",
       });
     }
 
-    //check is the type is M for muilt questions
-    if (type == "M") {
-      //check if the options is an array
-      if (Array.isArray(options)) {
-        //update and set answer in the options table
-        await Promise.all(
-          options.map((option) =>
-            questionOptionModel.update(
-              {
-                title: option,
-                status: answer == option ? 1 : 0,
-                active_status: 1,
-                question_bank_id: id,
-                created_by: 1,
-                updated_by: 1,
-                school_id: 1,
-                academic_id: 1,
-              },
-              { where: { question_bank_id: id } }
-            )
-          )
-        );
-      } else {
-        //return error if options is not an array
-        return res
-          .status(422)
-          .json({ status: false, message: "unprocessable content" });
+    if (type == "T") {
+      const checkIFOption = await questionOptionModel.findAll({
+        where: { question_bank_id: id },
+      });
+
+      if (checkIFOption) {
+        await questionOptionModel.destroy({
+          where: { question_bank_id: id },
+        });
       }
     }
 
-    //return successful message
+    if (type == "M" && Array.isArray(options) && options.length >= 2) {
+      await questionOptionModel.destroy({
+        where: { question_bank_id: id },
+      });
+
+      await Promise.all(
+        options.map((option) =>
+          questionOptionModel.create({
+            title: option,
+            status: answer === option ? 1 : 0,
+            active_status: 1,
+            question_bank_id: id,
+            created_by: 1,
+            updated_by: 1,
+            school_id: 1,
+            academic_id: 1,
+          })
+        )
+      );
+    }
+
     return res.status(201).json({
       status: true,
       message: "Question edited successfully",
