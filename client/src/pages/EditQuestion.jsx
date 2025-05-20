@@ -5,7 +5,7 @@ import {z} from "zod"
 import { ToastContainer, toast } from "react-toastify";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useQuestionHook from "../hooks/questionHook";
 import useOpt from "../hooks/opt";
 import Loader from "../components/Loader";
@@ -17,6 +17,7 @@ const EditQuestions = () => {
   const { getEachQuestion, loader: questionLoader } = useQuestionHook(id);
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook();
   const { sections, loader: sectionLoader } = useSectionHook();
+  const nav = useNavigate();
 
   
   const fullQuestion = {
@@ -103,7 +104,7 @@ const EditQuestions = () => {
         }
         toast.success(response.message)
         setTimeout(() => {
-          window.location.reload();
+          nav(`/admin/user/questions/preview/${updateQuestion.id}`);
         }, 1000);
       } catch (error) {
         toast.error('Something went wrong')
@@ -162,7 +163,7 @@ const EditQuestions = () => {
   {/* Update the Options when nubmer of options changes */}
   useEffect(() => {
     
-    if(numberOfOptions != options.length){
+    if(type === 'T' || numberOfOptions != options.length){
       setAnswer('')
       if(type === 'M') {
         setOptions(generateMultipleChoiceOptions(numberOfOptions))
