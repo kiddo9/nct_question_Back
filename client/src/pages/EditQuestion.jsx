@@ -140,7 +140,7 @@ const EditQuestions = () => {
       <ToastContainer/>
       <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Edit Question</CreateHeader>
-        <div className="px-4">
+        <div className="px-4 overflow-y-scroll max-h-[calc(100vh-232px)]">
           <h2>Review and edit the fields below</h2>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-4 w-full flex flex-col justify-between pb-5 h-fit">
             <div className="md:grid flex flex-col grid-cols-2 gap-10 ">
