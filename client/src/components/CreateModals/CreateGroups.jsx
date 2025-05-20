@@ -17,15 +17,15 @@ const CreateGroups = ({setOpenCreate}) => {
         }
         {/*CREATE API GOES HERE */}
         try {
-            // const request = await Api.post('/create/roles', {role: roles})
-            // const response = request.data
-            // if (response.status !== true) {
-            //     toast.error(response.message)
-            //     return
-            // }
-            // toast.success(response.message)
+            const request = await Api.post('/create/groups', {group: groups})
+            const response = request.data
+            if (response.status !== true) {
+                toast.error(response.message)
+                return
+            }
+            toast.success(response.message)
             
-            console.log(groups);
+            // console.log(groups);
             setTimeout(() => {
                 setOpenCreate(false)
                 window.location.reload();
