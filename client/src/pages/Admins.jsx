@@ -3,6 +3,7 @@ import Pagination from "../components/Pagination";
 import AddButton from "../components/AddButton";
 import Users from "../components/UsersTable/Users";
 import useAdminLists from "../hooks/adminLists";
+import useRoleHook from "../hooks/roleHook";
 
 export const Admins = () => {
   const status = [
@@ -13,9 +14,10 @@ export const Admins = () => {
   ];
 
   const { users, loader } = useAdminLists();
+  const { getRoles, loader: roleLoader } = useRoleHook();
   return (
     <>
-      <Users getUsers={users} status={status} loader={loader} />
+      <Users getUsers={users} getRoles={getRoles} status={status} loader={loader} roleLoader={roleLoader} />
     </>
   );
 };

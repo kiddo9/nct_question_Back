@@ -128,19 +128,23 @@ const EditQuestions = () => {
 
   {/* Update the Options when nubmer of options changes */}
   useEffect(() => {
-    setAnswer('')
-    if(type === 'M') {
-      setOptions(generateMultipleChoiceOptions(numberOfOptions))
-    } else if(type === 'T') {
-      setOptions(generateTrueFalseOptions())
+    
+    if(numberOfOptions != options.length){
+      setAnswer('')
+      if(type === 'M') {
+        setOptions(generateMultipleChoiceOptions(numberOfOptions))
+      } else if(type === 'T') {
+        setOptions(generateTrueFalseOptions())
+      }
     }
-  }, [manual, numberOfOptions])
+    
+  }, [manual,numberOfOptions])
   return (
     <div className="rounded-lg lg:px-2 py-8">
       <ToastContainer/>
       <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Edit Question</CreateHeader>
-        <div className="px-4">
+        <div className="px-4 overflow-y-scroll max-h-[calc(100vh-232px)]">
           <h2>Review and edit the fields below</h2>
           <form onSubmit={(e) => handleSubmit(e)} className="mt-4 w-full flex flex-col justify-between pb-5 h-fit">
             <div className="md:grid flex flex-col grid-cols-2 gap-10 ">
@@ -187,7 +191,7 @@ const EditQuestions = () => {
                     <div className="mb-4">
                       <p>Choose Correct Option</p>
                       {options.length && options.length > 0 && options?.map((option, index) => (
-                        <fieldset className="mb-4 flex gap-2">
+                        <fieldset key={index} className="mb-4 flex gap-2">
                           <input checked={option?.value == answer} onChange={(e) => setAnswer(e.target.value)} type="radio" id={option?.label} name="option" key={index} value={option?.value} />
                           <label htmlFor={option?.label}>{option?.label}</label>
                         </fieldset>

@@ -60,9 +60,9 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
       {question.type}
     </td>
-    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+    {/* <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
       {question.difficulty}
-    </td>
+    </td> */}
     <td className="px-4 py-4 whitespace-nowrap">
       <StatusBadge status={question.active_status} />
     </td>
@@ -77,9 +77,9 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
         <button onClick={() => nav(`/admin/user/questions/edit/${question.id}`)} className="text-green-600 hover:text-green-900">
           <Edit size={18} />
         </button>
-        <button className="text-red-600 hover:text-red-900">
+        {/* <button className="text-red-600 hover:text-red-900">
           <Trash2 size={18} />
-        </button>
+        </button> */}
       </div>
     </td>
   </tr>

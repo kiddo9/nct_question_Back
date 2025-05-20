@@ -101,7 +101,7 @@ const QuestionTable = ({
               )}
             </div>
           </th>
-          <th
+          {/* <th
             scope="col"
             className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
             onClick={() => requestSort("difficulty")}
@@ -112,7 +112,7 @@ const QuestionTable = ({
                 <span>{sortConfig.direction === "ascending" ? "↑" : "↓"}</span>
               )}
             </div>
-          </th>
+          </th> */}
           <th
             scope="col"
             className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
@@ -145,7 +145,7 @@ const QuestionTable = ({
           </th>
         </tr>
       </thead>
-      <tbody className="bg-white divide-y divide-gray-200 w-full">
+      <tbody className="bg-white divide-y divide-gray-200 w-full overflow-y-scroll h-[45vh]">
         {loader || groupLoader || load ? (
           <Loader />
         ) : (

@@ -26,14 +26,14 @@ const CreateQuestions = () => {
   const nav = useNavigate();
 
   const questionSchema = z.object({
-    group: z.string().min(1, { message: "Group is required" }),
-    section: z.string().min(1, { message: "Section is required" }),
-    question: z.string().min(1, { message: "Question is required" }),
-    mark: z.string().min(1, { message: "Mark is required" }),
-    type: z.string().min(1, { message: "Type is required" }),
-    // numberOfOptions: z.string().min(1, {message: "Number of options is required"}),
-    // options: z.array(z.object({label: z.string(), value: z.string()})).min(2, {message: "At least two options are required"}),
-    answer: z.string().min(1, { message: "Answer is required" }),
+    group: z.string().trim().min(1, { message: "Group is required" }),
+    section: z.string().trim().min(1, { message: "Section is required" }),
+    question: z.string().trim().min(1, { message: "Question is required" }),
+    mark: z.string().trim().min(1, { message: "Mark is required" }),
+    type: z.string().trim().min(1, { message: "Type is required" }),
+    numberOfOptions: z.string().trim().min(1, {message: "Number of options is required"}),
+    options: z.array(z.object({label: z.string(), value: z.string()})).min(2, {message: "At least two options are required"}),
+    answer: z.string().trim().min(1, { message: "Answer is required" }),
   });
 
   const handleSubmit = async (e) => {
@@ -106,11 +106,11 @@ const CreateQuestions = () => {
     return [
       {
         label: "True",
-        value: "true",
+        value: "T",
       },
       {
         label: "False",
-        value: "false",
+        value: "F",
       },
     ];
   };
@@ -143,7 +143,7 @@ const CreateQuestions = () => {
       <ToastContainer />
       <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Create New Question</CreateHeader>
-        <div className="px-4">
+        <div className="px-4 overflow-y-scroll max-h-[calc(100vh-232px)]">
           <h2>Fill in the fields below</h2>
           <form
             onSubmit={(e) => handleSubmit(e)}

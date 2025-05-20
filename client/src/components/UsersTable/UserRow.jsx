@@ -4,38 +4,17 @@ import { useNavigate } from 'react-router-dom';
 
 const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
     const nav = useNavigate();
+    console.log(user);
     const StatusBadge = ({ status }) => {
         let bgColor = '';
         let statusText = '';
         
-        switch(status) {
-          case 1:
-            bgColor = 'bg-green-100 text-green-800';
-            statusText = 'Active';
-            break;
-          case 0:
-            bgColor = 'bg-yellow-100 text-yellow-800';
-            statusText = 'Inactive';
-            break;
-          case -1:
-            bgColor = 'bg-gray-100 text-gray-800';
-            statusText = 'Deleted';
-            break;
-          case 'active':
-            bgColor = 'bg-blue-100 text-green-800';
-            statusText = 'Active';
-            break;
-          case 'inactive':
-            bgColor = 'bg-yellow-100 text-yellow-800';
-            statusText = 'Inactive';
-            break;
-          case 'deleted':
-            bgColor = 'bg-gray-100 text-gray-800';
-            statusText = 'Deleted';
-            break;
-          default:
-            bgColor = 'bg-blue-100 text-blue-800';
-            statusText = 'Unknown';
+        if(status) {
+          bgColor = 'bg-green-100 text-green-800';
+          statusText = 'Verified';
+        } else {
+          bgColor = 'bg-red-100 text-red-800';
+          statusText = 'Unverified';
         }
         
         return (
@@ -50,10 +29,29 @@ const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
         let statusText = '';
         
         if(status) {
+          bgColor = 'bg-blue-100 text-blue-800';
+          statusText = 'Yes';
+        } else {
+          bgColor = 'bg-yellow-100 text-yellow-800';
+          statusText = 'No';
+        }
+        
+        return (
+          <span className={`px-2 py-1 text-xs font-medium rounded-full ${bgColor}`}>
+            {statusText}
+          </span>
+        );
+      };
+
+      const PassWordSetBadge = ({ status }) => {
+        let bgColor = '';
+        let statusText = '';
+        
+        if(status) {
           bgColor = 'bg-green-100 text-green-800';
           statusText = 'Yes';
         } else {
-          bgColor = 'bg-red-100 text-red-800';
+          bgColor = 'bg-gray-100 text-gray-800';
           statusText = 'No';
         }
         
@@ -94,10 +92,10 @@ const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
       <TrueFalseBadge status={user.loggedIn} />
     </td>
     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-      <TrueFalseBadge status={user.passwordSet} />
+      <PassWordSetBadge status={user.password && String(user.password).trim() !== ''} />
     </td>
     <td className="px-4 py-4 whitespace-nowrap">
-      <StatusBadge status={user.status} />
+      <StatusBadge status={(user.password && String(user.password).trim() !== '') && user.email_verified == 1} />
     </td>
     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
       {new Date(user.createdAt).toUTCString()}
