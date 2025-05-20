@@ -145,7 +145,7 @@ const QuestionTable = ({
           </th>
         </tr>
       </thead>
-      <tbody className="bg-white divide-y divide-gray-200 w-full">
+      <tbody className="bg-white divide-y divide-gray-200 w-full overflow-y-scroll h-[45vh]">
         {loader || groupLoader || load ? (
           <Loader />
         ) : (

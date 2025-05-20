@@ -2,7 +2,7 @@ import React from 'react'
 
 const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurrentPage, numberPerPage, setNumberPerPage }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex gap-2 flex-wrap items-center justify-between">
           <div className="text-sm text-gray-700">
             <span className="font-medium">{questions.length}</span> results
           </div>
@@ -11,7 +11,7 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
                 setNumberPerPage(parseInt(e.target.value))
                 setCurrentPage(1)
             }} name="numberPerPage" id="">
-              <option value="5">5</option>
+              <option value="6">6</option>
               <option value="10">10</option>
               <option value="15">15</option>
               <option value="20">20</option>
