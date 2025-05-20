@@ -27,9 +27,8 @@ const DeleteQuestion = ({id, setOpenDelete}) => {
         }finally {
             setLoader(false)
         }
-        
-        
     }
+    
   return (
     <div   className='absolute top-0 left-0 flex justify-center items-center backdrop-blur-xs w-full h-full z-50 '>
         <div onClick={() => setOpenDelete(false)}  className='absolute top-0 left-0 w-full h-full bg-black opacity-50'/>
