@@ -6,10 +6,20 @@ import { Link } from 'react-router-dom'
 import { useQuestionGroupHook } from '../hooks/questionGroupHook'
 import { CircleX } from 'lucide-react'
 import CreateGroups from '../components/CreateModals/CreateGroups'
+import DeleteEnum from '../components/DeleteModals/DeleteEnum'
 
 const Groups = () => {
     const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
     const [openCreate, setOpenCreate] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteName, setDeleteName] = useState(null);
+    
+    const handleDelete = (id, name) => {
+        setOpenDelete(true);
+        setDeleteName(name);
+        setDeleteId(id);
+    };
 
     const StatusBadge = ({ status }) => {
         let bgColor = '';
@@ -60,9 +70,10 @@ const Groups = () => {
                         <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
                         <div className='flex gap-10 items-center'>
                             <StatusBadge status={group.active_status} />
-                            <CircleX className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                            <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                            
                         </div>
-                                            
+                                        
                     </div>
                 ))
               
@@ -70,6 +81,7 @@ const Groups = () => {
             </div>
         </div>
         {openCreate && <CreateGroups setOpenCreate={setOpenCreate} />}
+        {openDelete && <DeleteEnum type='group' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
     </div>
   )
 }

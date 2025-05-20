@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import Loader from '../components/Loader'
 import AddButton from '../components/AddButton'
@@ -6,10 +6,20 @@ import { Link } from 'react-router-dom'
 import { CircleX } from 'lucide-react'
 import useRoleHook from '../hooks/roleHook'
 import CreateRoles from '../components/CreateModals/CreateRoles'
+import DeleteEnum from '../components/DeleteModals/DeleteEnum'
 
 const Roles = () => {
     const { getRoles, loader: roleLoader } = useRoleHook()
-    const [openCreate, setOpenCreate] = React.useState(false);
+    const [openCreate, setOpenCreate] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [deleteName, setDeleteName] = useState(null);
+    
+    const handleDelete = (id, name) => {
+        setOpenDelete(true);
+        setDeleteName(name);
+        setDeleteId(id);
+    };
     
 
     const StatusBadge = ({ status }) => {
@@ -61,9 +71,9 @@ const Roles = () => {
                         <h1 className='md:text-lg text-[16px]  text-black'>{role.roles}</h1>
                         <div className='flex gap-10 items-center'>
                             <StatusBadge status={role.active_status} />
-                            <CircleX className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                            <CircleX onClick={() => handleDelete(role.id, role.roles)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
                         </div>
-                                            
+                                       
                     </div>
                 ))
               
@@ -71,6 +81,7 @@ const Roles = () => {
             </div>
         </div>
         {openCreate && <CreateRoles setOpenCreate={setOpenCreate} />}
+        {openDelete && <DeleteEnum type='role' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
     </div>
   )
 }

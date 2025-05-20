@@ -9,11 +9,12 @@ import { useParams } from "react-router-dom";
 import useQuestionHook from "../hooks/questionHook";
 import useOpt from "../hooks/opt";
 import Loader from "../components/Loader";
+import Api from "../api/Api";
 
 const EditQuestions = () => {
   const { id } = useParams();
   const { opt, loader: optLoader } = useOpt();
-  const { getEachQuestion, loader } = useQuestionHook(id);
+  const { getEachQuestion, loader: questionLoader } = useQuestionHook(id);
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook();
   const { sections, loader: sectionLoader } = useSectionHook();
 
@@ -39,6 +40,7 @@ const EditQuestions = () => {
   const [options, setOptions] = useState([])
   const [answer, setAnswer] = useState('')
   const [manual, setManual] = useState(false)
+  const [loader, setLoader] = useState(false)
 
   useEffect(() => {
     setGroup(fullQuestion?.group?.title)
@@ -49,22 +51,27 @@ const EditQuestions = () => {
     setNumberOfOptions(String(fullQuestion?.options?.length))
     setOptions(type== "T" ? [{label: 'True', value: 'T'}, {label: 'False', value: 'F'}] : fullQuestion?.options.map((option) => ({label: option?.title, value: option?.title})))
     setAnswer(type == "T" ? fullQuestion?.trueFalse : fullQuestion?.options?.find((option) => option?.status == 1)?.title)
-  }, [loader, groupLoader, sectionLoader, optLoader])
+  }, [questionLoader, groupLoader, sectionLoader, optLoader])
 
   const questionSchema = z.object({
-    group: z.string().min(1, {message: "Group is required"}), 
-    section: z.string().min(1, {message: "Section is required"}),
-    question: z.string().min(1, {message: "Question is required"}),
-    mark: z.string().min(1, {message: "Mark is required"}),
-    type: z.string().min(1, {message: "Type is required"}),
-    numberOfOptions: z.string().min(1, {message: "Number of options is required"}),
-    options: z.array(z.object({label: z.string(), value: z.string()})).min(2, {message: "At least two options are required"}),
-    answer: z.string().min(1, {message: "Answer is required"}),
+    group: z.string().trim().min(1, {message: "Group is required"}), 
+    section: z.string().trim().min(1, {message: "Section is required"}),
+    question: z.string().trim().min(1, {message: "Question is required"}),
+    mark: z.string().trim().min(1, {message: "Mark is required"}),
+    type: z.string().trim().min(1, {message: "Type is required"}),
+    numberOfOptions: z.string().trim().min(1, {message: "Number of options is required"}),
+    options: z.array(z.object({label: z.string().trim().min(1, {message: "All labels are required"}), value: z.string().trim().min(1, {message: "All values are required"})})).min(2, {message: "At least two options are required"}),
+    answer: z.string().trim().min(1, {message: "Answer is required"}),
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
+    setLoader(true)
     e.preventDefault()
     const result = questionSchema.safeParse({group, section, question, mark, type, numberOfOptions, options, answer})
+
+    if(type == "M" && options.length != Number(numberOfOptions)){
+      return toast.error('Number of options provided does not match the number of options in the question')
+    }
 
     if(result.success) {
       {/* API CALL GOES HERE */}
@@ -78,16 +85,42 @@ const EditQuestions = () => {
       }
       {/* Data to Update Options Database */}
       const updateOptions =type == "M" && updateQuestion.options.map((option, i) => ({...option, status: options[i]?.value == answer ? 1 : 0, title: options[i]?.value, question_bank_id: updateQuestion?.id}))
-      console.log(updateQuestion)
-      console.log(updateOptions)
-      console.log(result.data)
+      try {
+        const request = await Api.put(`/question/bank/update`, {
+          id: updateQuestion.id,
+          type: type,
+          question: question,
+          mark: mark,
+          options: updateOptions.map((option) => option.value),
+          numberOfOptions: numberOfOptions,
+          QuaterId: updateQuestion.section_id,
+          answer: answer,
+          GroupId: updateQuestion.q_group_id,
+        })
+        const response = request.data;
+        if(response.status != true) {
+          toast.error(response.message)
+        }
+        toast.success(response.message)
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } catch (error) {
+        toast.error('Something went wrong')
+        console.log(error)
+      }finally{
+        setLoader(false)
+      }
+
+      // console.log(updateQuestion)
+      // console.log(updateOptions)
+      // console.log(result.data)
     }
     else{
-     return result.error.issues.map((issue) => toast.error(issue.message))
+      setLoader(false)
+      return result.error.issues.map((issue) => toast.error(issue.message))
     }
-    if(type == "M" && options.length != Number(numberOfOptions)){
-       return toast.error('Number of options provided does not match the number of options in the question')
-    }
+    
 
   }
 
@@ -141,6 +174,7 @@ const EditQuestions = () => {
   }, [manual,numberOfOptions])
   return (
     <div className="rounded-lg lg:px-2 py-8">
+      {loader || groupLoader || sectionLoader || optLoader || questionLoader && <Loader />}
       <ToastContainer/>
       <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Edit Question</CreateHeader>
@@ -201,7 +235,9 @@ const EditQuestions = () => {
                 }
               </fieldset>
             </div>
-            <button type="submit" className="border-2 border-[#6674BB] mt-5 mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">Upload Question</button>
+            <button type="submit" className="border-2 border-[#6674BB] mt-5 mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl">
+              {loader ? 'Editing...' : 'Edit Question'}
+            </button>
           </form>
         </div>
       </div>
