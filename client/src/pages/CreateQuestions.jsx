@@ -26,14 +26,14 @@ const CreateQuestions = () => {
   const nav = useNavigate();
 
   const questionSchema = z.object({
-    group: z.string().min(1, { message: "Group is required" }),
-    section: z.string().min(1, { message: "Section is required" }),
-    question: z.string().min(1, { message: "Question is required" }),
-    mark: z.string().min(1, { message: "Mark is required" }),
-    type: z.string().min(1, { message: "Type is required" }),
-    // numberOfOptions: z.string().min(1, {message: "Number of options is required"}),
-    // options: z.array(z.object({label: z.string(), value: z.string()})).min(2, {message: "At least two options are required"}),
-    answer: z.string().min(1, { message: "Answer is required" }),
+    group: z.string().trim().min(1, { message: "Group is required" }),
+    section: z.string().trim().min(1, { message: "Section is required" }),
+    question: z.string().trim().min(1, { message: "Question is required" }),
+    mark: z.string().trim().min(1, { message: "Mark is required" }),
+    type: z.string().trim().min(1, { message: "Type is required" }),
+    numberOfOptions: z.string().trim().min(1, {message: "Number of options is required"}),
+    options: z.array(z.object({label: z.string(), value: z.string()})).min(2, {message: "At least two options are required"}),
+    answer: z.string().trim().min(1, { message: "Answer is required" }),
   });
 
   const handleSubmit = async (e) => {
