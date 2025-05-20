@@ -67,7 +67,9 @@ const CreateQuestions = () => {
 
         if (response.status == true) {
           toast.success(response.message);
-          nav(`/admin/user/questions/preview/${response.Id}`);
+          setTimeout(() => {
+            nav(`/admin/user/questions/preview/${response.Id}`);
+          }, 1000);
           return;
         }
 
@@ -312,7 +314,7 @@ const CreateQuestions = () => {
               type="submit"
               className="border-2 border-[#6674BB] mt-5 mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
             >
-              Upload Question
+              {loader ? "Uploading..." : "Upload Question"}
             </button>
           </form>
         </div>
