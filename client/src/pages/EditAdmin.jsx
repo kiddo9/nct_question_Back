@@ -87,9 +87,10 @@ const EditAdmins = () => {
                   Name
                 </label>
                 <input
-                  onChange={(e) => setName(e.target.value)}
+                  // onChange={(e) => setName(e.target.value)}
+                  disabled
                   value={name}
-                  className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]"
+                  className="rounded-lg px-4 py-2 outline-none border-2 text-gray-400 bg-black/2 border-gray-300 focus:border-[#D7DDFF]"
                   type="text"
                   id="name"
                   name="name"
@@ -101,9 +102,10 @@ const EditAdmins = () => {
                   Email
                 </label>
                 <input
-                  onChange={(e) => setEmail(e.target.value)}
+                  // onChange={(e) => setEmail(e.target.value)}
+                  disabled
                   value={email}
-                  className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]"
+                  className="rounded-lg px-4 py-2 outline-none text-gray-400 border-2 bg-black/2 border-gray-300 focus:border-[#D7DDFF]"
                   type="email"
                   id="email"
                   name="email"
