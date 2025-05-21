@@ -18,11 +18,10 @@ const emailSender = async ({
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-  console.log(otp)
 
   let emailContent = "";
 
-  if (emailType === "auth") {
+  if (emailType === "auth" || emailType === "reset") {
     emailContent = `
     <p>
           This is the one-time password (OTP) to validate and access your account.
@@ -55,6 +54,7 @@ const emailSender = async ({
           <a href="${Preset}" class="button">${
       emailType === "verify" ? "Verify email" : "Reset Password"
     }</a>
+    ${emailType === "verify" ? "" : "Link is valid for 10 minutes"}.
         </div>
   `;
   } else if (emailType === "others") {

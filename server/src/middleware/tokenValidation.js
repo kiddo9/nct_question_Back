@@ -36,7 +36,6 @@ const tokenValidation = async (req, res, next) => {
           }
         );
       }
-      console.log("checked");
 
       next();
       return;

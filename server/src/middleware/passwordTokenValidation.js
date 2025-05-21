@@ -16,7 +16,7 @@ const passwordTokenValidation = async (req, res, next) => {
       return res.json({ status: false });
     }
 
-    const checkId = await usersModel.findAll({
+    const checkId = await usersModel.findOne({
       where: { encryptedId: req.user.id },
     });
 

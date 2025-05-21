@@ -121,7 +121,7 @@ export const otpValidation = async (req, res) => {
   try {
     //validate email exists
     const validatedEmail = await usersModel.findOne({
-      where: { email: data.email },
+      where: { encryptedId: data.id },
     });
 
     //return error if email does not exist
@@ -129,8 +129,13 @@ export const otpValidation = async (req, res) => {
       res.json({ status: false, message: "invalid request" });
       return;
     }
+
+    if (validatedEmail.email !== data.email) {
+      res.json({ status: false, message: "invalid request" });
+      return;
+    }
     //check if type is auth, reset or p-reset
-    if (data.type == "auth" || data.type == "reset") {
+    if (data.type == "auth") {
       //return error if type is not matching
 
       if (validatedEmail.otpType !== data.type) {
@@ -172,10 +177,49 @@ export const otpValidation = async (req, res) => {
       );
 
       res.status(201).json({ status: true, id: validatedEmail.encryptedId });
-    } else if (type == "p_reset") {
-      return res.json({
-        status: false,
-        message: "feature still in production",
+    } else if (data.type == "reset") {
+      if (validatedEmail.otpType !== data.type) {
+        res.json({ status: false, message: "invalid Request" });
+        return;
+      }
+
+      //check if the otps matches
+      if (parseInt(otp) !== validatedEmail.otp) {
+        res.json({ status: false, message: "Invalid or wrong OTP" });
+        return;
+      }
+
+      //check if otp has expired
+      if (new Date() > validatedEmail.otpExpiryTime) {
+        res.json({ status: false, message: "Invalid otp expired" });
+        return;
+      }
+
+      const passwordResetToken = jwt.sign(
+        { id: validatedEmail.encryptedId, type: "P-reset" },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "10m",
+        }
+      );
+
+      emailSender({
+        to: validatedEmail.email,
+        subject: "Password reset Link",
+        emailType: "P-reset",
+        Preset: `${
+          process.env.APP_MODE == "production"
+            ? process.env.NGINX_PROD_ORIGIN
+            : process.env.NGINX_LOCAL_ORIGIN
+        }/auth/admin/reset?newPasswordSet=${passwordResetToken}`,
+        name: validatedEmail.name,
+      });
+
+      //return reponse
+      res.status(200).json({
+        status: true,
+        type: "reset",
+        message: "validation complete a link was sent to your email",
       });
     } else {
       res.json({ status: false, message: "invalid route" });
@@ -403,6 +447,58 @@ export const usersList = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status().json({ status: false, message: "internal server error" });
+  }
+};
+
+export const editAdmin = async (req, res) => {
+  const { roleId, id } = req.body;
+
+  try {
+    if (!roleId || !id) {
+      res.json({ status: false, message: "can't process request" });
+      return;
+    }
+
+    const comfirmAdminExist = await usersModel.findOne({
+      where: { encryptedId: id },
+    });
+
+    if (!comfirmAdminExist) {
+      res.json({ status: false, message: "invalid admin user" });
+      return;
+    }
+
+    if (roleId == comfirmAdminExist.roles) {
+      res.json({
+        status: false,
+        message: "can't make change. please make a change to update user data",
+      });
+      return;
+    }
+
+    const updateData = await usersModel.update(
+      {
+        roles: roleId,
+      },
+      { where: { encryptedId: id } }
+    );
+
+    if (!updateData) {
+      res.json({
+        status: false,
+        message: "unable to update data please check connection",
+      });
+      return;
+    }
+
+    return res
+      .status(201)
+      .json({
+        status: true,
+        message: `${comfirmAdminExist.name} data has been updated`,
+      });
+  } catch (error) {
+    console.log(error);
   }
 };
 

@@ -61,6 +61,11 @@ const Verify = () => {
             return;
           }
 
+          if (response.status == true && response.type == "reset") {
+            toast.success(response.message);
+            return;
+          }
+
           toast.success("Successfully Authenticated");
           nav("/admin/user/questions");
         } catch (error) {

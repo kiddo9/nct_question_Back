@@ -3,6 +3,7 @@ const router = express.Router();
 
 import {
   createAdminUser,
+  editAdmin,
   loginController,
   Logout,
   newUserEmailVerification,
@@ -33,6 +34,7 @@ import { options } from "../controllers/opt.js";
 import passwordTokenValidation from "../middleware/passwordTokenValidation.js";
 import { passwordSetAndReset } from "../controllers/Auth/passwordSetandReset.js";
 import { AllRoles, createRole, deleteRole } from "../controllers/roles.js";
+import { emailVerification } from "../controllers/Auth/emailValidation.js";
 
 router.get("/", tokenVerify, async (req, res) => {
   res.status(200).json({ status: true });
@@ -71,10 +73,12 @@ router.post("/create/roles", tokenVerify, createRole);
 router.post("/admin/create", tokenVerify, createAdminUser);
 router.post("/create/groups", tokenVerify, createGroup);
 router.post("/create/sections", tokenVerify, createSection);
+router.post("/admin/user/forgot-password", emailVerification);
 router.post("/logout", tokenVerify, Logout);
 
 router.put("/password/update", passwordTokenValidation, passwordSetAndReset);
 router.put("/question/bank/update", tokenVerify, updateQuestion);
+router.put("/admin/user/update", tokenVerify, editAdmin);
 
 router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
 router.delete("/admin/role/delete/:id", tokenVerify, deleteRole);

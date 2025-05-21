@@ -174,7 +174,10 @@ const Login = () => {
             </div>
 
             <div className="d-flex justify-content-between mb-3">
-              <a href="#" className="text-primary text-decoration-none">
+              <a
+                href="/auth/admin/forgot-password"
+                className="text-primary text-decoration-none"
+              >
                 Forgot password?
               </a>
             </div>
