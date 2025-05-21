@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, Filter, Trash2, Plus } from 'lucide-react';
 import AddButton from '../AddButton';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import UsersTable from './UsersTable';
 import UserPagination from './UserPagination';
 // Sample data 
@@ -9,13 +9,22 @@ import UserPagination from './UserPagination';
 
 // Main component
 export default function Users({ getUsers, getRoles, status, loader, roleLoader }) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const query = searchParams.get("page") || 1 //allows for pagination via the url
+
+  useEffect(() => {
+      if (query) {
+        setCurrentPage(parseInt(query))
+      }
+  }, [query])
 
   // const [questions, setQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [numberPerPage, setNumberPerPage] = useState(6);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(query);
 
   // console.log(getUsers);
   const usersWithRoles = getUsers.map(user => ({
@@ -129,7 +138,7 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
               className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search users..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {setSearchTerm(e.target.value); setSearchParams({ page: 1 })}}
             />
             <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
           </div>
