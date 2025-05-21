@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../components/Loader';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import {z} from 'zod'
+import Api from '../../api/Api';
 
 const ForgotPassword = () => {
     const nav = useNavigate();
@@ -12,15 +13,34 @@ const ForgotPassword = () => {
     const validEmail = z.string().email({ required_error: "Email is required", message: "Invalid email" }); //check if email is valid
     
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        {/*API GOES HERE */} //send email to user to reset password
-
+    const handleSubmit = async(e) => {
         setLoader(true);
-        setTimeout(() => {
-          nav(`/auth/admin/verify?vt=${null}`); //enter the token here
-        }, 1000);
-      };
+        e.preventDefault();
+         //send email to user to reset password
+        try {
+            {/*API GOES HERE */}
+            const request = await Api.post("/forgot-password", {
+                email,
+            });
+            const response = request.data;
+            if (response.status !== true) {
+                toast.error(response.message);
+                return;
+            } 
+            
+            toast.success(response.message);
+            setTimeout(() => {
+                nav(`/auth/admin/verify?vt=${null}`); //enter the token here
+              }, 1000);
+        } catch (error) {
+            toast.error("Something went wrong");
+            console.log(error);
+        }finally{
+            setLoader(false);
+        }
+        
+        
+    };
     return (
         <div className=" h-screen pb-10 pt-20 flex mx-auto">
           {loader && <Loader preload={true} />}
