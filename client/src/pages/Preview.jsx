@@ -27,11 +27,11 @@ const Preview = () => {
     }),
   }
 
+  if(questionLoader || optLoader || groupLoader || sectionLoader) return  <Loader />
 
 
   return (
     <div className="rounded-lg lg:px-2 py-8">
-      {questionLoader || optLoader || groupLoader || sectionLoader && <Loader />}
       <ToastContainer />
       <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
         <header className="bg-[#D7DDFF] w-full flex flex-row items-center px-4 py-2">
