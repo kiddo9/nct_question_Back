@@ -4,9 +4,7 @@ const tokenValidation = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token || token === undefined) {
-    res
-      .status(401)
-      .json({ status: false, message: "access denied. unauthorized access" });
+    res.json({ status: false, message: "access denied. unauthorized access" });
 
     return;
   }
@@ -38,22 +36,33 @@ const tokenValidation = async (req, res, next) => {
           }
         );
       }
+      console.log("checked");
+
       next();
       return;
     }
-    res
-      .status(401)
-      .json({ status: false, message: "access denied. unauthorized access" });
+    res.json({ status: false, message: "access denied. unauthorized access" });
   } catch (error) {
-    console.log(error);
-    await usersModel.update(
-      { loggedIn: 0 },
-      {
-        where: {
-          encryptedId: req.user.id,
-        },
+    if (error.name === "TokenExpiredError") {
+      try {
+        const decoded = jwt.decode(token);
+        if (decoded?.id) {
+          await usersModel.update(
+            { loggedIn: 0 },
+            { where: { encryptedId: decoded.id } }
+          );
+        }
+      } catch (innerError) {
+        console.error("Error decoding expired token:", innerError);
       }
-    );
+
+      return res.status(401).json({
+        status: false,
+        message: "Session expired. Please log in again.",
+      });
+    }
+
+    console.log(error);
   }
 };
 

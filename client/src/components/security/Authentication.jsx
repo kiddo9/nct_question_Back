@@ -9,9 +9,12 @@ const Authentication = ({ children }) => {
       const requestAuth = await Api.get(`/`);
 
       if (requestAuth.data.status !== true) {
+        console.log("false");
+
         nav("/auth/admin/login");
         return;
       }
+      console.log("checked");
     } catch (error) {
       nav("/auth/admin/login");
       console.log(error);
@@ -19,6 +22,10 @@ const Authentication = ({ children }) => {
   };
 
   authUser();
+
+  setInterval(() => {
+    authUser();
+  }, 50000);
   return children;
 };
 
