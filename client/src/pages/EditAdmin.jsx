@@ -25,6 +25,7 @@ const EditAdmins = () => {
   const { getRoles, loader: roleLoader } = useRoleHook();
   const admin = users?.find((admin) => admin?.id == id);
 
+
   {/* would also fetch the roles and merge with admins here */}
   const fullAdmin = {
     ...admin, 
@@ -35,12 +36,18 @@ const EditAdmins = () => {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
 
+
+
   useEffect(() => {
+    // setLoader(true);
     if (fullAdmin) {
       setName(fullAdmin.name);
       setEmail(fullAdmin.email);
       setRole(fullAdmin.role);
     }
+    // setTimeout(() => {
+    //   setLoader(false);
+    // }, 1000);
   }, [roleLoader, adminLoader]);
 
   const credentials = z.object({
@@ -61,6 +68,8 @@ const EditAdmins = () => {
       result.error.issues.map((issue) => toast.error(issue.message));
     }
   };
+
+  if(adminLoader || roleLoader) return <Loader /> // if loader is true then show loader
   return (
     <div className="rounded-lg lg:px-2 py-8 ">
       <ToastContainer />
@@ -78,9 +87,10 @@ const EditAdmins = () => {
                   Name
                 </label>
                 <input
-                  onChange={(e) => setName(e.target.value)}
+                  // onChange={(e) => setName(e.target.value)}
+                  disabled
                   value={name}
-                  className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]"
+                  className="rounded-lg px-4 py-2 outline-none border-2 text-gray-400 bg-black/2 border-gray-300 focus:border-[#D7DDFF]"
                   type="text"
                   id="name"
                   name="name"
@@ -92,9 +102,10 @@ const EditAdmins = () => {
                   Email
                 </label>
                 <input
-                  onChange={(e) => setEmail(e.target.value)}
+                  // onChange={(e) => setEmail(e.target.value)}
+                  disabled
                   value={email}
-                  className="rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]"
+                  className="rounded-lg px-4 py-2 outline-none text-gray-400 border-2 bg-black/2 border-gray-300 focus:border-[#D7DDFF]"
                   type="email"
                   id="email"
                   name="email"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import QuestionRow from "./QuestionRow";
 import Loader from "../Loader";
 
@@ -14,17 +14,17 @@ const QuestionTable = ({
   loader,
   groupLoader,
 }) => {
-  const [load, setLoad] = useState(false);
-  useEffect(() => {
-    setLoad(true);
-    const timeoutId = setTimeout(() => {
-      console.log("Timeout executed");
-      // Add any other logic you want to execute after the timeout here
-      setLoad(false);
-    }, 5000); // 5000 milliseconds = 5 seconds
+  // const [load, setLoad] = useState(false);
+  // useEffect(() => {
+  //   setLoad(true);
+  //   const timeoutId = setTimeout(() => {
+  //     console.log("Timeout executed");
+  //     // Add any other logic you want to execute after the timeout here
+  //     setLoad(false);
+  //   }, 5000); // 5000 milliseconds = 5 seconds
 
-    return () => clearTimeout(timeoutId); // Cleanup the timeout on component unmount
-  }, []);
+  //   return () => clearTimeout(timeoutId); // Cleanup the timeout on component unmount
+  // }, []);
 
   return (
     <table className="min-w-full divide-y divide-gray-200">
@@ -146,7 +146,7 @@ const QuestionTable = ({
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200 w-full overflow-y-scroll h-[45vh]">
-        {loader || groupLoader || load ? (
+        {loader || groupLoader? (
           <Loader />
         ) : (
           sortedQuestions
@@ -166,7 +166,7 @@ const QuestionTable = ({
               />
             ))
         )}
-        {!loader && !groupLoader && !load && sortedQuestions.length <= 0 && (
+        {!loader && !groupLoader  && sortedQuestions.length <= 0 && (
           <tr>
             <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
               No questions found. Try adjusting your search or filters.

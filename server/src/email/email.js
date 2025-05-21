@@ -18,6 +18,7 @@ const emailSender = async ({
       pass: process.env.EMAIL_PASSWORD,
     },
   });
+  console.log(otp)
 
   let emailContent = "";
 

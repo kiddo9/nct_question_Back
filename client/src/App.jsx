@@ -17,6 +17,7 @@ import EditAdmins from "./pages/EditAdmin";
 import Roles from "./pages/Roles";
 import Groups from "./pages/Groups";
 import Sections from "./pages/Sections";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 
 function App() {
   return (
@@ -69,6 +70,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/verify" element={<Verify />} />
                   <Route path="/reset" element={<PasswordRest />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="*" element={<Notfound />} />
                 </Routes>
               </>
