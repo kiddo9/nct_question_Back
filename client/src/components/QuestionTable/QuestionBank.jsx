@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, Filter, Trash2, Plus } from 'lucide-react';
 import QuestionPagination from './QuestionPagination';
 import QuestionTable from './QuestionTable';
@@ -6,17 +6,24 @@ import useQuestionHook from '../../hooks/questionHook';
 import { useQuestionGroupHook } from '../../hooks/questionGroupHook';
 import AddButton from '../AddButton';
 import useSectionHook from '../../hooks/sectionHook';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 // Sample data 
 
 
 // Main component
 export default function QuestionBank() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { getQuestion, loader } = useQuestionHook()
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
   const { sections, loader: sectionLoader } = useSectionHook()
 
+  const query = searchParams.get("page") || 1 //allows for pagination via the url
   
+  useEffect(() => {
+    if (query) {
+      setCurrentPage(parseInt(query))
+    }
+  }, [query])
 
   const questionsWithGroup = getQuestion.map(question => ({
     ...question,
@@ -30,7 +37,7 @@ export default function QuestionBank() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [numberPerPage, setNumberPerPage] = useState(6);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(query);
 
   // Filter questions based on search term
   const filteredQuestions = questionsWithGroup.filter(question => 
@@ -112,7 +119,7 @@ export default function QuestionBank() {
               className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search questions..."
               value={searchTerm}
-              onChange={(e) => {setSearchTerm(e.target.value); setCurrentPage(1);}}
+              onChange={(e) => {setSearchTerm(e.target.value); setSearchParams({ page: 1 });}}
             />
             <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
           </div>
@@ -146,14 +153,13 @@ export default function QuestionBank() {
             toggleSelectAll={toggleSelectAll} 
             requestSort={requestSort} 
             sortConfig={sortConfig} 
-            currentPage={currentPage} 
-            setCurrentPage={setCurrentPage} 
+            currentPage={currentPage}  
             numberPerPage={numberPerPage} 
           />
         </div>
         
         {/* Pagination */}
-        <QuestionPagination questions={questionsWithGroup} sortedQuestions={sortedQuestions} currentPage={currentPage} setCurrentPage={setCurrentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
+        <QuestionPagination questions={questionsWithGroup} sortedQuestions={sortedQuestions} currentPage={currentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
       </div>
     </div>
   );

@@ -1,6 +1,12 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom';
 
-const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurrentPage, numberPerPage, setNumberPerPage }) => {
+
+const QuestionPagination = ( { questions, sortedQuestions, currentPage, numberPerPage, setNumberPerPage }) => {
+  const [_, setSearchParams] = useSearchParams();
+  const changePage = (page) => {
+    setSearchParams({ page });
+  }
   return (
     <div className="flex gap-2 flex-wrap items-center justify-between">
           <div className="text-sm text-gray-700">
@@ -9,7 +15,7 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
           <div className="flex space-x-2">
             <select className='bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md' value={numberPerPage} onChange={(e) => {
                 setNumberPerPage(parseInt(e.target.value))
-                setCurrentPage(1)
+                changePage(1)
             }} name="numberPerPage" id="">
               <option value="6">6</option>
               <option value="10">10</option>
@@ -20,7 +26,7 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
             </select>
             {sortedQuestions.length > numberPerPage && (
             <>
-              <button disabled={currentPage <= 1} onClick={() => setCurrentPage(currentPage - 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
+              <button disabled={currentPage <= 1} onClick={() => changePage(currentPage - 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
                 Previous
               </button>
               
@@ -31,7 +37,7 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
                   className={`px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md ${
                     currentPage === index + 1 ? "bg-[#6674BB] text-white" : "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50"
                   }`}
-                  onClick={() => setCurrentPage(index + 1)}
+                  onClick={() => changePage(index + 1)}
                 >
                   {index + 1}
                 </button>
@@ -43,7 +49,7 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
                     className={`px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md ${
                       currentPage === index + 1 ? "bg-[#6674BB] text-white" : "bg-white border border-gray-300 text-gray-500 hover:bg-gray-50"
                     }`}
-                    onClick={() => setCurrentPage(index + 1)}
+                    onClick={() => changePage(index + 1)}
                   >
                     {index + 1}
                   </button>
@@ -51,7 +57,7 @@ const QuestionPagination = ( { questions, sortedQuestions, currentPage, setCurre
                 </>
               ))}
               
-              <button disabled={currentPage >= Math.ceil(sortedQuestions.length / numberPerPage)} onClick={() => setCurrentPage(currentPage + 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
+              <button disabled={currentPage >= Math.ceil(sortedQuestions.length / numberPerPage)} onClick={() => changePage(currentPage + 1)} className="bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md">
                 Next
               </button>
             </>
