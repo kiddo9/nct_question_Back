@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
     const nav = useNavigate();
-    console.log(user);
+    // console.log(user);
     const StatusBadge = ({ status }) => {
         let bgColor = '';
         let statusText = '';
