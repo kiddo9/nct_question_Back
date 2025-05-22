@@ -7,11 +7,11 @@ const UserPagination = ( { getUsers, sortedUsers, currentPage, numberPerPage, se
     setSearchParams({ page });
   }
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex gap-2 flex-wrap items-center justify-between">
           <div className="text-sm text-gray-700">
             <span className="font-medium">{getUsers.length}</span> results
           </div>
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2 sm:gap-0 sm:space-x-2">
             <select className='bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-medium rounded-md' value={numberPerPage} onChange={(e) => {
                 setNumberPerPage(parseInt(e.target.value))
                 changePage(1)
