@@ -53,7 +53,7 @@ const Groups = () => {
     <div className="rounded-lg lg:px-2 py-8">
         {groupLoader && <Loader />}
         <ToastContainer />
-        <div className="flex flex-col  bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-270px)] ">
+        <div className="flex flex-col  bg-white rounded-2xl mx-auto shadow py-2 w-[100vw] lg:w-[calc(100vw-270px)] ">
             <div className="flex justify-end  gap-2 items-center px-5 py-3 shadow-md">
                 <div className='cursor-pointer flex justify-center rounded-md bg-[#6674BB] px-2 py-2 text-white'>
                     <img src="/edit.svg" alt="edit" width={25} height={25} />

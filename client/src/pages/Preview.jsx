@@ -33,8 +33,8 @@ const Preview = () => {
   return (
     <div className="rounded-lg lg:px-2 py-8">
       <ToastContainer />
-      <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
-        <header className="bg-[#D7DDFF] w-full flex flex-row items-center px-4 py-2">
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[100vw] lg:w-[calc(100vw-245px)]">
+        <header className="bg-[#D7DDFF] w-full flex flex-wrap justify-center flex-row items-center px-4 py-2">
           <img onClick={() => nav(-1)} className="cursor-pointer" src="/back-arrow.svg" alt="back arrow" />
           <h1 className="text-xl mx-auto">Preview Question</h1>
           <div className='flex gap-8'>
@@ -50,7 +50,7 @@ const Preview = () => {
           </div>
         </header>
         <div className='px-4 py-2 flex flex-col '>
-          <div className='flex items-center justify-between w-full'>
+          <div className='flex flex-wrap gap-2 items-center justify-between w-full'>
             <span>
               Group: {fullQuestion?.group?.title}
             </span>
@@ -65,15 +65,18 @@ const Preview = () => {
             </span>
           </div>
 
-          
-          <div className='mt-5 mb-10 border-2 border-black/30 px-5 py-3 rounded-xl'>
-            {fullQuestion?.question}
+          <div className='mt-10 mb-10 '>
+            <p className='mb-2'>Question {fullQuestion?.id}:</p>
+            <div className='border-2 border-black/30 px-5 py-3 rounded-xl'>
+              {fullQuestion?.question}
+            </div>
           </div>
+          
 
           <p className='mb-2'>Options: </p>
           {
             fullQuestion?.type == "M" ?
-            <div className='grid grid-cols-2 gap-5'>
+            <div className='flex flex-col md:grid grid-cols-2 gap-5'>
               {fullQuestion?.options?.map((option, index) => {
                 return (
                   <div key={index} className={`${option?.status == 1 ? "bg-[#0AC511] text-white" : "bg-[#7291CA] text-white"} px-4 py-4 rounded-2xl text-sm`}>
@@ -84,7 +87,7 @@ const Preview = () => {
             </div>
 
             : fullQuestion?.type == "T" ?
-            <div className='grid grid-cols-2 gap-5'>
+            <div className='flex flex-col md:grid grid-cols-2 gap-5'>
               <div className={`${fullQuestion?.trueFalse == 'T' ? "bg-[#0AC511] text-white" : "bg-[#7291CA] text-white"} px-4 py-4 rounded-2xl text-sm`}>
                 True
               </div>

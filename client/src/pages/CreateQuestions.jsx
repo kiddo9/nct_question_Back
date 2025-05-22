@@ -143,7 +143,7 @@ const CreateQuestions = () => {
     <div className="rounded-lg lg:px-2 py-8">
       {loader && <Loader />}
       <ToastContainer />
-      <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[97vw] lg:w-[calc(100vw-245px)]">
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl mx-auto shadow py-2 w-[100vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Create New Question</CreateHeader>
         <div className="px-4 overflow-y-scroll max-h-[calc(100vh-232px)]">
           <h2>Fill in the fields below</h2>

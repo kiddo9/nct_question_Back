@@ -101,7 +101,7 @@ export default function QuestionBank() {
 
 
   return (
-    <div className="rounded-lg lg:px-2 py-8 mx-auto max-w-[97vw] lg:w-[calc(100vw-245px)]">
+    <div className="rounded-lg lg:px-2 py-8 mx-auto max-w-[100vw] lg:w-[calc(100vw-245px)]">
       <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow px-10 py-6">
         {/* Header section */}
         <div className="flex justify-between items-center">

@@ -4,7 +4,7 @@ import CustomSelect from "../components/CustomSelect";
 import { z } from "zod";
 import Api from "../api/Api";
 import { ToastContainer, toast } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import useAdminLists from "../hooks/adminLists";
 import useRoleHook from "../hooks/roleHook";
@@ -24,6 +24,8 @@ const EditAdmins = () => {
   const { users, loader: adminLoader } = useAdminLists();
   const { getRoles, loader: roleLoader } = useRoleHook();
   const admin = users?.find((admin) => admin?.id == id);
+  const nav = useNavigate();
+  const [loader, setLoader] = useState(false);
 
 
   {/* would also fetch the roles and merge with admins here */}
@@ -59,11 +61,32 @@ const EditAdmins = () => {
   });
 
   const handleSubmit = async (e) => {
+    setLoader(true);
     e.preventDefault();
     const result = credentials.safeParse({ name, email, role });
 
     if (result.success) {
-      console.log(result.data);
+      try {
+        const request = await Api.put('/admin/user/update', {
+          id: admin.encryptedId,
+          roleId: getRoles?.find((ro) => ro?.roles == role)?.id
+        });
+        const response = request.data;
+        if (response.status !== true) {
+          toast.error(response.message);
+          return;
+        }
+        toast.success(response.message);
+        setTimeout(() => {
+          nav('/admin/user/admins');
+        }, 1000)
+      } catch (error) {
+        toast.error("something went wrong");
+        console.log(error);
+      }finally{
+        setLoader(false);
+      }
+
     } else {
       result.error.issues.map((issue) => toast.error(issue.message));
     }
@@ -73,7 +96,7 @@ const EditAdmins = () => {
   return (
     <div className="rounded-lg lg:px-2 py-8 ">
       <ToastContainer />
-      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2 mx-auto w-[97vw] lg:w-[calc(100vw-245px)]">
+      <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow py-2 mx-auto w-[100vw] lg:w-[calc(100vw-245px)]">
         <CreateHeader>Edit Admin User</CreateHeader>
         <div className="px-4">
           <h2>Review and edit details</h2>
@@ -124,7 +147,7 @@ const EditAdmins = () => {
               type="submit"
               className="border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
             >
-              Update User
+              {loader ? "Updating..." : "Update User"}
             </button>
           </form>
         </div>
