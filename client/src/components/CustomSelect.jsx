@@ -17,13 +17,15 @@ const CustomSelect = ({label, options, placeholder, value, setValue}) => {
         <div  className="cursor-pointer relative rounded-lg px-4 py-2 outline-none border-2 border-gray-300 focus:border-[#D7DDFF]" name="role" id="role">
             <p type='button' onClick={() => {setIsOpen(!isOpen); setSearch('')}} className={`${value ? 'text-black' : 'text-gray-500'} w-full`}>{value || placeholder}</p>
             {isOpen && (
-                <ul className="absolute w-full left-0 max-h-[300px] overflow-y-scroll top-12 rounded-lg flex flex-col gap-2 bg-white border-2 border-gray-300 shadow-xl">
+                <ul className="absolute w-full left-0 max-h-[300px]  top-12 rounded-lg flex flex-col gap-2 bg-white border-2 border-gray-300 shadow-xl z-10">
                     <input onChange={(e) => setSearch(e.target.value)} value={search}  className='w-full outline-none px-4 py-2 border-y-2 border-gray-300 focus:border-[#D7DDFF]' type="text"  placeholder={'Search'}/>
-                    {filteredOptions.map((option, index) => (
-                        <li onClick={() => {setValue(option.label || option);  setIsOpen(false)}} key={index} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >
-                        {option.label || option}
-                        </li>
-                    ))}
+                    <div className='overflow-y-scroll'>
+                      {filteredOptions.map((option, index) => (
+                          <li onClick={() => {setValue(option.label || option);  setIsOpen(false)}} key={index} className='hover:bg-[#D7DDFF] px-4 py-2 transition duration-200 ease-in' >
+                          {option.label || option}
+                          </li>
+                      ))}
+                    </div>
                 </ul>
             )}
         </div>
