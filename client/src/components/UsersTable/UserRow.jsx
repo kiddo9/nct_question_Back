@@ -102,9 +102,9 @@ const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
     </td>
     <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
       <div className="flex justify-end space-x-2">
-        <button className="text-blue-600 hover:text-blue-900">
+        {/* <button className="text-blue-600 hover:text-blue-900">
           <Eye size={18} />
-        </button>
+        </button> */}
         <button onClick={() => nav(`/admin/user/admins/edit/${user.id}`)} className="text-green-600 hover:text-green-900">
           <Edit size={18} />
         </button>
