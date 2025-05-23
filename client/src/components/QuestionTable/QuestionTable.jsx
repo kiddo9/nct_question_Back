@@ -1,6 +1,7 @@
 import React from "react";
 import QuestionRow from "./QuestionRow";
 import Loader from "../Loader";
+import Fetching from "../Fetching";
 
 const QuestionTable = ({
   sortedQuestions,
@@ -147,7 +148,12 @@ const QuestionTable = ({
       </thead>
       <tbody className="bg-white divide-y divide-gray-200 w-full overflow-y-scroll h-[45vh]">
         {loader || groupLoader? (
-          <Loader />
+          <tr>
+            <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
+              <Fetching  />
+            </td>
+          </tr>
+          
         ) : (
           sortedQuestions
             .slice(

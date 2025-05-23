@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import UserRow from './UserRow';
 import Loader from '../Loader'
 import { User } from 'lucide-react';
+import Fetching from '../Fetching';
 
 
 const UsersTable = ( { sortedUsers, selectedRows, toggleSelectRow, toggleSelectAll, requestSort, sortConfig, currentPage, numberPerPage, loader, roleLoader}) => {
@@ -131,7 +132,12 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 w-full">
-              {load || loader || roleLoader ? <Loader/>
+              {load || loader || roleLoader ? 
+                <tr>
+                  <td colSpan="10" className="px-4 py-8 text-center text-gray-500">
+                    <Fetching  />
+                  </td>
+                </tr>
                 : sortedUsers.slice((currentPage - 1) * numberPerPage, currentPage * numberPerPage).map((user, index) => (
                     <UserRow key={user.id} user={user} index={index} selectedRows={selectedRows} toggleSelectRow={toggleSelectRow} currentPage={currentPage} numberPerPage={numberPerPage} />
                 ))}

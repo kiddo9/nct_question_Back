@@ -10,7 +10,9 @@ const Verify = () => {
   const [Input, setInput] = useState(["", "", "", "", "", ""]);
   const { load, email, id, type, token } = useValidation();
   const [loader, setLoader] = useState();
+  const [delay, setDelay] = useState(false);
   const nav = useNavigate();
+  
 
   const handleInput = (e, index) => {
     const newInputs = [...Input];
@@ -67,7 +69,11 @@ const Verify = () => {
           }
 
           toast.success("Successfully Authenticated");
-          nav("/admin/user/questions");
+          setDelay(true);
+          setTimeout(() => {
+            setDelay(false);
+            nav("/admin/user/questions");
+          }, 1000)
         } catch (error) {
           console.log(error);
           toast.error("An error occourd");
@@ -83,7 +89,7 @@ const Verify = () => {
 
   return (
     <div className=" h-screen pb-10 pt-20 flex mx-auto">
-      {load && <Loader />}
+      {load || delay && <Loader />}
       {loader && <Loader preload={true} />}
       <ToastContainer />
       <div className="rounded-[20px] slideDown py-5 transition-opacity duration-300 ease-in shadow-2xl px-3 h-[27rem] bg-white/30 backdrop-blur-xs mx-auto">

@@ -4,6 +4,7 @@ import AddButton from "../components/AddButton";
 import Users from "../components/UsersTable/Users";
 import useAdminLists from "../hooks/adminLists";
 import useRoleHook from "../hooks/roleHook";
+import { ToastContainer } from "react-toastify";
 
 export const Admins = () => {
   const status = [
@@ -17,6 +18,7 @@ export const Admins = () => {
   const { getRoles, loader: roleLoader } = useRoleHook();
   return (
     <>
+      <ToastContainer />
       <Users getUsers={users} getRoles={getRoles} status={status} loader={loader} roleLoader={roleLoader} />
     </>
   );

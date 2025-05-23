@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useEffect } from "react";
 import Api from "../../api/Api";
 import Loader from "../../components/Loader";
+import EyeToggle from "./EyeToggle";
 
 const PasswordRest = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const PasswordRest = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loader, setLoader] = useState(false);
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
 
   function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -160,12 +162,17 @@ const PasswordRest = () => {
             </label>
             <div className="input-group flex border-2 border-[#6699ff]/30 bg-white/10 backdrop-blur-xs px-2 py-2 rounded-lg">
               <input
-                type="password"
+                type={isPasswordVisible ? "text" : "password"}
                 className="outline-0 w-[90%]"
                 id="password"
                 placeholder="New password"
                 onChange={(e) => setNewPassword(e.target.value)}
                 value={newPassword}
+              />
+
+              <EyeToggle 
+                isPasswordVisible={isPasswordVisible} 
+                setPasswordVisible={setPasswordVisible} 
               />
             </div>
           </div>

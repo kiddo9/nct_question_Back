@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import Api from '../../api/Api'
+import Loader from '../Loader'
 
 
 const CreateRoles = ({setOpenCreate}) => {
@@ -40,6 +41,7 @@ const CreateRoles = ({setOpenCreate}) => {
     
   return (
     <div   className='absolute top-0 left-0 flex justify-center items-center backdrop-blur-xs w-full h-full z-50 '>
+        {loader && <Loader preload={loader} />}
         <div onClick={() => setOpenCreate(false)}  className='absolute top-0 left-0 w-full h-full bg-black opacity-50'/>
         <div className='bg-white py-2 rounded-lg shadow-2xl z-10 w-[600px]'>
             <header className="bg-[#D7DDFF] w-full  flex flex-row items-center px-4 py-2 shadow-md">

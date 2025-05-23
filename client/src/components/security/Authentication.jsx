@@ -23,9 +23,9 @@ const Authentication = ({ children }) => {
 
   authUser();
 
-  setInterval(() => {
-    authUser();
-  }, 50000);
+  // setInterval(() => {
+  //   authUser();
+  // }, 50000);
   return children;
 };
 
