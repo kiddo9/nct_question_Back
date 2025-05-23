@@ -53,7 +53,7 @@ export default function Fetching({ preload }) {
 
         {/* Logo */}
         <div
-          className="flex justify-center items-center transition-opacity duration-1000"
+          className="flex justify-center items-center transition-opacity duration-800"
           style={{ opacity: opacity }}
         >
           <div

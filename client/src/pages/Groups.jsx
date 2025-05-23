@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import Loader from '../components/Loader'
 import AddButton from '../components/AddButton'
@@ -7,6 +7,7 @@ import { useQuestionGroupHook } from '../hooks/questionGroupHook'
 import { CircleX } from 'lucide-react'
 import CreateGroups from '../components/CreateModals/CreateGroups'
 import DeleteEnum from '../components/DeleteModals/DeleteEnum'
+import Fetching from '../components/Fetching'
 
 const Groups = () => {
     const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
@@ -14,6 +15,7 @@ const Groups = () => {
     const [openDelete, setOpenDelete] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [deleteName, setDeleteName] = useState(null);
+    const [loading, setLoading] = useState(false);
     
     const handleDelete = (id, name) => {
         setOpenDelete(true);
@@ -21,6 +23,12 @@ const Groups = () => {
         setDeleteId(id);
     };
 
+    useEffect(() => {
+          setLoading(true);
+          setTimeout(() => {
+            setLoading(false);
+          }, 2500);
+    }, []);
     const StatusBadge = ({ status }) => {
         let bgColor = '';
         let statusText = '';
@@ -51,7 +59,6 @@ const Groups = () => {
       };
   return (
     <div className="rounded-lg lg:px-2 py-8">
-        {groupLoader && <Loader />}
         <ToastContainer />
         <div className="flex flex-col  bg-white rounded-2xl mx-auto shadow py-2 w-[100vw] lg:w-[calc(100vw-270px)] ">
             <div className="flex justify-end  gap-2 items-center px-5 py-3 shadow-md">
@@ -63,22 +70,24 @@ const Groups = () => {
                     <AddButton>Add Group</AddButton>
                 </Link>
             </div>
-            <div className=' overflow-y-scroll max-h-[calc(100vh-232px)]'>
-            {
-                questionGroups.map((group) => (
-                    <div key={group.id} className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
-                        <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
-                        <div className='flex gap-10 items-center'>
-                            <StatusBadge status={group.active_status} />
-                            <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
-                            
-                        </div>
-                                        
-                    </div>
-                ))
-              
-            }
-            </div>
+            {groupLoader || loading ? <Fetching/> : 
+              <div className=' overflow-y-scroll max-h-[calc(100vh-232px)]'>
+              {
+                  questionGroups.map((group) => (
+                      <div key={group.id} className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
+                          <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
+                          <div className='flex gap-10 items-center'>
+                              <StatusBadge status={group.active_status} />
+                              <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                              
+                          </div>
+                                          
+                      </div>
+                  ))
+                
+              }
+              </div>
+          }
         </div>
         {openCreate && <CreateGroups setOpenCreate={setOpenCreate} />}
         {openDelete && <DeleteEnum type='group' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
