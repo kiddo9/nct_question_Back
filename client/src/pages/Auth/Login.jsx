@@ -65,16 +65,12 @@ const Login = () => {
 
   return (
     <div
-      className="w-screen h-screen "
-      style={{
-        backgroundImage: "url(/login-bg.svg",
-        backgroundRepeat: "no-repeat",
-      }}
+      className="w-screen h-screen bg-[url('')] md:bg-[url('/login-bg.svg')] bg-no-repeat"
     >
-      <div className="  pt-20 pb-10 flex mx-auto">
+      <div className="pt-20 pb-10 flex mx-auto">
         <ToastContainer />
         {loading && <Loader preload={true} />}
-        <div className="login-card bg-white/30 backdrop-blur-xs rounded-lg shadow-lg p-6 mx-auto">
+        <div className="login-card  bg-white/50 backdrop-blur-xs rounded-lg shadow-lg p-6 mx-auto">
           <div className="logo-container flex items-center">
             <img src="/NCT-MainLogo-2.png" alt="Company Logo" />
           </div>
