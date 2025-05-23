@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify'
 import Loader from '../components/Loader'
 import AddButton from '../components/AddButton'
 import { Link } from 'react-router-dom'
-import { CircleX } from 'lucide-react'
+import { CircleDot, CircleX } from 'lucide-react'
 import useRoleHook from '../hooks/roleHook'
 import CreateRoles from '../components/CreateModals/CreateRoles'
 import DeleteEnum from '../components/DeleteModals/DeleteEnum'
@@ -64,9 +64,9 @@ const Roles = () => {
         <ToastContainer />
         <div className="flex flex-col  bg-white rounded-2xl mx-auto shadow py-2 w-[100vw]  lg:w-[calc(100vw-270px)] ">
             <div className="flex justify-end  gap-2 items-center px-5 py-3 shadow-md">
-                <div className='cursor-pointer flex justify-center rounded-md bg-[#6674BB] px-2 py-2 text-white'>
+                {/* <div className='cursor-pointer flex justify-center rounded-md bg-[#6674BB] px-2 py-2 text-white'>
                     <img src="/edit.svg" alt="edit" width={25} height={25} />
-                </div>
+                </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
                     <AddButton>Add Role</AddButton>
@@ -76,12 +76,17 @@ const Roles = () => {
               :
               <div className=' overflow-y-scroll max-h-[calc(100vh-232px)]'>
               {
-                  getRoles.map((role) => (
+                  getRoles.sort((a, b) => a.roles.localeCompare(b.roles)).map((role) => (
                       <div key={role.id} className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
                           <h1 className='md:text-lg text-[16px]  text-black'>{role.roles}</h1>
                           <div className='flex gap-10 items-center'>
                               <StatusBadge status={role.active_status} />
-                              <CircleX onClick={() => handleDelete(role.id, role.roles)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+
+                              {
+                                String(role.roles).trim().toLowerCase() != 'admin' 
+                                ? <CircleX onClick={() => handleDelete(role.id, role.roles)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' /> 
+                                : <CircleDot className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]'/>
+                              }
                           </div>
                                         
                       </div>

@@ -62,9 +62,9 @@ const Groups = () => {
         <ToastContainer />
         <div className="flex flex-col  bg-white rounded-2xl mx-auto shadow py-2 w-[100vw] lg:w-[calc(100vw-270px)] ">
             <div className="flex justify-end  gap-2 items-center px-5 py-3 shadow-md">
-                <div className='cursor-pointer flex justify-center rounded-md bg-[#6674BB] px-2 py-2 text-white'>
+                {/* <div className='cursor-pointer flex justify-center rounded-md bg-[#6674BB] px-2 py-2 text-white'>
                     <img src="/edit.svg" alt="edit" width={25} height={25} />
-                </div>
+                </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
                     <AddButton>Add Group</AddButton>
@@ -73,7 +73,7 @@ const Groups = () => {
             {groupLoader || loading ? <Fetching/> : 
               <div className=' overflow-y-scroll max-h-[calc(100vh-232px)]'>
               {
-                  questionGroups.map((group) => (
+                  questionGroups.sort((a, b) => a.title.localeCompare(b.title)).map((group) => (
                       <div key={group.id} className='py-4 border-t-2 border-gray-300 flex justify-between items-center px-5'>
                           <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
                           <div className='flex gap-10 items-center'>
