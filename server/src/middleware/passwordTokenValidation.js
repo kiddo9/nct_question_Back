@@ -13,7 +13,7 @@ const passwordTokenValidation = async (req, res, next) => {
     req.user = decode;
 
     if (!decode) {
-      return res.json({ status: false });
+      return res.json({ status: false, message: "invalid token" });
     }
 
     const checkId = await usersModel.findOne({
@@ -21,11 +21,11 @@ const passwordTokenValidation = async (req, res, next) => {
     });
 
     if (!checkId) {
-      return res.json({ status: false });
+      return res.json({ status: false, message: "invalid user access" });
     }
 
     if (decode.type !== "pass-set" && decode.type !== "P-reset") {
-      return res.json({ status: false });
+      return res.json({ status: false, message: "invalid request" });
     }
 
     next();

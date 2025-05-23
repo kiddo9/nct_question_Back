@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"; //import the jwt module
 import emailSender from "../../email/email.js"; //import the emailsender function
 import Otp_Gen from "otp-generator";
 import bcrypt from "bcrypt";
+import roleBasedAuthenicationMiddleware from "../../middleware/roleBasedAuthCheck.js";
 
 //Login controller authentication logic
 export const loginController = async (req, res) => {
@@ -491,12 +492,10 @@ export const editAdmin = async (req, res) => {
       return;
     }
 
-    return res
-      .status(201)
-      .json({
-        status: true,
-        message: `${comfirmAdminExist.name} data has been updated`,
-      });
+    return res.status(201).json({
+      status: true,
+      message: `${comfirmAdminExist.name} data has been updated`,
+    });
   } catch (error) {
     console.log(error);
   }

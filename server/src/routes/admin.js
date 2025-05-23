@@ -35,6 +35,7 @@ import passwordTokenValidation from "../middleware/passwordTokenValidation.js";
 import { passwordSetAndReset } from "../controllers/Auth/passwordSetandReset.js";
 import { AllRoles, createRole, deleteRole } from "../controllers/roles.js";
 import { emailVerification } from "../controllers/Auth/emailValidation.js";
+import roleBasedAuthenticationMiddleware from "../middleware/roleBasedAuthCheck.js";
 
 router.get("/", tokenVerify, async (req, res) => {
   res.status(200).json({ status: true });
@@ -56,8 +57,16 @@ router.get(
 
 router.post("/login", loginController);
 router.get("/questions/bank", tokenVerify, getAllQuestions);
-router.get("/admin/user/lists", tokenVerify, usersList);
-router.get("/admin/roles", tokenVerify, AllRoles);
+router.get(
+  "/admin/user/lists",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  usersList
+);
+router.get(
+  "/admin/roles",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  AllRoles
+);
 
 router.get("/questions/group", tokenVerify, getAllQuestionGroups);
 router.get("/sections", tokenVerify, getAllSections);
@@ -69,20 +78,52 @@ router.get("/question/bank/:id", tokenVerify, getEachQuestionById);
 
 router.post("/auth/validate", credValidation, otpValidation);
 router.post("/create/questions", tokenVerify, createQuestions);
-router.post("/create/roles", tokenVerify, createRole);
-router.post("/admin/create", tokenVerify, createAdminUser);
-router.post("/create/groups", tokenVerify, createGroup);
-router.post("/create/sections", tokenVerify, createSection);
+router.post(
+  "/create/roles",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  createRole
+);
+router.post(
+  "/admin/create",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  createAdminUser
+);
+router.post(
+  "/create/groups",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  createGroup
+);
+router.post(
+  "/create/sections",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  createSection
+);
 router.post("/admin/user/forgot-password", emailVerification);
 router.post("/logout", tokenVerify, Logout);
 
 router.put("/password/update", passwordTokenValidation, passwordSetAndReset);
 router.put("/question/bank/update", tokenVerify, updateQuestion);
-router.put("/admin/user/update", tokenVerify, editAdmin);
+router.put(
+  "/admin/user/update",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  editAdmin
+);
 
 router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
-router.delete("/admin/role/delete/:id", tokenVerify, deleteRole);
-router.delete("/group/delete/:id", tokenVerify, deleteGroup);
-router.delete("/section/delete/:id", tokenVerify, deleteSection);
+router.delete(
+  "/admin/role/delete/:id",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  deleteRole
+);
+router.delete(
+  "/group/delete/:id",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  deleteGroup
+);
+router.delete(
+  "/section/delete/:id",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  deleteSection
+);
 
 export default router;
