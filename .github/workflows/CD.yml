@@ -68,9 +68,10 @@ jobs:
     #     id: build-deploy
     #     uses: azure/container-apps-deploy-action@v1
     #     with:
-    #       imageToDeploy: ${{ vars.DOCKER_USERNAME }}.docker.io/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.sha }} #this should be the link to the docker image
-    #       resourceGroup: ${{vars.AZURE_RESOURCE_GROUP}}
-    #       containerAppName: ${{vars.AZURE_CONTAINER_APP_NAME}}
+    #       imageToDeploy: ${{ vars.DOCKER_IMAGE_NAME }}:${{ github.sha }} #this is the tag name
+    #       registryUrl: e.g mytestregistry.dockerhub.io
+    #       registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+    #       registryPassword: ${{ secrets.REGISTRY_PASSWORD }} ##it would be private so
 
     #   - name: Find pull request
     #     id: find-pr
