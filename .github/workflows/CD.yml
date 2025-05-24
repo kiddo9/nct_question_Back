@@ -35,7 +35,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           # get details from github secrets and varibles
-          images: ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:${{github.sha}}
+          images: ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}
 
         # log in to docker  hub with your creds
       - name: Log in to Docker Hub
