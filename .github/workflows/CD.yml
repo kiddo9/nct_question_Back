@@ -59,34 +59,38 @@ jobs:
           sbom: true
 
         # Azure
-    #   - name: Log in to Azure
-    #     uses: azure/login@v1
-    #     with:
-    #       creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # - name: Log in to Azure
+      #   uses: azure/login@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    #   - name: Build and deploy Container App
-    #     id: build-deploy
-    #     uses: azure/container-apps-deploy-action@v1
-    #     with:
-    #       imageToDeploy: ${{ vars.DOCKER_USERNAME }}.docker.io/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.sha }} #this should be the link to the docker image
-    #       resourceGroup: ${{vars.AZURE_RESOURCE_GROUP}}
-    #       containerAppName: ${{vars.AZURE_CONTAINER_APP_NAME}}
+      # - name: Build and deploy Container App
+      #   id: build-deploy
+      #   uses: azure/container-apps-deploy-action@v1
+      #   with:
+      #     imageToDeploy: ${{ vars.DOCKER_IMAGE_NAME }}:${{ github.sha }} #this is the tag name
+      #     registryUrl: e.g mytestregistry.dockerhub.io
+      #     registryUsername: ${{ secrets.REGISTRY_USERNAME }}
+      #     registryPassword: ${{ secrets.REGISTRY_PASSWORD }} #it would be private so
+      #     resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
+      #     containerAppName: ${{ vars.AZURE_CONTAINER_APP_NAME }}
+      #     location: ${{ vars.AZURE_LOCATION }}
 
-    #   - name: Find pull request
-    #     id: find-pr
-    #     uses: juliangruber/find-pull-request-action@v1
-    #     with:
-    #       github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Find pull request
+      #   id: find-pr
+      #   uses: juliangruber/find-pull-request-action@v1
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
-    #   - name: Comment on PR with the app URL
-    #     if: steps.find-pr.outputs.number != ''
-    #     uses: actions/github-script@v6
-    #     with:
-    #       github-token: ${{ secrets.GITHUB_TOKEN }}
-    #       script: |
-    #         await github.rest.issues.createComment({
-    #           issue_number: ${{ steps.find-pr.outputs.number }},
-    #           owner: context.repo.owner,
-    #           repo: context.repo.repo,
-    #           body: `🚀 Deployed to: ${{ steps.build-deploy.outputs.appUrl }}`
-    #         });
+      # - name: Comment on PR with the app URL
+      #   if: steps.find-pr.outputs.number != ''
+      #   uses: actions/github-script@v6
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       await github.rest.issues.createComment({
+      #         issue_number: ${{ steps.find-pr.outputs.number }},
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: `🚀 Deployed to: ${{ steps.build-deploy.outputs.appUrl }}`
+      #       });
