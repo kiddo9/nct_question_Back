@@ -26,12 +26,15 @@ jobs:
           node-version: 22.x
 
       - name: 'Install Packages'
+        working-directory: client
         run: npm install
       
       - name: 'Lint'
+        working-directory: client
         run: npm run lint
 
       - name: 'Build'
+        working-directory: client
         run: npm run build
 
   build_server:
@@ -50,12 +53,15 @@ jobs:
           node-version: 22.x
   
       - name: 'Install Packages'
+        working-directory: server
         run: npm install
         
       - name: 'Lint'
+        working-directory: server
         run: npm run lint
   
       - name: 'Build'
+        working-directory: server
         run: npm run build
         
 
