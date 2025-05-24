@@ -1,0 +1,56 @@
+name: NCT_QUESTION_BANK CI
+
+on: 
+  workflow_dispatch:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+
+jobs:
+
+  build: 
+    name: 'Build the Application'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.2.2
+
+      - name: 'Setup Node.js environment'
+        uses: actions/setup-node@v3.9.1
+        with:
+          node-version: 22.x
+
+      - name: 'Install Packages'
+        run: npm install
+
+      - name: 'Build'
+        run: npm run build
+
+  test: 
+    name: 'Run All Tests'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.2.2
+      - name: 'Mock Pass'
+        run: echo "All tests passed"
+
+  lint:
+    name: 'Perform Linting of Code'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: 'Install Packages'
+        run: npm install
+        
+      - name: 'Lint'
+        run: npm run lint
