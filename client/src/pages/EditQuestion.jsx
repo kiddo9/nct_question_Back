@@ -181,7 +181,7 @@ const EditQuestions = () => {
       }
     }
     
-  }, [manual,numberOfOptions])
+  }, [manual, numberOfOptions])
   
   return (
     <div className="rounded-lg lg:px-2 py-8">
