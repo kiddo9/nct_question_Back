@@ -31,7 +31,8 @@ const Login = () => {
   }, [nav]);
 
   //const sitekeyone = "6LcLITorAAAAAD3awuWCg4U3-I2tMwIKXv9-Vpcm";
-  const sitekeyone = "6LeOHzorAAAAACA9rLeBi5ZVWDMAKsu62BAoaNh9";
+  // const sitekeyone = "6LeOHzorAAAAACA9rLeBi5ZVWDMAKsu62BAoaNh9";
+  const sitekeyone = "6LeEtUkrAAAAAPF8buEmK7n9E89MixpuRVoI1Wu7";
 
   const handleSubmittion = async () => {
     setLoading(true);
@@ -64,9 +65,7 @@ const Login = () => {
   };
 
   return (
-    <div
-      className="w-screen h-screen bg-[url('')] md:bg-[url('/login-bg.svg')] bg-no-repeat"
-    >
+    <div className="w-screen h-screen bg-[url('')] md:bg-[url('/login-bg.svg')] bg-no-repeat">
       <div className="pt-20 pb-10 flex mx-auto">
         <ToastContainer />
         {loading && <Loader preload={true} />}
