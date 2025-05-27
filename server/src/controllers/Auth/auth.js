@@ -165,7 +165,7 @@ export const otpValidation = async (req, res) => {
       //send token for authorization
       res.cookie("token", createAuthToken, {
         httpOnly: true,
-        secure: process.env.APP_MODE === "production",
+        secure: false, //process.env.APP_MODE === "production",
         sameSite: "lax",
         maxAge: 11 * 60 * 60 * 1000,
       });
