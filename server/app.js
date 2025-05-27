@@ -27,11 +27,7 @@ async function setupAndStartServer() {
 
   server.use("/u/", routers);
 
-  server.listen(`${process.env.PORT}`, () => {
-    console.log(
-      `server running on ${process.env.PORT} \n only accept request from ${process.env.LOCAL_ORIGIN} and ${process.env.NGINX_LOCAL_ORIGIN}.\n App mode ${process.env.APP_MODE}`
-    );
-  });
+  server.listen(`${process.env.PORT}`);
 }
 
 await setupAndStartServer();
