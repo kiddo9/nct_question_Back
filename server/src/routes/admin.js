@@ -62,11 +62,7 @@ router.get(
   [tokenVerify, roleBasedAuthenticationMiddleware],
   usersList
 );
-router.get(
-  "/admin/roles",
-  [tokenVerify, roleBasedAuthenticationMiddleware],
-  AllRoles
-);
+router.get("/admin/roles", [tokenVerify], AllRoles);
 
 router.get("/questions/group", tokenVerify, getAllQuestionGroups);
 router.get("/sections", tokenVerify, getAllSections);

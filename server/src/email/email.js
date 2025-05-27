@@ -18,7 +18,7 @@ const emailSender = async ({
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-  console.log(otp)
+  console.log(otp);
   let emailContent = "";
 
   if (emailType === "auth" || emailType === "reset") {
