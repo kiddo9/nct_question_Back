@@ -3,14 +3,44 @@ import questionOptionModel from "../../models/question_options.js";
 
 //controller to get all questions
 export const getAllQuestions = async (req, res) => {
+  let fetchQuestions;
   //using the try catch block
   try {
-    //fetch all data from the database
-    const fetchQuestions = await questionBank.findAll();
+    const { type, QuaterId, GroupId, active_status } = req.query;
 
-    //check if the table is empty
-    if (fetchQuestions.length <= 0) {
-      return res.json({ status: false, message: "No data at the moment" });
+    if (req.query) {
+      const query = {
+        where: {},
+      };
+
+      if (type) {
+        query.where.type = type;
+      }
+      if (QuaterId) {
+        query.where.section_id = QuaterId;
+      }
+      if (GroupId) {
+        query.where.q_group_id = GroupId;
+      }
+      if (active_status) {
+        query.where.active_status = active_status;
+      }
+
+      // Fetch filtered questions from the database
+      fetchQuestions = await questionBank.findAll(query);
+
+      // Check if any questions were found
+      if (fetchQuestions.length === 0) {
+        return res.json({ status: false, message: "No questions found" });
+      }
+    } else {
+      //fetch all data from the database
+      fetchQuestions = await questionBank.findAll();
+
+      //check if the table is empty
+      if (fetchQuestions.length <= 0) {
+        return res.json({ status: false, message: "No data at the moment" });
+      }
     }
 
     //return successful message with data
@@ -199,7 +229,59 @@ export const deleteQuestion = async (req, res) => {
   }
 };
 
+//multiple delete question controller
+export const multiDeleteQuestion = async (req, res) => {
+  const { ids } = req.body;
+  try {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.json({ status: false, message: "invalid request" });
+    }
+
+    // Check if the questions exist
+    const questions = await questionBank.findAll({
+      where: { id: ids },
+    });
+
+    // If no questions found, return an error
+    if (questions.length === 0) {
+      return res.json({ status: false, message: "no questions found" });
+    }
+
+    // Delete options for each question
+    await Promise.all(
+      questions.map(async (question) => {
+        if (question.type === "M") {
+          await questionOptionModel.destroy({
+            where: { question_bank_id: question.id },
+          });
+        }
+      })
+    );
+
+    // Delete the questions
+    const deleteCount = await questionBank.destroy({
+      where: { id: ids },
+    });
+
+    // If no questions were deleted, return a message
+    if (deleteCount === 0) {
+      return res.json({ status: false, message: "unable to delete question" });
+    }
+
+    //return successful response
+    return res.status(200).json({
+      status: true,
+      message: `${deleteCount} questions deleted successfully`,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ status: false, message: "internal error" });
+  }
+};
+
+//update question controller
 export const updateQuestion = async (req, res) => {
+  //destructure the request body and get all data
   const {
     id,
     type,
@@ -212,7 +294,9 @@ export const updateQuestion = async (req, res) => {
     GroupId,
   } = req.body;
 
+  //use the try catch block
   try {
+    //check if the required fields are empty
     if (
       !type ||
       !id ||
@@ -222,9 +306,20 @@ export const updateQuestion = async (req, res) => {
       !answer ||
       !GroupId
     ) {
+      //return error if any of the required fields are empty
       return res.json({ status: false, message: "unable to update question" });
     }
 
+    //check if the question id exist in the database
+    const checkForQuestion = await questionBank.findOne({ where: { id: id } });
+    //return error if it does not exist
+    if (!checkForQuestion) {
+      return res.json({
+        status: false,
+        message: "unable to update question. data does not exist",
+      });
+    }
+    //update the question in the database
     const updateQuestion = await questionBank.update(
       {
         type,
@@ -245,18 +340,21 @@ export const updateQuestion = async (req, res) => {
       { where: { id: id } }
     );
 
-    if (updateQuestion[0] === 0) {
+    //check if the question was updated
+    if (updateQuestion[0] === 0 || !updateQuestion) {
       return res.json({
         status: false,
         message: "unable to update and add question",
       });
     }
 
+    //if the type is T for true or false question, check if options exist and delete them
     if (type == "T") {
       const checkIFOption = await questionOptionModel.findAll({
         where: { question_bank_id: id },
       });
 
+      // if options exist, delete them
       if (checkIFOption) {
         await questionOptionModel.destroy({
           where: { question_bank_id: id },
@@ -264,11 +362,13 @@ export const updateQuestion = async (req, res) => {
       }
     }
 
+    //if the type is M for muilt questions, check if options is an array and has at least 2 options
     if (type == "M" && Array.isArray(options) && options.length >= 2) {
       await questionOptionModel.destroy({
         where: { question_bank_id: id },
       });
 
+      //create and set answer in the options table
       await Promise.all(
         options.map((option) =>
           questionOptionModel.create({
@@ -285,6 +385,7 @@ export const updateQuestion = async (req, res) => {
       );
     }
 
+    //return successful message if the question was updated
     return res.status(201).json({
       status: true,
       message: "Question edited successfully",

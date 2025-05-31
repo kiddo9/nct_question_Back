@@ -1,20 +1,16 @@
 name: NCT-CBT DOCKER DEPLOYMENT
 
 on:
-  workflow_dispatch:
-
-  push:
-    branches:
-      - main
-
-  pull_request:
-    branches:
-      - main
+  workflow_run:
+    workflows: [NCT_QUESTION_BANK_CI]
+    types:
+      - completed
 
 # vars and secrets to be specified in the settings panel of github repo
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     # The type of runner that the job will run on
     strategy:
       matrix:
