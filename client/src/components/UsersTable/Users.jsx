@@ -49,12 +49,17 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
       filtered = filtered.filter(user => user.role === query.role);
     }
     if (query.passwordSet) {
-      const passwordSetValue = query.passwordSet === 'true'; // Convert string to boolean
-      filtered = filtered.filter(user => user.password && user.password.trim() !== '' === passwordSetValue);
+      filtered = filtered.filter(user =>  query.passwordSet === 'true' 
+        ?  user.password && user.password.trim() !== ''
+        : !user.password || user.password.trim() == ''
+      );
     }
     if (query.verifiedUser) {
-      const verifiedValue = query.verifiedUser === 'true'; // Convert string to boolean
-      filtered = filtered.filter(user => user.email_verified == 1 && user.password && user.password.trim() !== '' === verifiedValue);
+      // Filter users based on email_verified status
+      filtered = filtered.filter(user =>  query.verifiedUser === 'true' 
+        ? user.email_verified == 1 && user.password && user.password.trim() !== ''
+        : user.email_verified == 0 && (!user.password || user.password.trim() == '')
+      );
     }
     if (query.loggedIn) {
       const loggedInValue = query.loggedIn === 'true'; // Convert string to boolean
@@ -214,7 +219,7 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
         </div>
         
         {/* Pagination */}
-        <UserPagination getUsers={getUsers} sortedUsers={sortedUsers} currentPage={currentPage} setCurrentPage={setCurrentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
+        <UserPagination getUsers={filteredUsers} sortedUsers={sortedUsers} currentPage={currentPage} setCurrentPage={setCurrentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
       </div>
     </div>
   );

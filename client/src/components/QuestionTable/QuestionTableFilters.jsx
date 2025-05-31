@@ -48,8 +48,8 @@ const QuestionTableFilters = ({showFilters, setShowFilters, questionGroups, sect
 
   const filterLabels = {
     type: 'Type',
-    quarterId: 'Quarter',
-    groupId: 'Group',
+    quarter: 'Quarter',
+    group: 'Group',
     activeStatus: 'Status'
   };
 
@@ -63,8 +63,8 @@ const QuestionTableFilters = ({showFilters, setShowFilters, questionGroups, sect
   const clearFilters = () => {
     setFilters({
       type: "",
-      quarterId: "",
-      groupId: "",
+      quarter: "",
+      group: "",
       activeStatus: ""
     });
   };
