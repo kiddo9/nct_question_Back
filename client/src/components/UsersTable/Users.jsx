@@ -5,6 +5,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import UsersTable from './UsersTable';
 import UserPagination from './UserPagination';
 import UserTableFilters from './UserTableFilters';
+import { toast, ToastContainer } from 'react-toastify';
+import Api from '../../api/Api';
 // Sample data 
 
 
@@ -34,6 +36,8 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
   const [currentPage, setCurrentPage] = useState(query);
   const [showFilters, setShowFilters] = useState(false);
   const [queryFilteredUsers, setQueryFilteredUsers] = useState([]);
+  const [load, setLoad] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   // console.log(getUsers);
   const usersWithRoles = getUsers.map(user => ({
@@ -118,9 +122,23 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
   };
 
   // Handle bulk delete
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async() => {
     // Perform bulk delete logic
-    setSelectedRows([]);
+    setLoad(true);
+    console.log(selectedRows)
+    try {
+      {/* API GOES HERE */}
+      toast.success("Users deleted successfully.");
+      setSelectedRows([]);
+      setTimeout(() => {
+          window.location.reload();
+      }, 1000);
+    } catch (error) {
+      toast.error("Error deleting questions. Please try again.");
+      console.error("Error deleting questions:", error);
+    }finally {
+      setLoad(false);
+    }
   };
 
   // Status badge component
@@ -128,6 +146,7 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
 
   return (
     <div className="rounded-lg lg:px-2 py-8 max-w-[100vw]  lg:w-[calc(100vw-245px)]">
+      <ToastContainer/>
       <div className="flex flex-col space-y-4 bg-white rounded-2xl shadow px-10 py-6">
         {/* Header section */}
         <div className="flex justify-between items-center">
@@ -182,8 +201,8 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
           <div className="flex space-x-2">
             {selectedRows.length > 0 && (
               <button 
-                onClick={handleBulkDelete}
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md flex items-center space-x-1"
+                onClick={() => setDeleteModal(true)}
+                className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md flex items-center space-x-1 cursor-pointer"
               >
                 <Trash2 size={16} />
                 <span>Delete ({selectedRows.length})</span>
@@ -221,7 +240,28 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
         {/* Pagination */}
         <UserPagination getUsers={filteredUsers} sortedUsers={sortedUsers} currentPage={currentPage} setCurrentPage={setCurrentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
       </div>
+      {deleteModal && <MultiDeleteModal selectedRows={selectedRows} handleBulkDelete={handleBulkDelete} load={load} setDeleteModal={setDeleteModal} />}
     </div>
   );
 }
 
+
+const MultiDeleteModal = ({selectedRows, handleBulkDelete, load, setDeleteModal}) => {
+  return (
+    <div   className='absolute top-0 left-0 flex justify-center items-center backdrop-blur-xs w-full h-full z-50 '>
+        <div onClick={() => setDeleteModal(false)}  className='absolute top-0 left-0 w-full h-full bg-black opacity-50'/>
+       <div className='bg-white py-2 rounded-lg shadow-2xl z-10 w-[400px]'>
+            <header className="bg-[#D7DDFF] w-full flex flex-row items-center px-4 py-2 shadow-md">
+                <h1 className="text-xl mx-auto text-red-500">Delete Question</h1>
+            </header>
+            <p className='text-center mt-5 mb-2'>Are you sure you want to delete this question?</p>
+            <div className='flex justify-center gap-4 px-10 pb-3'>
+                <button disabled={load} onClick={() => handleBulkDelete(selectedRows)} className='bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-red-600'>
+                    {load ? 'Deleting...' : 'Yes'}
+                </button>
+                <button disabled={load} onClick={() => setDeleteModal(false)} className='bg-[#6699ff] text-white px-4 py-2 rounded-lg cursor-pointer hover:shadow-2xl'>No</button>
+            </div>
+       </div>
+    </div>
+  );
+}

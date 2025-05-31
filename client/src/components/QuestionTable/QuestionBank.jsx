@@ -135,7 +135,6 @@ export default function QuestionBank() {
   const handleBulkDelete = async() => {
     // setQuestions(questions.filter(question => !selectedRows.includes(question.id)));
     // Perform bulk delete logic
-    console.log(selectedRows);
     setLoad(true);
     try {
       const request = await Api.delete("/questions/bank/multi/delete", {
