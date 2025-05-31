@@ -3,9 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 
 
 const QuestionPagination = ( { questions, sortedQuestions, currentPage, numberPerPage, setNumberPerPage }) => {
-  const [_, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const changePage = (page) => {
-    setSearchParams({ page });
+    setSearchParams({  ...Object.fromEntries(searchParams.entries()), page });
   }
   return (
     <div className="flex gap-2 flex-wrap items-center justify-between">

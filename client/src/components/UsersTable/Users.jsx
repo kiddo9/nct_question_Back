@@ -4,6 +4,7 @@ import AddButton from '../AddButton';
 import { Link, useSearchParams } from 'react-router-dom';
 import UsersTable from './UsersTable';
 import UserPagination from './UserPagination';
+import UserTableFilters from './UserTableFilters';
 // Sample data 
 
 
@@ -11,13 +12,19 @@ import UserPagination from './UserPagination';
 export default function Users({ getUsers, getRoles, status, loader, roleLoader }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const query = searchParams.get("page") || 1 //allows for pagination via the url
+  const query = {
+    page: searchParams.get("page") || 1, //allows for pagination via the url
+    role: searchParams.get("role") || "",
+    passwordSet: searchParams.get("passwordSet") || "",
+    verifiedUser: searchParams.get("verifiedUser") || "",
+    loggedIn: searchParams.get("loggedIn") || ""
+  }
 
   useEffect(() => {
-      if (query) {
-        setCurrentPage(parseInt(query))
+      if (query.page) {
+        setCurrentPage(parseInt(query.page))
       }
-  }, [query])
+  }, [query.page])
 
   // const [questions, setQuestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +32,8 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [numberPerPage, setNumberPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(query);
+  const [showFilters, setShowFilters] = useState(false);
+  const [queryFilteredUsers, setQueryFilteredUsers] = useState([]);
 
   // console.log(getUsers);
   const usersWithRoles = getUsers.map(user => ({
@@ -33,8 +42,35 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
   }))
   // console.log(usersWithRoles);
 
+  useEffect(() => {
+    let filtered = usersWithRoles;
+    // Filter users based on query parameters
+    if (query.role) {
+      filtered = filtered.filter(user => user.role === query.role);
+    }
+    if (query.passwordSet) {
+      filtered = filtered.filter(user =>  query.passwordSet === 'true' 
+        ?  user.password && user.password.trim() !== ''
+        : !user.password || user.password.trim() == ''
+      );
+    }
+    if (query.verifiedUser) {
+      // Filter users based on email_verified status
+      filtered = filtered.filter(user =>  query.verifiedUser === 'true' 
+        ? user.email_verified == 1 && user.password && user.password.trim() !== ''
+        : user.email_verified == 0 && (!user.password || user.password.trim() == '')
+      );
+    }
+    if (query.loggedIn) {
+      const loggedInValue = query.loggedIn === 'true'; // Convert string to boolean
+      // Filter users based on logged_in status
+      filtered = filtered.filter(user => user.loggedIn === Number(loggedInValue));
+    }
+    setQueryFilteredUsers(filtered);
+  }, [getUsers, getRoles, query.role, query.passwordSet, query.verifiedUser, query.loggedIn]);
+
   // Filter questions based on search term
-  const filteredUsers = usersWithRoles.filter(user => 
+  const filteredUsers = queryFilteredUsers.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     // user.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -138,7 +174,7 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
               className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Search users..."
               value={searchTerm}
-              onChange={(e) => {setSearchTerm(e.target.value); setSearchParams({ page: 1 })}}
+              onChange={(e) => {setSearchTerm(e.target.value); setSearchParams({ ...Object.fromEntries(searchParams.entries()), page: 1 })}}
             />
             <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
           </div>
@@ -153,12 +189,17 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
                 <span>Delete ({selectedRows.length})</span>
               </button>
             )}
-            <button className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-md flex items-center space-x-1">
+            <button onClick={() => setShowFilters(!showFilters)} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm cursor-pointer px-3 py-2 rounded-md flex items-center space-x-1">
               <Filter size={16} />
-              <span>Filter</span>
+              <span>
+                {showFilters ? 'Collapse' : 'Expand'}
+                &nbsp;Filter
+              </span>
             </button>
           </div>
         </div>
+
+        <UserTableFilters showFilters={showFilters} setShowFilters={setShowFilters} roles={getRoles} />
         
         {/* Table */}
         <div className="overflow-x-auto w-full">
@@ -178,7 +219,7 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
         </div>
         
         {/* Pagination */}
-        <UserPagination getUsers={getUsers} sortedUsers={sortedUsers} currentPage={currentPage} setCurrentPage={setCurrentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
+        <UserPagination getUsers={filteredUsers} sortedUsers={sortedUsers} currentPage={currentPage} setCurrentPage={setCurrentPage} numberPerPage={numberPerPage} setNumberPerPage={setNumberPerPage} />
       </div>
     </div>
   );

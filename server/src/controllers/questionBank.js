@@ -6,41 +6,12 @@ export const getAllQuestions = async (req, res) => {
   let fetchQuestions;
   //using the try catch block
   try {
-    const { type, QuaterId, GroupId, active_status } = req.query;
+    //fetch all data from the database
+    fetchQuestions = await questionBank.findAll();
 
-    if (req.query) {
-      const query = {
-        where: {},
-      };
-
-      if (type) {
-        query.where.type = type;
-      }
-      if (QuaterId) {
-        query.where.section_id = QuaterId;
-      }
-      if (GroupId) {
-        query.where.q_group_id = GroupId;
-      }
-      if (active_status) {
-        query.where.active_status = active_status;
-      }
-
-      // Fetch filtered questions from the database
-      fetchQuestions = await questionBank.findAll(query);
-
-      // Check if any questions were found
-      if (fetchQuestions.length === 0) {
-        return res.json({ status: false, message: "No questions found" });
-      }
-    } else {
-      //fetch all data from the database
-      fetchQuestions = await questionBank.findAll();
-
-      //check if the table is empty
-      if (fetchQuestions.length <= 0) {
-        return res.json({ status: false, message: "No data at the moment" });
-      }
+    //check if the table is empty
+    if (fetchQuestions.length <= 0) {
+      return res.json({ status: false, message: "No data at the moment" });
     }
 
     //return successful message with data

@@ -1,5 +1,5 @@
 const errorHandler = async (err, req, res, next) => {
-  console.log(err);
+  console.log(err, req.body, res, next);
 };
 
 export default errorHandler;
