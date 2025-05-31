@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken"; //import the jwt module
 import emailSender from "../../email/email.js"; //import the emailsender function
 import Otp_Gen from "otp-generator";
 import bcrypt from "bcrypt";
-import { Op } from "sequelize";
 
 //Login controller authentication logic
 export const loginController = async (req, res) => {
@@ -439,55 +438,10 @@ export const newUserEmailVerification = async (req, res) => {
 export const usersList = async (req, res) => {
   let getListOfUsers;
   try {
-    const {
-      roles,
-      emailVerified,
-      passwordSet,
-      passwordNotSet,
-      verifiedUser,
-      loggedIn,
-    } = req.query; //get user details from request
+    getListOfUsers = await usersModel.findAll();
 
-    if (req.query) {
-      const query = {
-        where: {},
-      };
-
-      if (roles) {
-        query.where.roles = parseInt(roles);
-      }
-
-      if (emailVerified) {
-        query.where.email_verified = Number(emailVerified);
-      }
-
-      if (passwordNotSet === "null") {
-        query.where.password = null;
-      }
-
-      if (passwordSet === "set") {
-        query.where.password = { [Op.not]: null };
-      }
-
-      if (loggedIn) {
-        query.where.loggedIn = Number(loggedIn); // 0 or 1
-      }
-
-      if (verifiedUser === "verified") {
-        query.where.password = { [Op.not]: null };
-        query.where.email_verified = 1;
-      }
-      getListOfUsers = await usersModel.findAll(query);
-
-      if (!getListOfUsers || getListOfUsers.length <= 0) {
-        return res.json({ status: false, message: "no data found" });
-      }
-    } else {
-      getListOfUsers = await usersModel.findAll();
-
-      if (!getListOfUsers || getListOfUsers.length <= 0) {
-        return res.json({ status: false, message: "no data found" });
-      }
+    if (!getListOfUsers || getListOfUsers.length <= 0) {
+      return res.json({ status: false, message: "no data found" });
     }
 
     return res.status(201).json({ status: true, lists: getListOfUsers });
