@@ -1,6 +1,7 @@
 import React from "react";
 import Api from "../../api/Api";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Authentication = ({ children }) => {
   const nav = useNavigate();
@@ -16,17 +17,22 @@ const Authentication = ({ children }) => {
       }
       console.log("checked");
     } catch (error) {
-      nav("/auth/admin/login");
-      console.log(error);
+      // nav("/auth/admin/login");
+      toast.error(
+        "Seems like you have lost internet connection. Try again later."
+      );
+      console.error("Authentication error:", error);
     }
   };
 
   authUser();
 
-  // setInterval(() => {
-  //   authUser();
-  // }, 50000);
-  return children;
+  return (
+    <>
+      <ToastContainer />
+      {children}
+    </>
+  );
 };
 
 export default Authentication;
