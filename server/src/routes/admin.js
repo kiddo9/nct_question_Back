@@ -15,6 +15,7 @@ import {
   deleteQuestion,
   getAllQuestions,
   getEachQuestionById,
+  multiDeleteQuestion,
   updateQuestion,
 } from "../controllers/questionBank.js";
 import {
@@ -106,6 +107,7 @@ router.put(
 );
 
 router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
+router.delete("/questions/bank/multi/delete", tokenVerify, multiDeleteQuestion);
 router.delete(
   "/admin/role/delete/:id",
   [tokenVerify, roleBasedAuthenticationMiddleware],
