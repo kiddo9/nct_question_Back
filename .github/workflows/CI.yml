@@ -1,63 +1,59 @@
-name: NCT_QUESTION_BANK CI
+name: NCT_QUESTION_BANK_CI
 
-on: 
+on:
   workflow_dispatch:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['main']
-
+    branches: ["main"]
 
 jobs:
-
-  build_client: 
-    name: 'Build the Client Application'
+  build_client:
+    name: "Build the Client Application"
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout code'
+      - name: "Checkout code"
         uses: actions/checkout@v4.2.2
 
-      - name: 'Setup Node.js environment'
+      - name: "Setup Node.js environment"
         uses: actions/setup-node@v3.9.1
         with:
           node-version: 22.x
 
-      - name: 'Install Packages'
+      - name: "Install Packages"
         working-directory: ./client
         run: npm install
-      
-      - name: 'Lint'
+
+      - name: "Lint"
         working-directory: ./client
         run: npm run lint
 
-      - name: 'Build'
+      - name: "Build"
         working-directory: ./client
         run: npm run build
 
   build_server:
-    name: 'Perform Build of Server Code'
+    name: "Perform Build of Server Code"
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout code'
+      - name: "Checkout code"
         uses: actions/checkout@v4.2.2
 
-      - name: 'Setup Node.js environment'
+      - name: "Setup Node.js environment"
         uses: actions/setup-node@v3.9.1
         with:
           node-version: 22.x
-  
-      - name: 'Install Packages'
+
+      - name: "Install Packages"
         working-directory: ./server
         run: npm install
-        
-      - name: 'Lint'
+
+      - name: "Lint"
         working-directory: ./server
         run: npm run lint
-  
-      - name: 'Build'
+
+      - name: "Build"
         working-directory: ./server
         run: npm run build
-        
-

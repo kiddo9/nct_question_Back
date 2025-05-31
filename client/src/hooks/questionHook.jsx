@@ -17,7 +17,7 @@ const useQuestionHook = (id) => {
           toast.error("unable to fetch request");
           return;
         }
-        console.log(response);
+        // console.log(response);
 
         setGetQuestions(response.questions);
         return;
