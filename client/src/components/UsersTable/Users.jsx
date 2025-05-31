@@ -128,7 +128,15 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
     console.log(selectedRows)
     try {
       {/* API GOES HERE */}
-      toast.success("Users deleted successfully.");
+      const request = await Api.delete("/admin/user/multi/delete", {
+        data: {ids: selectedRows}
+      })
+      const response = request.data;
+      if(response.status != true) {
+        toast.error(response.message || "Error deleting users. Please try again.");
+        return;
+      }
+      toast.success(response.message || "Users deleted successfully.");
       setSelectedRows([]);
       setTimeout(() => {
           window.location.reload();
@@ -252,9 +260,9 @@ const MultiDeleteModal = ({selectedRows, handleBulkDelete, load, setDeleteModal}
         <div onClick={() => setDeleteModal(false)}  className='absolute top-0 left-0 w-full h-full bg-black opacity-50'/>
        <div className='bg-white py-2 rounded-lg shadow-2xl z-10 w-[400px]'>
             <header className="bg-[#D7DDFF] w-full flex flex-row items-center px-4 py-2 shadow-md">
-                <h1 className="text-xl mx-auto text-red-500">Delete Question</h1>
+                <h1 className="text-xl mx-auto text-red-500">Delete User(s)</h1>
             </header>
-            <p className='text-center mt-5 mb-2'>Are you sure you want to delete this question?</p>
+            <p className='text-center mt-5 mb-2'>Are you sure you want to delete the user(s)?</p>
             <div className='flex justify-center gap-4 px-10 pb-3'>
                 <button disabled={load} onClick={() => handleBulkDelete(selectedRows)} className='bg-red-500 text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-red-600'>
                     {load ? 'Deleting...' : 'Yes'}
