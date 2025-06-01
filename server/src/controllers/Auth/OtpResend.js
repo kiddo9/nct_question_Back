@@ -53,10 +53,10 @@ const otpResend = async (req, res) => {
       otp: generateNewOtp,
       name: update.name,
     });
-
     return res.json({
       status: true,
       message: "new otp has been sent to your email",
+      coolDownTime: otpExpiresIn,
     });
   } catch (error) {
     console.log(error);
