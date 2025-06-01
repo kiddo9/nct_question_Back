@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Api from "../api/Api";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 import NotificationPanel from "./NotificationPanel";
+import UserActionsPanel from "./UserActionsPanel";
 
 const Nav = ({ children }) => {
   const menus = [
@@ -16,8 +17,22 @@ const Nav = ({ children }) => {
 
   const [open, setOpen] = React.useState(false);
   const [openNotification, setOpenNotification] = React.useState(false);
+  const [openUserActions, setOpenUserActions] = React.useState(false);
   const [loader, setLoader] = useState(false);
   const nav = useNavigate();
+
+  {/* Toogler between notification panel and user action panel*/}
+  useEffect(() => {
+    if( openUserActions) {
+        setOpenNotification(false);
+    }
+  }, [openUserActions, setOpenNotification]);
+
+  useEffect(() => {
+    if (openNotification) {
+      setOpenUserActions(false);
+    }
+  }, [openNotification, setOpenUserActions]);
 
   async function LogoutAdmin() {
     setLoader(true);
@@ -51,20 +66,7 @@ const Nav = ({ children }) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-            />
-          </svg>
+          {/* notification icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -78,6 +80,23 @@ const Nav = ({ children }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
+            />
+          </svg>
+
+          {/*User icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6 cursor-pointer"
+            onClick={() => setOpenUserActions(!openUserActions)}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 14.25c3.038 0 5.5-2.462 5.5-5.5S15.038 3.25 12 3.25 6.5 5.712 6.5 8.75s2.462 5.5 5.5 5.5zm0 1.5c-4.418 0-8 2.239-8 5v1h16v-1c0-2.761-3.582-5-8-5z"
             />
           </svg>
 
@@ -169,7 +188,10 @@ const Nav = ({ children }) => {
       </div>
 
       {/* Notification dropdown */}
-      <NotificationPanel openNotification={openNotification} setOpenNotification={setOpenNotification} />
+      <NotificationPanel openNotification={openNotification} setOpenNotification={setOpenNotification}   />
+
+      {/* User actions dropdown */}
+      <UserActionsPanel openUserActions={openUserActions} setOpenUserActions={setOpenUserActions}openNotification={openNotification} setOpenNotification={setOpenNotification} />
     </div>
   );
 };
