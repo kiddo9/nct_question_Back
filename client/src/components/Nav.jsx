@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Api from "../api/Api";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import NotificationPanel from "./NotificationPanel";
 
 const Nav = ({ children }) => {
   const menus = [
@@ -70,7 +71,7 @@ const Nav = ({ children }) => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+            className="size-6 cursor-pointer"
             onClick={() => setOpenNotification(!openNotification)}
           >
             <path
@@ -167,17 +168,8 @@ const Nav = ({ children }) => {
         <div className="">{children}</div>
       </div>
 
-      <div
-        className={`${
-          openNotification !== true ? "-z-40 opacity-0" : "z-40 opacity-100"
-        } transition-opacity duration-150 ease-in-out fixed right-6 w-80 overflow-y-auto Scroll h-96 px-2 py-2 flex flex-col items-center shadow-md bg-white`}
-      >
-        {/* <p className="shadow-md bg-gray-300 w-72 rounded-lg p-4 mt-2">
-          notification
-        </p> */}
-
-        <p className="mt-20">No notificatons yet</p>
-      </div>
+      {/* Notification dropdown */}
+      <NotificationPanel openNotification={openNotification} setOpenNotification={setOpenNotification} />
     </div>
   );
 };
