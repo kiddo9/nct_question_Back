@@ -19,34 +19,23 @@ const Verify = () => {
 
   const handleInput = (e, index) => {
     const newInputs = [...Input];
-    newInputs[index] = e.target.value;
+    newInputs[index] = e.target.value.replace(/\D+/g, "").slice(-1);
 
-    if (index !== "") {
-      const next = e.target.nextElementSibling;
-
-      if (next) {
-        next.focus();
-      }
-    } else {
-      return (e.target.value = "");
+    if (newInputs[index] && index < 5) {
+      e.target.nextElementSibling?.focus();
     }
 
     setInput(newInputs);
   };
 
-  const handleKeyUp = (e) => {
-    const target = e.target;
-    const key = e.key.toLowerCase();
+  const handleKeyDown = (e) => {
+    const { value, previousElementSibling } = e.target;
 
-    if (key == "backspace" || key == "delete") {
-      target.value = "";
-      const prev = target.previousElementSibling;
-      if (prev) {
-        prev.focus();
-      }
-      return;
+    if (e.key === "Backspace" && value === "") {
+      previousElementSibling?.focus();
     }
   };
+
   const otp = Input.join("");
 
   useEffect(() => {
@@ -63,6 +52,8 @@ const Verify = () => {
           if (response.status !== true) {
             toast.error(response.message);
             setInput(["", "", "", "", "", ""]);
+            document.getElementById("otp-1").focus();
+            
             return;
           }
 
@@ -78,6 +69,7 @@ const Verify = () => {
           setDelay(true);
           setTimeout(() => {
             setDelay(false);
+            localStorage.removeItem("coolDownTime");
             nav("/admin/user/questions");
           }, 1000)
         } catch (error) {
@@ -173,9 +165,10 @@ const Verify = () => {
               onChange={(e) => handleInput(e, index)}
               key={index}
               value={input}
+              id={`otp-${index + 1}`}
               maxLength={1}
               type="text"
-              onKeyUp={(e) => handleKeyUp(e)}
+              onKeyDown={(e) => handleKeyDown(e)}
               className="w-14 h-11 text-lg rounded-md text-center border-2 bg-white/10 border-[#6699ff] text-[#6699ff] focus:shadow-2xl  outline-none"
             />
           ))}
