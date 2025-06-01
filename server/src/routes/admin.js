@@ -2,7 +2,9 @@ import express from "express";
 const router = express.Router();
 
 import {
+  bulkDelete,
   createAdminUser,
+  deleteUser,
   editAdmin,
   loginController,
   Logout,
@@ -37,6 +39,7 @@ import { passwordSetAndReset } from "../controllers/Auth/passwordSetandReset.js"
 import { AllRoles, createRole, deleteRole } from "../controllers/roles.js";
 import { emailVerification } from "../controllers/Auth/emailValidation.js";
 import roleBasedAuthenticationMiddleware from "../middleware/roleBasedAuthCheck.js";
+import otpResend from "../controllers/Auth/OtpResend.js";
 
 router.get("/", tokenVerify, async (req, res) => {
   res.status(200).json({ status: true });
@@ -48,6 +51,7 @@ router.get("/validate", credValidation, async (req, res) => {
     cred: req.user,
   });
 });
+router.get("/otp/resend", credValidation, otpResend);
 router.get(
   "/password/token/validator",
   passwordTokenValidation,
@@ -108,6 +112,16 @@ router.put(
 
 router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
 router.delete("/questions/bank/multi/delete", tokenVerify, multiDeleteQuestion);
+router.delete(
+  "/admin/user/multi/delete",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  bulkDelete
+);
+router.delete(
+  "/admin/user/delete/:id",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  deleteUser
+);
 router.delete(
   "/admin/role/delete/:id",
   [tokenVerify, roleBasedAuthenticationMiddleware],

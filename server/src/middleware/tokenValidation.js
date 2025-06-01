@@ -1,68 +1,90 @@
 import jwt from "jsonwebtoken";
 import usersModel from "../../models/users.js";
+
 const tokenValidation = async (req, res, next) => {
   const token = req.cookies.token;
 
-  if (!token || token === undefined) {
-    res.json({ status: false, message: "access denied. unauthorized access" });
-
-    return;
+  if (!token) {
+    return res.json({
+      status: false,
+      message: "Access denied. Unauthorized access.",
+    });
   }
 
-  try {
-    const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (!decode) {
-      res.json({
-        status: false,
-        message: "access denied. unauthorized access",
-      });
-    }
-    req.user = decode;
-
-    const exist = await usersModel.findOne({
-      where: {
-        encryptedId: req.user.id,
-      },
-    });
-
-    if (decode.verified == true && exist) {
-      if (exist.loggedIn !== 1) {
-        await usersModel.update(
-          { loggedIn: 1 },
-          {
-            where: {
-              encryptedId: req.user.id,
-            },
-          }
-        );
-      }
-
-      next();
-      return;
-    }
-    res.json({ status: false, message: "access denied. unauthorized access" });
-  } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      try {
-        const decoded = jwt.decode(token);
-        if (decoded?.id) {
+  jwt.verify(token, process.env.JWT_SECRET_KEY, async (err, decoded) => {
+    if (err) {
+      if (err.name === "TokenExpiredError") {
+        const decodedPayload = jwt.decode(token); // decode without verifying
+        if (decodedPayload?.id) {
           await usersModel.update(
             { loggedIn: 0 },
-            { where: { encryptedId: decoded.id } }
+            { where: { encryptedId: decodedPayload.id } }
           );
         }
-      } catch (innerError) {
-        console.error("Error decoding expired token:", innerError);
+
+        return res.json({
+          status: "expired",
+          message: "Session expired. Please log in again.",
+        });
       }
 
-      return res.status(401).json({
+      if (err.name === "JsonWebTokenError") {
+        return res.json({
+          status: false,
+          message: "Access denied. Invalid token.",
+        });
+      }
+
+      return res.json({
         status: false,
-        message: "Session expired. Please log in again.",
+        message: "Access denied.",
       });
     }
 
-    console.log(error);
-  }
+    // If no error, the token is valid
+    if (!decoded) {
+      return res.json({
+        status: false,
+        message: "Access denied. Unauthorized access.",
+      });
+    }
+
+    req.user = decoded;
+
+    try {
+      const user = await usersModel.findOne({
+        where: {
+          encryptedId: decoded.id,
+        },
+      });
+
+      if (decoded.verified === true && user) {
+        if (user.loggedIn !== 1) {
+          await usersModel.update(
+            { loggedIn: 1 },
+            {
+              where: {
+                encryptedId: decoded.id,
+              },
+            }
+          );
+        }
+
+        return next(); // All good, continue
+      }
+
+      return res.json({
+        status: false,
+        message: "Access denied. User not verified or not found.",
+      });
+    } catch (dbError) {
+      console.error("Database error:", dbError);
+      return res.status(500).json({
+        status: false,
+        message: "Internal server error.",
+      });
+    }
+  });
 };
 
 export default tokenValidation;
