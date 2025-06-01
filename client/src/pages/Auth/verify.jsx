@@ -65,6 +65,9 @@ const Verify = () => {
 
           if (response.status == true && response.type == "reset") {
             toast.success(response.message);
+            setTimeout(() => {
+              nav("/auth/admin/login");
+            }, 3000)
             return;
           }
 
