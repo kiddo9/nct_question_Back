@@ -83,9 +83,14 @@ export const loginController = async (req, res) => {
 
     //set user secert token for authenttication verification
     const token = jwt.sign(
-      { email: userExist.email, id: userExist.encryptedId, type: otpType },
+      {
+        email: userExist.email,
+        id: userExist.encryptedId,
+        time: otpExpiresIn,
+        type: otpType,
+      },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "5m" }
+      { expiresIn: "6m" }
     );
 
     //send Otp to user email
