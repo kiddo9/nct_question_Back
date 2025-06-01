@@ -172,7 +172,10 @@ export const otpValidation = async (req, res) => {
 
       //set logged in to 1
       await usersModel.update(
-        { loggedIn: 1 },
+        {
+          loggedIn: 1,
+          tokenExpiredAt: new Date(Date.now() + 11 * 60 * 60 * 1000),
+        },
         { where: { encryptedId: data.id } }
       );
 
@@ -498,6 +501,83 @@ export const editAdmin = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+//bulk delete controller
+export const bulkDelete = async (req, res) => {
+  const { ids } = req.body;
+
+  try {
+    if (!Array.isArray(ids) || ids.length <= 0) {
+      return res.json({ status: false, message: "no data to delete" });
+    }
+
+    const comfirmUsersExist = await usersModel.findAll({
+      where: { encryptedId: ids },
+    });
+    //check if users exist
+    if (!comfirmUsersExist || comfirmUsersExist.length <= 0) {
+      return res.json({ status: false, message: "no users found" });
+    }
+
+    //delete users
+    const deleteUsers = await usersModel.destroy({
+      where: { encryptedId: ids },
+    });
+
+    if (!deleteUsers) {
+      return res.json({ status: false, message: "unable to delete users" });
+    }
+
+    return res.status(201).json({
+      status: true,
+      message: `${deleteUsers} users deleted successfully`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: "internal server error" });
+  }
+};
+
+//delete each user controller
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    //check if id is valid
+    if (!id) {
+      return res.json({ status: false, message: "invalid request" });
+    }
+
+    //check if user exist
+    const comfirmUserExist = await usersModel.findOne({
+      where: { encryptedId: id },
+    });
+
+    if (!comfirmUserExist) {
+      return res.json({
+        status: false,
+        message: "Request invalid. Bad request",
+      });
+    }
+
+    //delete user
+    const deleteUser = await usersModel.destroy({
+      where: { encryptedId: id },
+    });
+
+    if (!deleteUser) {
+      return res.json({ status: false, message: "unable to delete user" });
+    }
+
+    return res.status(201).json({
+      status: true,
+      message: `${comfirmUserExist.name} deleted successfully`,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: "internal server error" });
   }
 };
 

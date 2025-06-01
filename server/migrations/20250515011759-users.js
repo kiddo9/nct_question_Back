@@ -64,6 +64,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      tokenExpiredAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
     });
   },
 

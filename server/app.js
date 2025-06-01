@@ -7,7 +7,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import routers from "./src/routes/admin.js";
-import errorHandler from "./src/services/errorHandler.js";
+import cronJobs from "./src/cron/cronjobs.js";
 
 async function setupAndStartServer() {
   server.use(
@@ -28,8 +28,7 @@ async function setupAndStartServer() {
 
   server.use("/u/", routers);
 
-  server.use(errorHandler);
-
+  cronJobs();
   server.listen(`${process.env.PORT}`);
 }
 

@@ -32,7 +32,7 @@ const PasswordRest = () => {
       try {
         if (response.status == false) {
           //return error message or redirect but preferrable show error message
-          console.log("not true");
+          navigate("/auth/admin/forgot-password");
 
           return;
         }
@@ -42,7 +42,7 @@ const PasswordRest = () => {
     };
 
     passwordValidateRequest();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,6 +77,7 @@ const PasswordRest = () => {
         navigate("/auth/admin/login");
       }, 2000);
     } catch (error) {
+      toast.error("invalid token or link expired");
       console.log(error);
     } finally {
       setLoader(false);
@@ -170,9 +171,9 @@ const PasswordRest = () => {
                 value={newPassword}
               />
 
-              <EyeToggle 
-                isPasswordVisible={isPasswordVisible} 
-                setPasswordVisible={setPasswordVisible} 
+              <EyeToggle
+                isPasswordVisible={isPasswordVisible}
+                setPasswordVisible={setPasswordVisible}
               />
             </div>
           </div>
