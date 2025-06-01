@@ -60,6 +60,9 @@ const CreateAdmins = () => {
         toast.error("something went wrong");
       } finally {
         setLoader(false);
+        setEmail("");
+        setName("");
+        setRole("");
       }
     } else {
       result.error.issues.map((issue) => toast.error(issue.message));
@@ -123,7 +126,7 @@ const CreateAdmins = () => {
               type="submit"
               className="border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-4 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
             >
-              Create User
+              {loader ? "Creating..." : "Create Admin"}
             </button>
           </form>
         </div>
