@@ -174,7 +174,7 @@ export const otpValidation = async (req, res) => {
       await usersModel.update(
         {
           loggedIn: 1,
-          tokenExpiredAt: new Date(Date.now() + 11 * 60 * 60 * 1000),
+          // tokenExpiredAt: new Date(Date.now() + 11 * 60 * 60 * 1000),
         },
         { where: { encryptedId: data.id } }
       );
