@@ -125,7 +125,7 @@ export default function Users({ getUsers, getRoles, status, loader, roleLoader }
   const handleBulkDelete = async() => {
     // Perform bulk delete logic
     setLoad(true);
-    console.log(selectedRows)
+    // console.log(selectedRows)
     try {
       {/* API GOES HERE */}
       const request = await Api.delete("/admin/user/multi/delete", {
