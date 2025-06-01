@@ -79,6 +79,14 @@ const CreateQuestions = () => {
         toast.error("An error occured will processing your request");
       } finally {
         setLoader(false);
+        setGroup("");
+        setSection("");
+        setQuestion("");
+        setMark("");
+        setType("");
+        setNumberOfOptions("");
+        setOptions([]);
+        setAnswer("");
       }
     } else {
       return result.error.issues.map((issue) => toast.error(issue.message));

@@ -10,6 +10,7 @@ const Verify = () => {
   const [Input, setInput] = useState(["", "", "", "", "", ""]);
   const { load, email, id, type, token } = useValidation();
   const [loader, setLoader] = useState();
+  const [resend, setResend] = useState(false);
   const [delay, setDelay] = useState(false);
   const nav = useNavigate();
   
@@ -65,6 +66,9 @@ const Verify = () => {
 
           if (response.status == true && response.type == "reset") {
             toast.success(response.message);
+            setTimeout(() => {
+              nav(`/auth/admin/email-notify?vt=${token}`);
+            }, 1000)
             return;
           }
 
@@ -87,6 +91,26 @@ const Verify = () => {
     }
   }, [otp.length, email, token, nav, id, type, otp]);
 
+  const resendToken = async () => {
+    setResend(true);
+    try {
+      const requestTo = await Api.get(`/otp/resend?vt=${token}`);
+
+      const response = requestTo.data;
+
+      if (response.status !== true) {
+        toast.error(response.message);
+        return;
+      }
+
+      toast.success(response.message);
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while resending the token");
+    } finally {
+      setResend(false);
+    }
+  }
   return (
     <div className=" h-screen pb-10 pt-20 flex mx-auto">
       {load || delay && <Loader />}
@@ -119,15 +143,16 @@ const Verify = () => {
         <div className="flex flex-col px-2 mt-10 gap-2">
           <button
             type="submit"
-            className="w-full bg-[#6699ff] text-white rounded-md py-2"
+            className="w-full bg-[#6699ff] text-white rounded-md py-2 cursor-pointer hover:bg-[#6699ff]/90 transition-colors duration-300"
           >
             <i className="fas fa-sign-in-alt me-2"></i>Sign In
           </button>
           <button
-            type="submit"
-            className="w-full flex gap-4 justify-center items-center text-black rounded-md py-2"
+            onClick={resendToken}
+            className="w-full flex gap-2 justify-center items-center text-black rounded-md py-2 cursor-pointer hover:bg-white/90 transition-colors duration-300 border-2 border-[#6699ff] hover:shadow-2xl"
           >
             <svg
+              style={resend ? { animation: "spin .5s linear infinite" } : {}}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -141,7 +166,7 @@ const Verify = () => {
                 d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
               />
             </svg>
-            resend Token
+            {resend ? "Resending..." : "Resend OTP"}
           </button>
 
           <p className="text-center">00:44</p>

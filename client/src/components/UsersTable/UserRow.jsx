@@ -65,14 +65,14 @@ const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
   return (
     <tr 
     key={user.id} 
-    className={`${selectedRows.includes(user.id) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
+    className={`${selectedRows.includes(user.encryptedId) ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
     >
     <td className="p-4">
       <input
         type="checkbox"
         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-        checked={selectedRows.includes(user.id)}
-        onChange={() => toggleSelectRow(user.id)}
+        checked={selectedRows.includes(user.encryptedId)}
+        onChange={() => toggleSelectRow(user.encryptedId)}
       />
     </td>
     <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
