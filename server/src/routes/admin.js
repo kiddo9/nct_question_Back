@@ -41,6 +41,12 @@ import { AllRoles, createRole, deleteRole } from "../controllers/roles.js";
 import { emailVerification } from "../controllers/Auth/emailValidation.js";
 import roleBasedAuthenticationMiddleware from "../middleware/roleBasedAuthCheck.js";
 import otpResend from "../controllers/Auth/OtpResend.js";
+import {
+  createNewClass,
+  deleteClass,
+  getAllClasses,
+  updateClass,
+} from "../controllers/classes.js";
 
 router.get("/", tokenVerify, loggedInUsers);
 router.get("/validate", credValidation, async (req, res) => {
@@ -71,6 +77,7 @@ router.get("/admin/roles", [tokenVerify], AllRoles);
 router.get("/questions/group", tokenVerify, getAllQuestionGroups);
 router.get("/sections", tokenVerify, getAllSections);
 router.get("/opt", tokenVerify, options);
+router.get("/classes", tokenVerify, getAllClasses);
 
 router.get("/email/verification", newUserEmailVerification);
 router.get("/questions/group/:id", tokenVerify, getQuestionGroupById);
@@ -99,6 +106,11 @@ router.post(
   createSection
 );
 router.post("/admin/user/forgot-password", emailVerification);
+router.post(
+  "/create/classes",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  createNewClass
+);
 router.post("/logout", tokenVerify, Logout);
 
 router.put("/password/update", passwordTokenValidation, passwordSetAndReset);
@@ -107,6 +119,11 @@ router.put(
   "/admin/user/update",
   [tokenVerify, roleBasedAuthenticationMiddleware],
   editAdmin
+);
+router.put(
+  "/classes/update",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  updateClass
 );
 
 router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
@@ -135,6 +152,11 @@ router.delete(
   "/section/delete/:id",
   [tokenVerify, roleBasedAuthenticationMiddleware],
   deleteSection
+);
+router.delete(
+  "/classes/delete/:id",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  deleteClass
 );
 
 export default router;
