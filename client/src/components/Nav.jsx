@@ -127,7 +127,7 @@ const Nav = ({ children }) => {
           <aside
             className={`fixed h-full z-40 bg-[#6674BB] ${
               open == true ? "translate-x-0 " : "-translate-x-[100%]"
-            }  lg:translate-x-0 top-0 lg:top-22 w-52 transition-all duration-200 ease-in-out justify-between items-center`}
+            }  lg:translate-x-0 top-0 lg:top-22 w-52 transition-all duration-200 ease-in-out justify-between items-center `}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -144,14 +144,14 @@ const Nav = ({ children }) => {
                 d="M6 18 18 6M6 6l12 12"
               />
             </svg>
-            <div className="flex flex-col pl-4 gap-4 mt-10 lg:mt-3">
+            <div className="flex   flex-col pl-4 gap-4 mt-20 lg:mt-20">
               {menus.map((menu) => (
                 <NavLink
                   key={menu.id}
                   to={menu.path}
                   className={({ isActive }) =>
                     isActive
-                      ? "text-black bg-[#D7DDFF] rounded-tl-full py-1 rounded-bl-full  px-1 w-full"
+                      ? "text-black bg-[#D7DDFF] rounded-tl-full py-1 rounded-bl-full  px-1 w-full shadow-lg"
                       : ""
                   }
                   onClick={() => setOpen(!open)}
