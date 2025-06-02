@@ -1,21 +1,33 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Api from "../../api/Api";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-const Authentication = ({ children }) => {
+
+export const UserContext = React.createContext(null);
+
+
+const AuthenticationProvider = ({ children }) => {
   const nav = useNavigate();
-  const authUser = async () => {
+  const [user, setUser] = React.useState({
+    name: "", 
+    email: "", 
+    roles: "", 
+    loggedIn: 0
+  });
+  
+  useEffect(() => {
     try {
-      const requestAuth = await Api.get(`/`);
-
-      if (requestAuth.data.status !== true) {
-        console.log("false");
-
-        nav("/auth/admin/login");
-        return;
-      }
-      console.log("checked");
+      Api.get(`/`).then((response) => {
+        if (response.data.status !== true) {
+          console.log("false");
+  
+          nav("/auth/admin/login");
+          return;
+        }
+        console.log("checked");
+        setUser(response.data.user);
+      });
     } catch (error) {
       // nav("/auth/admin/login");
       toast.error(
@@ -23,16 +35,19 @@ const Authentication = ({ children }) => {
       );
       console.error("Authentication error:", error);
     }
-  };
+  }, []);
 
-  authUser();
+  
 
   return (
-    <>
-      <ToastContainer />
+    <UserContext.Provider value={{ user }}>
       {children}
-    </>
+    </UserContext.Provider>
   );
 };
 
-export default Authentication;
+export default AuthenticationProvider;
+
+export const useAuth = () => {
+  return useContext(UserContext);
+}

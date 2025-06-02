@@ -8,7 +8,7 @@ import Verify from "./pages/Auth/verify";
 import Auth from "./components/auth";
 import { Admins } from "./pages/Admins";
 import CreateAdmins from "./pages/CreateAdmins";
-import Authentication from "./components/security/Authentication";
+import AuthenticationProvider from "./components/security/Authentication";
 import Preview from "./pages/Preview";
 import PasswordRest from "./pages/Auth/PasswordRest";
 import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
@@ -30,7 +30,7 @@ function App() {
             path="/admin/user/*"
             element={
               <>
-                <Authentication>
+                <AuthenticationProvider>
                   <Nav>
                     {/* <Suspense fallback={<Loader />}> */}
                     <Routes>
@@ -58,7 +58,7 @@ function App() {
                     </Routes>
                     {/* </Suspense> */}
                   </Nav>
-                </Authentication>
+                </AuthenticationProvider>
               </>
             }
           />
