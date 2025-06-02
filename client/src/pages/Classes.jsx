@@ -7,11 +7,16 @@ import Fetching from '../components/Fetching';
 import DeleteEnum from '../components/DeleteModals/DeleteEnum';
 import CreateClasses from '../components/CreateModals/CreateClasses';
 import useClassHook from '../hooks/classHook';
+import EditClasses from '../components/EditModals/EditClasses';
 
 const Classes = () => {
     const { classes, loader: classLoader } = useClassHook();
     const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const [editName, setEditName] = useState(null);
+    const [editMark, setEditMark] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
     const [deleteName, setDeleteName] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -21,6 +26,13 @@ const Classes = () => {
         setOpenDelete(true);
         setDeleteName(name);
         setDeleteId(id);
+    };
+
+    const handleEdit = (id, name, mark) => {
+        setOpenEdit(true);
+        setEditId(id);
+        setEditName(name);
+        setEditMark(mark);
     };
 
     useEffect(() => {
@@ -92,7 +104,7 @@ const Classes = () => {
                             <StatusBadge status={clas.active_status} />
                             <p className=' text-sm  text-black justify-self-end'>{clas.updated_by}</p>
                             <div className='flex justify-end items-center gap-2 justify-self-end'>
-                                <Edit className='cursor-pointer text-green-600 hover:text-green-900' size={18} />
+                                <Edit onClick={() => handleEdit(clas.id, clas.class_name, clas.pass_mark)} className='cursor-pointer text-green-600 hover:text-green-900' size={18} />
                                 <CircleX onClick={() => handleDelete(clas.id, clas.class_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] ' />  
                             </div>
                                              
@@ -105,6 +117,7 @@ const Classes = () => {
         </div>
         {openCreate && <CreateClasses setOpenCreate={setOpenCreate} />}
         {openDelete && <DeleteEnum type='class' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
+        {openEdit && <EditClasses setOpenEdit={setOpenEdit} id={editId} name={editName} mark={editMark} setName={setEditName} setMark={setEditMark} />}
     </div>
   )
 }
