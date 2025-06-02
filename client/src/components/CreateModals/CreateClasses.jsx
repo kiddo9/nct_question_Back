@@ -22,7 +22,7 @@ const CreateClasses = ({setOpenCreate}) => {
         console.log(classes)
         {/*CREATE API GOES HERE */}
         try {
-            const request = await Api.post('/create/classes', {class: classes})
+            const request = await Api.post('/create/classes', {classes: classes})
             const response = request.data
             if (response.status !== true) {
                 toast.error(response.message)
