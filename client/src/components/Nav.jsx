@@ -151,7 +151,7 @@ const Nav = ({ children }) => {
                   to={menu.path}
                   className={({ isActive }) =>
                     isActive
-                      ? "text-black bg-[#D7DDFF] rounded-tl-full py-1 rounded-bl-full  px-1 w-full shadow-lg"
+                      ? "text-black bg-[#D7DDFF] rounded-tl-full  py-1 rounded-bl-full  px-1 w-full"
                       : ""
                   }
                   onClick={() => setOpen(!open)}

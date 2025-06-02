@@ -2,22 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import AddButton from '../components/AddButton';
 import { Link } from 'react-router-dom';
-import { CircleX } from 'lucide-react';
+import { CircleX, Edit } from 'lucide-react';
 import Fetching from '../components/Fetching';
 import DeleteEnum from '../components/DeleteModals/DeleteEnum';
+import CreateClasses from '../components/CreateModals/CreateClasses';
 
 const Classes = () => {
     const classes = [
-        { id: 1, section_name: 'Class 1', marks: 100, active_status: 1 },
-        { id: 2, section_name: 'Class 2', marks: 100, active_status: 0 },
-        { id: 3, section_name: 'Class 3', marks: 50, active_status: 1 },
-        { id: 4, section_name: 'Class 4', marks: 100, active_status: 0 },
-        { id: 5, section_name: 'Class 5', marks: 60, active_status: 1 },
-        { id: 6, section_name: 'Class 6', marks: 60, active_status: 0 },
-        { id: 7, section_name: 'Class 7', marks: 100, active_status: 1 },
-        { id: 8, section_name: 'Class 8', marks: 100, active_status: 0 },
-        { id: 9, section_name: 'Class 9', marks: 100, active_status: 1 },
-        { id: 10, section_name: 'Class 10', marks: 100, active_status: 0 },
+        { id: 1, section_name: 'Class 1', marks: 100, updatedBy: "Paschal Elechi", active_status: 1 },
+        { id: 2, section_name: 'Class 2', marks: 100, updatedBy: "Paschal Elechi", active_status: 0 },
+        { id: 3, section_name: 'Class 3', marks: 50, updatedBy: "Paschal Elechi",  active_status: 1 },
+        { id: 4, section_name: 'Class 4', marks: 100, updatedBy: "Paschal Elechi",  active_status: 0 },
+        { id: 5, section_name: 'Class 5', marks: 60, updatedBy: "Paschal Elechi",  active_status: 1 },
+        { id: 6, section_name: 'Class 6', marks: 60, updatedBy: "Paschal Elechi", active_status: 0 },
+        { id: 7, section_name: 'Class 7', marks: 100, updatedBy: "Paschal Elechi", active_status: 1 },
+        { id: 8, section_name: 'Class 8', marks: 100, updatedBy: "Paschal Elechi", active_status: 0 },
+        { id: 9, section_name: 'Class 9', marks: 100, updatedBy: "Paschal Elechi", active_status: 1 },
+        { id: 10, section_name: 'Class 10', marks: 100, updatedBy: "Paschal Elechi", active_status: 0 },
     ];
     const classLoader = false
     const [openCreate, setOpenCreate] = useState(false);
@@ -63,7 +64,7 @@ const Classes = () => {
         }
         
         return (
-          <span className={`px-2 py-1 text-xs font-medium rounded-full justify-self-end  ${bgColor}`}>
+          <span className={`ml-4 px-2 py-1 text-xs font-medium rounded-full justify-self-center   ${bgColor}`}>
             {statusText}
           </span>
         );
@@ -81,22 +82,30 @@ const Classes = () => {
                     <AddButton>Add Class</AddButton>
                 </Link>
             </div>
-            <div className='py-2 border-t-2 border-gray-300 grid grid-cols-4 gap-10 w-full items-center justify-items-center px-5 shadow-md'>
-                    <h1 className='md:text-lg text-[16px]  text-black justify-self-start'>Class</h1>
-                    <h1 className='md:text-lg text-[16px]  text-blackt'>Marks</h1>
-                    <h1 className='md:text-lg text-[16px]  text-black justify-self-end'>Status</h1>
-                    <h1 className='md:text-lg text-[16px]  text-black justify-self-end'>Action</h1>
+            <div className='py-2 border-t-2 border-gray-300 bg-gray-100 grid grid-cols-6 gap-10 w-full items-center justify-items-center px-5 shadow-md'>
+                    <h1 className='text-sm  text-black/50 font-semibold justify-self-start'>ID</h1>
+                    <h1 className='text-sm  text-black/50 font-semibold justify-self-start'>CLASS</h1>
+                    <h1 className='text-sm  text-black/50 font-semibold '>MARKS</h1>
+                    <h1 className='text-sm  text-black/50 font-semibold  justify-self-center'>STATUS</h1>
+                    <h1 className='text-sm  text-black/50 font-semibold  justify-self-end'>Updated By</h1>
+                    <h1 className='text-sm  text-black/50 font-semibold  justify-self-end'>ACTIONS</h1>
             </div>
             {classLoader || loading ? <Fetching/> :
               <div className=' overflow-y-scroll max-h-[calc(100vh-285px)]'>
                 
                 {
                     classes.map((clas) => (
-                        <div key={clas.id} className='py-4 border-t-2 border-gray-300 grid grid-cols-4 gap-10 w-full items-center justify-items-center px-5'>
-                            <p className='md:text-[16px] text-sm text-black justify-self-start'>{clas.section_name}</p>
-                            <span>{clas.marks}</span>
+                        <div key={clas.id} className='py-3 border-t-2 border-gray-300 grid grid-cols-6 gap-10 w-full items-center justify-items-center px-5'>
+                            <span className=' text-sm text-black justify-self-start'>{clas.id}</span>
+                            <p className=' text-sm text-black justify-self-start'>{clas.section_name}</p>
+                            <span className='text-sm'>{clas.marks}</span>
                             <StatusBadge status={clas.active_status} />
-                            <CircleX onClick={() => handleDelete(clas.id, clas.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] justify-self-end' />                   
+                            <p className=' text-sm  text-black justify-self-end'>{clas.updatedBy}</p>
+                            <div className='flex justify-end items-center gap-2 justify-self-end'>
+                                <Edit className='cursor-pointer text-green-600 hover:text-green-900' size={18} />
+                                <CircleX onClick={() => handleDelete(clas.id, clas.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] ' />  
+                            </div>
+                                             
                         </div>
                     ))
                     
@@ -104,7 +113,7 @@ const Classes = () => {
               </div>
           }
         </div>
-        {openCreate && <CreateSections setOpenCreate={setOpenCreate} />}
+        {openCreate && <CreateClasses setOpenCreate={setOpenCreate} />}
         {openDelete && <DeleteEnum type='class' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
     </div>
   )
