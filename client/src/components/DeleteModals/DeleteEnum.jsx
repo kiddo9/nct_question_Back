@@ -19,6 +19,9 @@ const DeleteEnum = ({type, id, setOpenDelete, name}) => {
                 case 'section':
                     request = await Api.delete(`/section/delete/${id}`);
                     break;
+                case 'class':
+                    request = await Api.delete(`/classes/delete/${id}`);
+                    break;
                 default:
                     request = {data: {status: false, message: 'An error occurred will processing your request'}};
                     break;
