@@ -91,7 +91,7 @@ const Nav = ({ children }) => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 cursor-pointer"
+            className="size-6 cursor-pointer user-actions-panel"
             onClick={() => setOpenUserActions(!openUserActions)}
           >
             <path
