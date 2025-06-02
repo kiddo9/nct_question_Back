@@ -6,6 +6,7 @@ import {
   createAdminUser,
   deleteUser,
   editAdmin,
+  loggedInUsers,
   loginController,
   Logout,
   newUserEmailVerification,
@@ -41,9 +42,7 @@ import { emailVerification } from "../controllers/Auth/emailValidation.js";
 import roleBasedAuthenticationMiddleware from "../middleware/roleBasedAuthCheck.js";
 import otpResend from "../controllers/Auth/OtpResend.js";
 
-router.get("/", tokenVerify, async (req, res) => {
-  res.status(200).json({ status: true });
-});
+router.get("/", tokenVerify, loggedInUsers);
 router.get("/validate", credValidation, async (req, res) => {
   return res.json({
     status: true,

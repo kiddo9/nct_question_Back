@@ -6,6 +6,11 @@ const otpResend = async (req, res) => {
   const user = req.user;
 
   try {
+    const userDetails = await usersModel.findOne({
+      where: {
+        encryptedId: user.id,
+      },
+    });
     //generate Otp
     const generateNewOtp = Otp_Gen.generate(6, {
       upperCaseAlphabets: false,
@@ -21,7 +26,7 @@ const otpResend = async (req, res) => {
     const update = await usersModel.update(
       {
         otp: generateNewOtp,
-        otpExpiresIn: otpExpiresIn,
+        otpExpiryTime: otpExpiresIn,
         otpType: user.type,
       },
       {
@@ -51,7 +56,7 @@ const otpResend = async (req, res) => {
       subject: subject,
       emailType: user.type,
       otp: generateNewOtp,
-      name: update.name,
+      name: userDetails.name,
     });
     return res.json({
       status: true,

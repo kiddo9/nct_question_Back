@@ -16,8 +16,12 @@ const jwtValidation = async (req, res, next) => {
 
     next();
   } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      console.log("Token expired");
+      return res.json({ status: "expired", message: "token expired" });
+    }
     console.log(error);
-    res.json({ status: false });
+    return res.json({ status: false });
   }
 };
 

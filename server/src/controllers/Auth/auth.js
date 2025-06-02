@@ -586,6 +586,24 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+export const loggedInUsers = async (req, res) => {
+  const loggedInUser = req.user;
+  try {
+    const comfirmAdminExist = await usersModel.findOne({
+      where: { encryptedId: loggedInUser.id },
+      attributes: ["name", "email", "roles", "loggedIn"],
+    });
+    if (!comfirmAdminExist) {
+      return res.json({ status: false, message: "invalid admin user" });
+    }
+
+    return res.status(201).json({ status: true, user: comfirmAdminExist });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: "internal server error" });
+  }
+};
+
 //log out controller
 export const Logout = async (req, res) => {
   const details = req.user;
