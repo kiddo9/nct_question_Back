@@ -10,6 +10,7 @@ const useValidation = () => {
   const [email, setEmail] = useState("");
   const [id, setId] = useState("");
   const [type, setType] = useState("");
+  const [expiryTime, setExpiryTime] = useState("");
   function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
@@ -34,6 +35,7 @@ const useValidation = () => {
         setEmail(response.cred.email);
         setId(response.cred.id);
         setType(response.cred.type);
+        setExpiryTime(response.cred.time);
         toast.success(response.message);
       } catch (error) {
         console.log(error);
@@ -45,7 +47,7 @@ const useValidation = () => {
 
     validate();
   }, [token, nav]);
-  return { load, email, id, type, token };
+  return { load, email, id, type, token, expiryTime };
 };
 
 export default useValidation;

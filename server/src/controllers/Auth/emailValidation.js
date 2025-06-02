@@ -53,6 +53,7 @@ export const emailVerification = async (req, res) => {
       {
         email: validatedEmail.email,
         id: validatedEmail.encryptedId,
+        time: otpExpiresIn,
         type: otpType,
       },
       process.env.JWT_SECRET_KEY,

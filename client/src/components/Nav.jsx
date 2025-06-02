@@ -13,6 +13,9 @@ const Nav = ({ children }) => {
     { id: 3, name: "Users", path: "/admin/user/admins" },
     { id: 4, name: "Roles", path: "/admin/user/roles" },
     { id: 5, name: "Groups", path: "/admin/user/groups" },
+    { id: 8, name: "classes", path: "/" },
+    { id: 6, name: "Cbt-QR", path: "/" },
+    { id: 7, name: "CbtSim", path: "/" },
   ];
 
   const [open, setOpen] = React.useState(false);
@@ -21,10 +24,12 @@ const Nav = ({ children }) => {
   const [loader, setLoader] = useState(false);
   const nav = useNavigate();
 
-  {/* Toogler between notification panel and user action panel*/}
+  {
+    /* Toogler between notification panel and user action panel*/
+  }
   useEffect(() => {
-    if( openUserActions) {
-        setOpenNotification(false);
+    if (openUserActions) {
+      setOpenNotification(false);
     }
   }, [openUserActions, setOpenNotification]);
 
@@ -58,11 +63,7 @@ const Nav = ({ children }) => {
       {loader && <Loader />}
       <header className="flex justify-between items-center p-4 bg-white sticky top-0 left-0 right-0  z-10 shadow-xl">
         <div className="flex items-center gap-4">
-          <img
-            src="/logo.svg"
-            className="w-56 h-14 object-cover"
-            alt="logo"
-          />
+          <img src="/logo.svg" className="w-56 h-14 object-cover" alt="logo" />
         </div>
 
         <div className="flex items-center gap-4">
@@ -126,7 +127,7 @@ const Nav = ({ children }) => {
           <aside
             className={`fixed h-full z-40 bg-[#6674BB] ${
               open == true ? "translate-x-0 " : "-translate-x-[100%]"
-            }  lg:translate-x-0 top-0 lg:top-22 w-52 transition-all duration-200 ease-in-out justify-between items-center`}
+            }  lg:translate-x-0 top-0 lg:top-22 w-52 transition-all duration-200 ease-in-out justify-between items-center `}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -143,14 +144,14 @@ const Nav = ({ children }) => {
                 d="M6 18 18 6M6 6l12 12"
               />
             </svg>
-            <div className="flex flex-col pl-4 gap-4 mt-24">
+            <div className="flex   flex-col pl-4 gap-4 mt-20 lg:mt-20">
               {menus.map((menu) => (
                 <NavLink
                   key={menu.id}
                   to={menu.path}
                   className={({ isActive }) =>
                     isActive
-                      ? "text-black bg-[#D7DDFF] rounded-tl-full py-1 rounded-bl-full  px-2 w-full"
+                      ? "text-black bg-[#D7DDFF] rounded-tl-full  py-1 rounded-bl-full  px-1 w-full"
                       : ""
                   }
                   onClick={() => setOpen(!open)}
@@ -188,10 +189,19 @@ const Nav = ({ children }) => {
       </div>
 
       {/* Notification dropdown */}
-      <NotificationPanel openNotification={openNotification} setOpenNotification={setOpenNotification}   />
+      <NotificationPanel
+        openNotification={openNotification}
+        setOpenNotification={setOpenNotification}
+      />
 
       {/* User actions dropdown */}
-      <UserActionsPanel openUserActions={openUserActions} setOpenUserActions={setOpenUserActions}openNotification={openNotification} setOpenNotification={setOpenNotification} />
+      <UserActionsPanel
+        logoutAdmin={LogoutAdmin}
+        openUserActions={openUserActions}
+        setOpenUserActions={setOpenUserActions}
+        openNotification={openNotification}
+        setOpenNotification={setOpenNotification}
+      />
     </div>
   );
 };

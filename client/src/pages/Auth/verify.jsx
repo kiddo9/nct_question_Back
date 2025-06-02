@@ -8,43 +8,34 @@ import { useNavigate } from "react-router-dom";
 
 const Verify = () => {
   const [Input, setInput] = useState(["", "", "", "", "", ""]);
-  const { load, email, id, type, token } = useValidation();
+  const { load, email, id, type, token, expiryTime } = useValidation();
   const [loader, setLoader] = useState();
   const [resend, setResend] = useState(false);
   const [delay, setDelay] = useState(false);
+  const [time, setTime] = useState("00:00");
+  const storedTime = localStorage.getItem("coolDownTime");
   const nav = useNavigate();
   
 
   const handleInput = (e, index) => {
     const newInputs = [...Input];
-    newInputs[index] = e.target.value;
+    newInputs[index] = e.target.value.replace(/\D+/g, "").slice(-1);
 
-    if (index !== "") {
-      const next = e.target.nextElementSibling;
-
-      if (next) {
-        next.focus();
-      }
-    } else {
-      return (e.target.value = "");
+    if (newInputs[index] && index < 5) {
+      e.target.nextElementSibling?.focus();
     }
 
     setInput(newInputs);
   };
 
-  const handleKeyUp = (e) => {
-    const target = e.target;
-    const key = e.key.toLowerCase();
+  const handleKeyDown = (e) => {
+    const { value, previousElementSibling } = e.target;
 
-    if (key == "backspace" || key == "delete") {
-      target.value = "";
-      const prev = target.previousElementSibling;
-      if (prev) {
-        prev.focus();
-      }
-      return;
+    if (e.key === "Backspace" && value === "") {
+      previousElementSibling?.focus();
     }
   };
+
   const otp = Input.join("");
 
   useEffect(() => {
@@ -61,6 +52,8 @@ const Verify = () => {
           if (response.status !== true) {
             toast.error(response.message);
             setInput(["", "", "", "", "", ""]);
+            document.getElementById("otp-1").focus();
+            
             return;
           }
 
@@ -76,6 +69,7 @@ const Verify = () => {
           setDelay(true);
           setTimeout(() => {
             setDelay(false);
+            localStorage.removeItem("coolDownTime");
             nav("/admin/user/questions");
           }, 1000)
         } catch (error) {
@@ -104,13 +98,52 @@ const Verify = () => {
       }
 
       toast.success(response.message);
+      startCountDown(response.coolDownTime );
+      localStorage.setItem("coolDownTime", response.coolDownTime);  
     } catch (error) {
       console.log(error);
       toast.error("An error occurred while resending the token");
     } finally {
       setResend(false);
+      
     }
   }
+
+  
+  const startCountDown = (time) => {
+    const countDownDate = new Date(time).getTime();
+    const x = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      setTime(`${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`);
+      if (distance < 0) {
+        clearInterval(x);
+        setTime("00:00");
+      }
+    }, 1000);
+  }
+
+  useEffect(() => {
+    
+    if (storedTime) {
+      const storedTimeDate = new Date(storedTime);
+      const now = new Date();
+      if (storedTimeDate < now) {
+        localStorage.removeItem("coolDownTime");
+        return;
+      }
+      startCountDown(storedTime);
+
+      return;
+    }
+    if (expiryTime) {
+      startCountDown(expiryTime);
+    }
+  }, [expiryTime, storedTime]);
+
+ 
   return (
     <div className=" h-screen pb-10 pt-20 flex mx-auto">
       {load || delay && <Loader />}
@@ -132,9 +165,10 @@ const Verify = () => {
               onChange={(e) => handleInput(e, index)}
               key={index}
               value={input}
+              id={`otp-${index + 1}`}
               maxLength={1}
               type="text"
-              onKeyUp={(e) => handleKeyUp(e)}
+              onKeyDown={(e) => handleKeyDown(e)}
               className="w-14 h-11 text-lg rounded-md text-center border-2 bg-white/10 border-[#6699ff] text-[#6699ff] focus:shadow-2xl  outline-none"
             />
           ))}
@@ -149,7 +183,8 @@ const Verify = () => {
           </button>
           <button
             onClick={resendToken}
-            className="w-full flex gap-2 justify-center items-center text-black rounded-md py-2 cursor-pointer hover:bg-white/90 transition-colors duration-300 border-2 border-[#6699ff] hover:shadow-2xl"
+            disabled={time !== "00:00" || resend}
+            className="w-full flex gap-2 justify-center items-center text-black rounded-md py-2 cursor-pointer hover:bg-white/90 transition-colors duration-300 border-2 border-[#6699ff] hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg
               style={resend ? { animation: "spin .5s linear infinite" } : {}}
@@ -169,7 +204,7 @@ const Verify = () => {
             {resend ? "Resending..." : "Resend OTP"}
           </button>
 
-          <p className="text-center">00:44</p>
+          <p className="text-center"> Expires in: {time}</p>
         </div>
       </div>
     </div>

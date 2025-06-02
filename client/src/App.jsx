@@ -8,7 +8,7 @@ import Verify from "./pages/Auth/verify";
 import Auth from "./components/auth";
 import { Admins } from "./pages/Admins";
 import CreateAdmins from "./pages/CreateAdmins";
-import Authentication from "./components/security/Authentication";
+import AuthenticationProvider from "./components/security/Authentication";
 import Preview from "./pages/Preview";
 import PasswordRest from "./pages/Auth/PasswordRest";
 import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
@@ -19,6 +19,7 @@ import Groups from "./pages/Groups";
 import Sections from "./pages/Sections";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EmailNotify from "./pages/Auth/EmailNotify";
+import Classes from "./pages/Classes";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
             path="/admin/user/*"
             element={
               <>
-                <Authentication>
+                <AuthenticationProvider>
                   <Nav>
                     {/* <Suspense fallback={<Loader />}> */}
                     <Routes>
@@ -44,6 +45,9 @@ function App() {
                       <Route path="/section" element={<Sections />} />
                       <Route path="/roles" element={<Roles />} />
                       <Route path="/groups" element={<Groups />} />
+                      <Route path="/classes" element={<Classes />} />
+                      <Route path="/cbt-qr" element={<Sections />} />
+                      <Route path="/cbt-sim" element={<Sections />} />
                       <Route path="/create_admin" element={<CreateAdmins />} />
                       <Route
                         path="/questions/preview/:id"
@@ -58,7 +62,7 @@ function App() {
                     </Routes>
                     {/* </Suspense> */}
                   </Nav>
-                </Authentication>
+                </AuthenticationProvider>
               </>
             }
           />

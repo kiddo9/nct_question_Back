@@ -1,7 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from './security/Authentication'
 
-const UserActionsPanel = ({openUserActions, setOpenUserActions, setOpenNotification}) => {
+const UserActionsPanel = ({openUserActions, setOpenUserActions, setOpenNotification, logoutAdmin}) => {
+  
+  const { user } = useAuth()
    
   return (
     <div
@@ -10,7 +13,9 @@ const UserActionsPanel = ({openUserActions, setOpenUserActions, setOpenNotificat
         }`}
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">User Actions</h2>
+          <h2 className=" font-semibold">
+            {user.name && `Welcome, ${user.name}` }
+          </h2>
           <button
 
             onClick={() => setOpenUserActions(false)}
@@ -34,18 +39,14 @@ const UserActionsPanel = ({openUserActions, setOpenUserActions, setOpenNotificat
         </div>
         {/* User actions can be dynamically rendered here */}
         <ul className="mt-4 space-y-2 text-sm">
-          <li className="flex items-center">
-            
-            <Link className="ml-2">View Profile</Link>
-          </li>
-          <li className="flex items-center">
+          <li className="flex items-center hover:text-[#6699ff]">
             <Link onClick={() => setOpenNotification(true)} className="ml-2">Notifications</Link>
           </li>
-          <li className="flex items-center">
+          <li className="flex items-center hover:text-[#6699ff]">
             <Link className="ml-2">Change Password</Link>
           </li>
-          <li className="flex items-center">
-            <Link className="ml-2">Logout</Link>
+          <li className="flex items-center hover:text-red-500">
+            <Link onClick={logoutAdmin} className="ml-2">Logout</Link>
           </li>
         </ul>
         
