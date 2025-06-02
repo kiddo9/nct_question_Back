@@ -19,6 +19,7 @@ import Groups from "./pages/Groups";
 import Sections from "./pages/Sections";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EmailNotify from "./pages/Auth/EmailNotify";
+import Classes from "./pages/Classes";
 
 function App() {
   return (
@@ -44,6 +45,9 @@ function App() {
                       <Route path="/section" element={<Sections />} />
                       <Route path="/roles" element={<Roles />} />
                       <Route path="/groups" element={<Groups />} />
+                      <Route path="/classes" element={<Classes />} />
+                      <Route path="/cbt-qr" element={<Sections />} />
+                      <Route path="/cbt-sim" element={<Sections />} />
                       <Route path="/create_admin" element={<CreateAdmins />} />
                       <Route
                         path="/questions/preview/:id"
