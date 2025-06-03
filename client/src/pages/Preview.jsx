@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { Edit, Trash2 } from 'lucide-react';
 import DeleteQuestion from '../components/DeleteModals/DeleteQuestion';
 import Fetching from '../components/Fetching';
+import useClassHook from '../hooks/classHook';
 
 const Preview = () => {
   const nav = useNavigate();
@@ -15,6 +16,7 @@ const Preview = () => {
   const { opt, loader: optLoader } = useOpt();
   const { getEachQuestion, loader: questionLoader } = useQuestionHook(id);
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook();
+  const { classes, loader: classLoader } = useClassHook();
   const { sections, loader: sectionLoader } = useSectionHook();
   const [openDelete, setOpenDelete] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ const Preview = () => {
   const fullQuestion = {
     ...getEachQuestion,
     group: questionGroups?.find((group) => group?.id == getEachQuestion?.q_group_id),
+    class: classes?.find((cls) => cls?.id == getEachQuestion?.class_id),
     section: sections?.find((section) => section?.id == getEachQuestion?.section_id),
     options: opt?.filter((option) => {
       return (option?.question_bank_id == getEachQuestion?.id) 
@@ -59,13 +62,16 @@ const Preview = () => {
           </div>
         </header>
         {
-          questionLoader || optLoader || groupLoader || sectionLoader || loading
+          questionLoader || optLoader || groupLoader || sectionLoader || classLoader || loading
           ? <Fetching /> 
            
           : <div className='px-4 py-2 flex flex-col '>
               <div className='flex flex-wrap gap-2 items-center justify-between w-full'>
                 <span>
                   Group: {fullQuestion?.group?.title}
+                </span>
+                <span>
+                  Class: {fullQuestion?.class?.class_name}
                 </span>
                 <span>
                   Section: {fullQuestion?.section?.section_name}
