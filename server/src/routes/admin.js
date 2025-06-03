@@ -47,6 +47,7 @@ import {
   getAllClasses,
   updateClass,
 } from "../controllers/classes.js";
+import getAllUserName from "../controllers/Auth/usersName.js";
 
 router.get("/", tokenVerify, loggedInUsers);
 router.get("/validate", credValidation, async (req, res) => {
@@ -78,6 +79,7 @@ router.get("/questions/group", tokenVerify, getAllQuestionGroups);
 router.get("/sections", tokenVerify, getAllSections);
 router.get("/opt", tokenVerify, options);
 router.get("/classes", tokenVerify, getAllClasses);
+router.get("/admins/name/users", tokenVerify, getAllUserName);
 
 router.get("/email/verification", newUserEmailVerification);
 router.get("/questions/group/:id", tokenVerify, getQuestionGroupById);

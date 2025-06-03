@@ -1,4 +1,6 @@
 import questionGroups from "../../models/question_groups.js";
+import usersModel from "../../models/users.js";
+
 export const getAllQuestionGroups = async (req, res) => {
   try {
     const fetchQuestionGroups = await questionGroups.findAll();
@@ -40,7 +42,7 @@ export const getQuestionGroupById = async (req, res) => {
 
 export const createGroup = async (req, res) => {
   const { group } = req.body;
-
+  const user = req.user;
   try {
     if (!Array.isArray(group)) {
       return res.json({ status: false, message: "Unable to process request" });
@@ -50,14 +52,18 @@ export const createGroup = async (req, res) => {
       return res.json({ status: false, message: "Enter at least one group" });
     }
 
+    const userResponsible = await usersModel.findOne({
+      where: { encrypedId: user.id },
+    });
+
     // Create groups
     await Promise.all(
       group.map((position) =>
         questionGroups.create({
           title: position,
           active_status: 1,
-          created_by: 1,
-          updated_by: 1,
+          created_by: userResponsible.id,
+          updated_by: userResponsible.id,
           school_id: 1,
           academic_id: 1,
         })

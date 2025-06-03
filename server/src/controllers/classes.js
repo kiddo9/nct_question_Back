@@ -1,4 +1,5 @@
 import classesModel from "../../models/classes.js";
+import usersModel from "../../models/users.js";
 
 //get all classes controllers
 export const getAllClasses = async (req, res) => {
@@ -25,7 +26,7 @@ export const getAllClasses = async (req, res) => {
 
 export const createNewClass = async (req, res) => {
   const { classes } = req.body;
-
+  const user = req.user;
   try {
     if (!Array.isArray(classes)) {
       return res.json({ status: false, message: "unexpected information" });
@@ -35,20 +36,9 @@ export const createNewClass = async (req, res) => {
       return res.json({ status: false, message: "no classes to create" });
     }
 
-    const mapClasses = classes.map((Cls) => Cls.class_name.toLowerCase());
-
-    for (const classC of mapClasses) {
-      const checkIfExist = await classesModel.findOne({
-        where: { class_name: classC.class_name },
-      });
-
-      if (checkIfExist) {
-        return res.json({
-          status: false,
-          message: "unable to create class. class already exist",
-        });
-      }
-    }
+    const userResponsble = await usersModel.findOne({
+      where: { encrypedId: user.id },
+    });
 
     const createTheClass = await Promise.all(
       classes.map((cls) => {
@@ -56,8 +46,8 @@ export const createNewClass = async (req, res) => {
           class_name: cls.class_name,
           pass_mark: cls.mark,
           active_status: 1,
-          created_by: 1,
-          updated_by: 1,
+          created_by: userResponsble.id,
+          updated_by: userResponsble.id,
           school_id: 1,
           academic_id: 1,
         });
@@ -81,6 +71,7 @@ export const createNewClass = async (req, res) => {
 
 export const updateClass = async (req, res) => {
   const { id, class_name, mark } = req.body;
+  const user = req.user;
   try {
     const checkIfExist = await classesModel.findOne({ where: id });
 
@@ -88,8 +79,12 @@ export const updateClass = async (req, res) => {
       return res.json({ status: false, message: "data not found" });
     }
 
+    const userResponsble = await usersModel.findOne({
+      where: { encrypedId: user.id },
+    });
+
     const update = await classesModel.update(
-      { class_name, pass_mark: mark },
+      { class_name, pass_mark: mark, updated_by: userResponsble.id },
       { where: { id } }
     );
 
@@ -111,7 +106,7 @@ export const updateClass = async (req, res) => {
 export const deleteClass = async (req, res) => {
   const { id } = req.params;
   try {
-    const checkIfExist = await classesModel.findOne({ where: id });
+    const checkIfExist = await classesModel.findOne({ where: { id } });
 
     if (!checkIfExist) {
       return res.json({ status: false, message: "data not found" });

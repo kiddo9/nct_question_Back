@@ -1,5 +1,6 @@
 import questionBank from "../../models/Question_Bank.js";
 import questionOptionModel from "../../models/question_options.js";
+import usersModel from "../../models/users.js";
 
 //controller to get all questions
 export const getAllQuestions = async (req, res) => {
@@ -65,14 +66,28 @@ export const createQuestions = async (req, res) => {
     QuaterId,
     answer,
     GroupId,
+    ClassId,
   } = req.body;
+  const user = req.user;
 
   //using try catch block
   try {
     //if details are empty return error
-    if (!type || !question || !mark || !QuaterId || !answer || !GroupId) {
+    if (
+      !type ||
+      !question ||
+      !mark ||
+      !QuaterId ||
+      !answer ||
+      !GroupId ||
+      !ClassId
+    ) {
       return res.json({ status: false, message: "unable to create question " });
     }
+
+    const userResponsble = await usersModel.findOne({
+      where: { encryptedId: user.id },
+    });
 
     //create the question
     const createQuestion = await questionBank.create({
@@ -84,10 +99,10 @@ export const createQuestions = async (req, res) => {
       number_of_option: numberOfOptions,
       active_status: 1,
       q_group_id: GroupId,
-      class_id: 1,
+      class_id: ClassId,
       section_id: QuaterId,
-      created_by: 1,
-      updated_by: 1,
+      created_by: userResponsble.id,
+      updated_by: userResponsble.id,
       school_id: 1,
       academic_id: 1,
     });
@@ -112,8 +127,8 @@ export const createQuestions = async (req, res) => {
               status: answer == option ? 1 : 0,
               active_status: 1,
               question_bank_id: createQuestion.id,
-              created_by: 1,
-              updated_by: 1,
+              created_by: userResponsble.id,
+              updated_by: userResponsble.id,
               school_id: 1,
               academic_id: 1,
             })
@@ -263,7 +278,9 @@ export const updateQuestion = async (req, res) => {
     QuaterId,
     answer,
     GroupId,
+    ClassId,
   } = req.body;
+  const user = req.user;
 
   //use the try catch block
   try {
@@ -275,7 +292,8 @@ export const updateQuestion = async (req, res) => {
       !mark ||
       !QuaterId ||
       !answer ||
-      !GroupId
+      !GroupId ||
+      !ClassId
     ) {
       //return error if any of the required fields are empty
       return res.json({ status: false, message: "unable to update question" });
@@ -290,6 +308,10 @@ export const updateQuestion = async (req, res) => {
         message: "unable to update question. data does not exist",
       });
     }
+    const userResponsble = await usersModel.findOne({
+      where: { encryptedId: user.id },
+    });
+
     //update the question in the database
     const updateQuestion = await questionBank.update(
       {
@@ -301,10 +323,9 @@ export const updateQuestion = async (req, res) => {
         number_of_option: numberOfOptions,
         active_status: 1,
         q_group_id: GroupId,
-        class_id: 1,
+        class_id: ClassId,
         section_id: QuaterId,
-        created_by: 1,
-        updated_by: 1,
+        updated_by: userResponsble.id,
         school_id: 1,
         academic_id: 1,
       },
@@ -347,8 +368,8 @@ export const updateQuestion = async (req, res) => {
             status: answer === option ? 1 : 0,
             active_status: 1,
             question_bank_id: id,
-            created_by: 1,
-            updated_by: 1,
+            created_by: userResponsble.id,
+            updated_by: userResponsble.id,
             school_id: 1,
             academic_id: 1,
           })
