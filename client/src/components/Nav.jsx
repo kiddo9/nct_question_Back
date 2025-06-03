@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Loader from "./Loader";
 import NotificationPanel from "./NotificationPanel";
 import UserActionsPanel from "./UserActionsPanel";
+import { ChevronDown, Plus } from "lucide-react";
 
 const Nav = ({ children }) => {
   const menus = [
@@ -68,13 +69,21 @@ const Nav = ({ children }) => {
 
         <div className="flex items-center gap-4">
           {/* notification icon */}
+          <button
+              // onClick={() => setShowQuickActions(!showQuickActions)}
+              className="flex items-center space-x-1 px-3 py-2 text-sm bg-[#6674BB] text-white rounded-lg hover:bg-[#6674BB]/80 transition-colors cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Quick Actions</span>
+              <ChevronDown className="w-4 h-4" />
+           </button>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 cursor-pointer"
+            className="size-8 cursor-pointer"
             onClick={() => setOpenNotification(!openNotification)}
           >
             <path
@@ -91,7 +100,7 @@ const Nav = ({ children }) => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6 cursor-pointer user-actions-panel"
+            className="size-8 cursor-pointer user-actions-panel"
             onClick={() => setOpenUserActions(!openUserActions)}
           >
             <path
