@@ -9,6 +9,8 @@ import Loader from "../components/Loader";
 import useAdminLists from "../hooks/adminLists";
 import useRoleHook from "../hooks/roleHook";
 import Fetching from "../components/Fetching";
+import { useAuth } from "../components/security/Authentication";
+import { LockKeyhole } from "lucide-react";
 
 const EditAdmins = () => {
   
@@ -100,6 +102,20 @@ const EditAdmins = () => {
       result.error.issues.map((issue) => toast.error(issue.message));
     }
   };
+
+  const {user} = useAuth();
+
+  if (!user || !user.role || user.role != "admin") {
+    return (
+      <div className="flex flex-col items-center max-w-[100vw]  lg:w-[calc(100vw-245px)] justify-center h-[calc(100vh-100px)]">
+        <LockKeyhole className="w-16 h-16 text-black mb-4" />
+        <h1 className="text-2xl mx-auto text-center font-bold text-red-500">Access Denied</h1>
+        <div className="text-center text-gray-500">
+          You do not have permission to access this page. Please contact your administrator.
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg lg:px-2 py-8 ">

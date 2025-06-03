@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import AddButton from '../components/AddButton';
 import { Link } from 'react-router-dom';
-import { CircleX, Edit } from 'lucide-react';
+import { CircleDot, CircleX, Edit } from 'lucide-react';
 import Fetching from '../components/Fetching';
 import DeleteEnum from '../components/DeleteModals/DeleteEnum';
 import CreateClasses from '../components/CreateModals/CreateClasses';
 import useClassHook from '../hooks/classHook';
 import EditClasses from '../components/EditModals/EditClasses';
+import { useAuth } from '../components/security/Authentication';
 
 const Classes = () => {
     const { classes, loader: classLoader } = useClassHook();
@@ -20,6 +21,7 @@ const Classes = () => {
     const [deleteId, setDeleteId] = useState(null);
     const [deleteName, setDeleteName] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
     // console.log(classes);
     
     const handleDelete = (id, name) => {
@@ -81,7 +83,7 @@ const Classes = () => {
                 </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
-                    <AddButton>Add Class</AddButton>
+                    { user.role == 'admin'  && <AddButton>Add Class</AddButton> }
                 </Link>
             </div>
             <div className='py-2 border-t-2 border-gray-300 bg-gray-100 grid grid-cols-6 gap-10 w-full items-center justify-items-center px-5 shadow-md'>
@@ -104,8 +106,9 @@ const Classes = () => {
                             <StatusBadge status={clas.active_status} />
                             <p className=' text-sm  text-black justify-self-end'>{clas.updated_by}</p>
                             <div className='flex justify-end items-center gap-2 justify-self-end'>
-                                <Edit onClick={() => handleEdit(clas.id, clas.class_name, clas.pass_mark)} className='cursor-pointer text-green-600 hover:text-green-900' size={18} />
-                                <CircleX onClick={() => handleDelete(clas.id, clas.class_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] ' />  
+                                { user.role != 'admin' && <CircleDot className='text-blue-600' size={18} /> }
+                                { user.role == 'admin' && <Edit onClick={() => handleEdit(clas.id, clas.class_name, clas.pass_mark)} className='cursor-pointer text-green-600 hover:text-green-900' size={18} /> }
+                                { user.role == 'admin' && <CircleX onClick={() => handleDelete(clas.id, clas.class_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] ' /> } 
                             </div>
                                              
                         </div>

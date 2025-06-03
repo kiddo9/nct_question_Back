@@ -6,13 +6,15 @@ import Loader from "./Loader";
 import NotificationPanel from "./NotificationPanel";
 import UserActionsPanel from "./UserActionsPanel";
 import { ChevronDown, Plus } from "lucide-react";
+import { useAuth } from "./security/Authentication";
 
 const Nav = ({ children }) => {
+  const {user} = useAuth()
   const menus = [
     { id: 1, name: "Questions", path: "/admin/user/questions" },
     { id: 2, name: "Section", path: "/admin/user/section" },
-    { id: 3, name: "Users", path: "/admin/user/admins" },
-    { id: 4, name: "Roles", path: "/admin/user/roles" },
+    { id: 3, name: "Users", path: "/admin/user/admins", admin: true },
+    { id: 4, name: "Roles", path: "/admin/user/roles", admin: true },
     { id: 5, name: "Groups", path: "/admin/user/groups" },
     { id: 8, name: "Classes", path: "/admin/user/classes" },
     { id: 6, name: "Cbt-QR", path: "/admin/user/cbt-qr" },
@@ -154,7 +156,7 @@ const Nav = ({ children }) => {
               />
             </svg>
             <div className="flex   flex-col pl-4 gap-4 mt-20 lg:mt-20">
-              {menus.map((menu) => (
+              {menus.filter((menu) => user.role != 'admin' ? !menu.admin : true).map((menu) => (
                 <NavLink
                   key={menu.id}
                   to={menu.path}
@@ -171,7 +173,7 @@ const Nav = ({ children }) => {
                 </NavLink>
               ))}
 
-              <div
+              {/* <div
                 onClick={() => LogoutAdmin()}
                 className="flex w-44 mt-20 bottom-0 left-5 right-5 items-center gap-2 hover:bg-red-600 transition duration-300 ease-in-out hover:drop-shadow-2xl  cursor-pointer bg-red-500 px-3 py-2 rounded-lg"
               >
@@ -190,7 +192,7 @@ const Nav = ({ children }) => {
                   />
                 </svg>
                 <p className="text-white">Logout</p>
-              </div>
+              </div> */}
             </div>
           </aside>
         </nav>

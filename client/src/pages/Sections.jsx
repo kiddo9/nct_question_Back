@@ -9,6 +9,7 @@ import useSectionHook from '../hooks/sectionHook'
 import CreateSections from '../components/CreateModals/CreateSections'
 import DeleteEnum from '../components/DeleteModals/DeleteEnum'
 import Fetching from '../components/Fetching'
+import { useAuth } from '../components/security/Authentication'
 
 const Sections = () => {
     const { sections, loader: sectionLoader } = useSectionHook()
@@ -17,6 +18,7 @@ const Sections = () => {
     const [deleteId, setDeleteId] = useState(null);
     const [deleteName, setDeleteName] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
     
     const handleDelete = (id, name) => {
         setOpenDelete(true);
@@ -70,7 +72,7 @@ const Sections = () => {
                 </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
-                    <AddButton>Add Section</AddButton>
+                    { user.role == 'admin'  && <AddButton>Add Section</AddButton> }
                 </Link>
             </div>
             {sectionLoader || loading ? <Fetching/> :
@@ -81,7 +83,7 @@ const Sections = () => {
                           <h1 className='md:text-lg text-[16px]  text-black'>{section.section_name}</h1>
                           <div className='flex gap-10 items-center'>
                               <StatusBadge status={section.active_status} />
-                              <CircleX onClick={() => handleDelete(section.id, section.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                              { user.role == 'admin'  && <CircleX onClick={() => handleDelete(section.id, section.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />}
                           </div>
                                               
                       </div>
