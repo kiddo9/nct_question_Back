@@ -118,14 +118,23 @@ const Preview = () => {
                 : null
               }
               
-
-              <button
-                  onClick={() => nav("/admin/user/questions")}
-                  type="submit"
-                  className="mt-10  border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
-                >
-                  Done
-              </button>
+              <div className='mt-10 mx-auto flex flex-wrap gap-4 justify-center'>   
+                <button
+                    onClick={() => nav("/admin/user/questions")}
+                    type="submit"
+                    className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
+                  >
+                    Done
+                </button>
+                <button
+                    onClick={() => nav(`/admin/user/questions/create?group=${fullQuestion?.group?.title}&class=${fullQuestion?.class?.class_name}&section=${fullQuestion?.section?.section_name}`)}
+                    type="submit"
+                    className="border-2 border-[#0AC511]  text-[#0AC511] hover:bg-[#0AC511]/70 hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
+                  >
+                    New
+                </button>
+              </div>
+              
               
             </div>
         }

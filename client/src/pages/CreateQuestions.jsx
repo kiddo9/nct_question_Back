@@ -6,11 +6,12 @@ import { ToastContainer, toast } from "react-toastify";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
 import Api from "../api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import useClassHook from "../hooks/classHook";
 
 const CreateQuestions = () => {
+  const [searchParams, _] = useSearchParams()
   const [group, setGroup] = useState("");
   const [className, setClassName] = useState("");
   const [section, setSection] = useState("");
@@ -27,6 +28,19 @@ const CreateQuestions = () => {
   const { classes } = useClassHook()
   const { sections } = useSectionHook();
   const nav = useNavigate();
+
+  { /* Extract query parameters from the URL to prefill the group, class and section */}
+  const query = {
+    group: searchParams.get("group") || "",
+    className: searchParams.get("class") || "",
+    section: searchParams.get("section") || "",
+  }
+
+  useEffect(() => {
+    if (query.group) setGroup(query.group);
+    if (query.className) setClassName(query.className);
+    if (query.section) setSection(query.section);
+  }, [query.group, query.className, query.section]);
 
   const questionSchema = z.object({
     group: z.string().trim().min(1, { message: "Group is required" }),

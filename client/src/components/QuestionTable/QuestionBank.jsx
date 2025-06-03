@@ -55,7 +55,7 @@ export default function QuestionBank() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [numberPerPage, setNumberPerPage] = useState(6);
-  const [currentPage, setCurrentPage] = useState(query);
+  const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
   const [queryFilteredQuestions, setQueryFilteredQuestions] = useState([]);
   const [load, setLoad] = useState(false);
