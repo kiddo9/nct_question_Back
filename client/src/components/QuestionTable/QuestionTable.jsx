@@ -69,6 +69,18 @@ const QuestionTable = ({
           <th
             scope="col"
             className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+            onClick={() => requestSort("class")}
+          >
+            <div className="flex items-center space-x-1">
+              <span>Class</span>
+              {sortConfig.key === "class" && (
+                <span>{sortConfig.direction === "ascending" ? "↑" : "↓"}</span>
+              )}
+            </div>
+          </th>
+          <th
+            scope="col"
+            className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
             onClick={() => requestSort("quarter")}
           >
             <div className="flex items-center space-x-1">
