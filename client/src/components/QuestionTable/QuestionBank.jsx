@@ -11,6 +11,7 @@ import QuestionTableFilters from './QuestionTableFilters';
 import { toast, ToastContainer } from 'react-toastify';
 import Api from '../../api/Api';
 import Loader from '../Loader';
+import useClassHook from '../../hooks/classHook';
 // Sample data 
 
 
@@ -19,6 +20,7 @@ export default function QuestionBank() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { getQuestion, loader } = useQuestionHook()
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
+  const { classes, loader: classLoader } = useClassHook()
   const { sections, loader: sectionLoader } = useSectionHook()
 
   const query = {
@@ -39,6 +41,7 @@ export default function QuestionBank() {
   let questionsWithGroup = getQuestion.map(question => ({ 
     ...question,
     group: questionGroups.find(group => group.id === question.q_group_id)?.title,
+    class: classes.find(cls => cls.id === question.class_id)?.class_name,
     section: sections.find(section => section.id == question.section_id)?.section_name
   }))
   // If getQuestion is not an array, return an empty array
@@ -215,6 +218,7 @@ export default function QuestionBank() {
           <QuestionTable 
             loader={loader}
             groupLoader={groupLoader}
+            classLoader={classLoader}
             sectionLoader={sectionLoader}
             sortedQuestions={sortedQuestions} 
             selectedRows={selectedRows} 
