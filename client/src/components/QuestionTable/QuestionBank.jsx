@@ -12,6 +12,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import Api from '../../api/Api';
 import Loader from '../Loader';
 import useClassHook from '../../hooks/classHook';
+import useUserHook from '../../hooks/userHook';
 // Sample data 
 
 
@@ -22,6 +23,8 @@ export default function QuestionBank() {
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
   const { classes, loader: classLoader } = useClassHook()
   const { sections, loader: sectionLoader } = useSectionHook()
+  const { users, loader: userLoader } = useUserHook();
+  
 
   const query = {
     page: searchParams.get("page") || 1, //allows for pagination via the url
@@ -42,7 +45,8 @@ export default function QuestionBank() {
     ...question,
     group: questionGroups.find(group => group.id === question.q_group_id)?.title,
     class: classes.find(cls => cls.id === question.class_id)?.class_name,
-    section: sections.find(section => section.id == question.section_id)?.section_name
+    section: sections.find(section => section.id == question.section_id)?.section_name,
+    updatedBy: users.find(user => user.id === question.updated_by)?.name || 'N/A',
   }))
   // If getQuestion is not an array, return an empty array
 
@@ -220,6 +224,7 @@ export default function QuestionBank() {
             groupLoader={groupLoader}
             classLoader={classLoader}
             sectionLoader={sectionLoader}
+            userLoader={userLoader}
             sortedQuestions={sortedQuestions} 
             selectedRows={selectedRows} 
             toggleSelectRow={toggleSelectRow} 

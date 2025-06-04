@@ -72,6 +72,9 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
     <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
       {new Date(question.updated_at).toUTCString()}
     </td>
+    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+      {question.updatedBy ? question.updatedBy : 'N/A'}
+    </td>
     <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
       <div className="flex justify-end space-x-2">
         <button onClick={() => nav(`/admin/user/questions/preview/${question.id}`)} className="text-blue-600 hover:text-blue-900 cursor-pointer">
