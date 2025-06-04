@@ -2,35 +2,39 @@ import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import AddButton from '../components/AddButton';
 import { Link } from 'react-router-dom';
-import { CircleX, Edit } from 'lucide-react';
+import { CircleDot, CircleX, Edit } from 'lucide-react';
 import Fetching from '../components/Fetching';
 import DeleteEnum from '../components/DeleteModals/DeleteEnum';
 import CreateClasses from '../components/CreateModals/CreateClasses';
+import useClassHook from '../hooks/classHook';
+import EditClasses from '../components/EditModals/EditClasses';
+import { useAuth } from '../components/security/Authentication';
 
 const Classes = () => {
-    const classes = [
-        { id: 1, section_name: 'Class 1', marks: 100, updatedBy: "Paschal Elechi", active_status: 1 },
-        { id: 2, section_name: 'Class 2', marks: 100, updatedBy: "Paschal Elechi", active_status: 0 },
-        { id: 3, section_name: 'Class 3', marks: 50, updatedBy: "Paschal Elechi",  active_status: 1 },
-        { id: 4, section_name: 'Class 4', marks: 100, updatedBy: "Paschal Elechi",  active_status: 0 },
-        { id: 5, section_name: 'Class 5', marks: 60, updatedBy: "Paschal Elechi",  active_status: 1 },
-        { id: 6, section_name: 'Class 6', marks: 60, updatedBy: "Paschal Elechi", active_status: 0 },
-        { id: 7, section_name: 'Class 7', marks: 100, updatedBy: "Paschal Elechi", active_status: 1 },
-        { id: 8, section_name: 'Class 8', marks: 100, updatedBy: "Paschal Elechi", active_status: 0 },
-        { id: 9, section_name: 'Class 9', marks: 100, updatedBy: "Paschal Elechi", active_status: 1 },
-        { id: 10, section_name: 'Class 10', marks: 100, updatedBy: "Paschal Elechi", active_status: 0 },
-    ];
-    const classLoader = false
+    const { classes, loader: classLoader } = useClassHook();
     const [openCreate, setOpenCreate] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
+    const [editId, setEditId] = useState(null);
+    const [editName, setEditName] = useState(null);
+    const [editMark, setEditMark] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
     const [deleteName, setDeleteName] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
+    // console.log(classes);
     
     const handleDelete = (id, name) => {
         setOpenDelete(true);
         setDeleteName(name);
         setDeleteId(id);
+    };
+
+    const handleEdit = (id, name, mark) => {
+        setOpenEdit(true);
+        setEditId(id);
+        setEditName(name);
+        setEditMark(mark);
     };
 
     useEffect(() => {
@@ -79,7 +83,7 @@ const Classes = () => {
                 </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
-                    <AddButton>Add Class</AddButton>
+                    { user.role == 'admin'  && <AddButton>Add Class</AddButton> }
                 </Link>
             </div>
             <div className='py-2 border-t-2 border-gray-300 bg-gray-100 grid grid-cols-6 gap-10 w-full items-center justify-items-center px-5 shadow-md'>
@@ -87,7 +91,7 @@ const Classes = () => {
                     <h1 className='text-sm  text-black/50 font-semibold justify-self-start'>CLASS</h1>
                     <h1 className='text-sm  text-black/50 font-semibold '>MARKS</h1>
                     <h1 className='text-sm  text-black/50 font-semibold  justify-self-center'>STATUS</h1>
-                    <h1 className='text-sm  text-black/50 font-semibold  justify-self-end'>Updated By</h1>
+                    <h1 className='text-sm  text-black/50 font-semibold  justify-self-end'>UPDATED BY</h1>
                     <h1 className='text-sm  text-black/50 font-semibold  justify-self-end'>ACTIONS</h1>
             </div>
             {classLoader || loading ? <Fetching/> :
@@ -97,13 +101,14 @@ const Classes = () => {
                     classes.map((clas) => (
                         <div key={clas.id} className='py-3 border-t-2 border-gray-300 grid grid-cols-6 gap-10 w-full items-center justify-items-center px-5'>
                             <span className=' text-sm text-black justify-self-start'>{clas.id}</span>
-                            <p className=' text-sm text-black justify-self-start'>{clas.section_name}</p>
-                            <span className='text-sm'>{clas.marks}</span>
+                            <p className=' text-sm text-black justify-self-start'>{clas.class_name}</p>
+                            <span className='text-sm'>{clas.pass_mark}</span>
                             <StatusBadge status={clas.active_status} />
-                            <p className=' text-sm  text-black justify-self-end'>{clas.updatedBy}</p>
+                            <p className=' text-sm  text-black justify-self-end'>{clas.updated_by}</p>
                             <div className='flex justify-end items-center gap-2 justify-self-end'>
-                                <Edit className='cursor-pointer text-green-600 hover:text-green-900' size={18} />
-                                <CircleX onClick={() => handleDelete(clas.id, clas.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] ' />  
+                                { user.role != 'admin' && <CircleDot className='text-blue-600' size={18} /> }
+                                { user.role == 'admin' && <Edit onClick={() => handleEdit(clas.id, clas.class_name, clas.pass_mark)} className='cursor-pointer text-green-600 hover:text-green-900' size={18} /> }
+                                { user.role == 'admin' && <CircleX onClick={() => handleDelete(clas.id, clas.class_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB] ' /> } 
                             </div>
                                              
                         </div>
@@ -115,6 +120,7 @@ const Classes = () => {
         </div>
         {openCreate && <CreateClasses setOpenCreate={setOpenCreate} />}
         {openDelete && <DeleteEnum type='class' id={deleteId} setOpenDelete={setOpenDelete} name={deleteName} />} 
+        {openEdit && <EditClasses setOpenEdit={setOpenEdit} id={editId} name={editName} mark={editMark} setName={setEditName} setMark={setEditMark} />}
     </div>
   )
 }

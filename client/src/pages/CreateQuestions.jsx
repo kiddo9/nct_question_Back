@@ -6,11 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 import { useQuestionGroupHook } from "../hooks/questionGroupHook";
 import useSectionHook from "../hooks/sectionHook";
 import Api from "../api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Loader from "../components/Loader";
+import useClassHook from "../hooks/classHook";
 
 const CreateQuestions = () => {
+  const [searchParams, _] = useSearchParams()
   const [group, setGroup] = useState("");
+  const [className, setClassName] = useState("");
   const [section, setSection] = useState("");
   const [question, setQuestion] = useState("");
   const [mark, setMark] = useState("");
@@ -22,11 +25,26 @@ const CreateQuestions = () => {
   const [loader, setLoader] = useState(false);
 
   const { questionGroups } = useQuestionGroupHook();
+  const { classes } = useClassHook()
   const { sections } = useSectionHook();
   const nav = useNavigate();
 
+  { /* Extract query parameters from the URL to prefill the group, class and section */}
+  const query = {
+    group: searchParams.get("group") || "",
+    className: searchParams.get("class") || "",
+    section: searchParams.get("section") || "",
+  }
+
+  useEffect(() => {
+    if (query.group) setGroup(query.group);
+    if (query.className) setClassName(query.className);
+    if (query.section) setSection(query.section);
+  }, [query.group, query.className, query.section]);
+
   const questionSchema = z.object({
     group: z.string().trim().min(1, { message: "Group is required" }),
+    className: z.string().trim().min(1, { message: "Class is required" }),
     section: z.string().trim().min(1, { message: "Section is required" }),
     question: z.string().trim().min(1, { message: "Question is required" }),
     mark: z.string().trim().min(1, { message: "Mark is required" }),
@@ -40,6 +58,7 @@ const CreateQuestions = () => {
     e.preventDefault();
     const result = questionSchema.safeParse({
       group,
+      className,
       section,
       question,
       mark,
@@ -61,6 +80,7 @@ const CreateQuestions = () => {
           QuaterId: sections?.find((sec) => sec?.section_name == section)?.id,
           answer,
           GroupId: questionGroups?.find((gr) => gr?.title == group)?.id,
+          ClassId: classes?.find((cls) => cls?.class_name == className)?.id,
         });
 
         const response = requestTo.data;
@@ -80,6 +100,7 @@ const CreateQuestions = () => {
       } finally {
         setLoader(false);
         setGroup("");
+        setClassName("");
         setSection("");
         setQuestion("");
         setMark("");
@@ -173,6 +194,13 @@ const CreateQuestions = () => {
                 placeholder="Select Section"
                 value={section}
                 setValue={setSection}
+              />
+              <CustomSelect
+                label="Class"
+                options={classes.map((clas) => clas.class_name)}
+                placeholder="Select Class"
+                value={className}
+                setValue={setClassName}
               />
               <fieldset className="flex flex-col gap-2 col-span-2">
                 <label className="text-sm" htmlFor="question">

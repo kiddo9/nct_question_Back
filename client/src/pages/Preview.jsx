@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import { Edit, Trash2 } from 'lucide-react';
 import DeleteQuestion from '../components/DeleteModals/DeleteQuestion';
 import Fetching from '../components/Fetching';
+import useClassHook from '../hooks/classHook';
 
 const Preview = () => {
   const nav = useNavigate();
@@ -15,6 +16,7 @@ const Preview = () => {
   const { opt, loader: optLoader } = useOpt();
   const { getEachQuestion, loader: questionLoader } = useQuestionHook(id);
   const { questionGroups, loader: groupLoader } = useQuestionGroupHook();
+  const { classes, loader: classLoader } = useClassHook();
   const { sections, loader: sectionLoader } = useSectionHook();
   const [openDelete, setOpenDelete] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,6 +31,7 @@ const Preview = () => {
   const fullQuestion = {
     ...getEachQuestion,
     group: questionGroups?.find((group) => group?.id == getEachQuestion?.q_group_id),
+    class: classes?.find((cls) => cls?.id == getEachQuestion?.class_id),
     section: sections?.find((section) => section?.id == getEachQuestion?.section_id),
     options: opt?.filter((option) => {
       return (option?.question_bank_id == getEachQuestion?.id) 
@@ -59,13 +62,16 @@ const Preview = () => {
           </div>
         </header>
         {
-          questionLoader || optLoader || groupLoader || sectionLoader || loading
+          questionLoader || optLoader || groupLoader || sectionLoader || classLoader || loading
           ? <Fetching /> 
            
           : <div className='px-4 py-2 flex flex-col '>
               <div className='flex flex-wrap gap-2 items-center justify-between w-full'>
                 <span>
                   Group: {fullQuestion?.group?.title}
+                </span>
+                <span>
+                  Class: {fullQuestion?.class?.class_name}
                 </span>
                 <span>
                   Section: {fullQuestion?.section?.section_name}
@@ -112,14 +118,23 @@ const Preview = () => {
                 : null
               }
               
-
-              <button
-                  onClick={() => nav("/admin/user/questions")}
-                  type="submit"
-                  className="mt-10  border-2 border-[#6674BB] mx-auto text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
-                >
-                  Done
-              </button>
+              <div className='mt-10 mx-auto flex flex-wrap gap-4 justify-center'>   
+                <button
+                    onClick={() => nav("/admin/user/questions")}
+                    type="submit"
+                    className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
+                  >
+                    Done
+                </button>
+                <button
+                    onClick={() => nav(`/admin/user/questions/create?group=${fullQuestion?.group?.title}&class=${fullQuestion?.class?.class_name}&section=${fullQuestion?.section?.section_name}`)}
+                    type="submit"
+                    className="border-2 border-[#0AC511]  text-[#0AC511] hover:bg-[#0AC511]/70 hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
+                  >
+                    New
+                </button>
+              </div>
+              
               
             </div>
         }

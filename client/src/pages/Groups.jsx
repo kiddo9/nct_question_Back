@@ -8,6 +8,7 @@ import { CircleX } from 'lucide-react'
 import CreateGroups from '../components/CreateModals/CreateGroups'
 import DeleteEnum from '../components/DeleteModals/DeleteEnum'
 import Fetching from '../components/Fetching'
+import { useAuth } from '../components/security/Authentication'
 
 const Groups = () => {
     const { questionGroups, loader: groupLoader } = useQuestionGroupHook()
@@ -16,6 +17,7 @@ const Groups = () => {
     const [deleteId, setDeleteId] = useState(null);
     const [deleteName, setDeleteName] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { user } = useAuth();
     
     const handleDelete = (id, name) => {
         setOpenDelete(true);
@@ -67,7 +69,7 @@ const Groups = () => {
                 </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
-                    <AddButton>Add Group</AddButton>
+                    { user.role == 'admin'  && <AddButton>Add Group</AddButton> }
                 </Link>
             </div>
             {groupLoader || loading ? <Fetching/> : 
@@ -78,7 +80,7 @@ const Groups = () => {
                           <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
                           <div className='flex gap-10 items-center'>
                               <StatusBadge status={group.active_status} />
-                              <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />
+                              { user.role == 'admin'  && <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' /> }
                               
                           </div>
                                           

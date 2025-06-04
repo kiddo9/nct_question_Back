@@ -1,4 +1,5 @@
 import sections from "../../models/sections.js";
+import usersModel from "../../models/users.js";
 
 export const getAllSections = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ export const getAllSections = async (req, res) => {
 
 export const createSection = async (req, res) => {
   const { section } = req.body;
-
+  const user = req.user;
   try {
     if (!Array.isArray(section)) {
       return res.json({ status: false, message: "Unable to process request" });
@@ -29,14 +30,18 @@ export const createSection = async (req, res) => {
       return res.json({ status: false, message: "Enter at least one section" });
     }
 
+    const userResponsible = await usersModel.findOne({
+      where: { encrypedId: user.id },
+    });
+
     // Create sections
     await Promise.all(
       section.map((position) =>
         sections.create({
           section_name: position,
           active_status: 1,
-          created_by: 1,
-          updated_by: 1,
+          created_by: userResponsible.id,
+          updated_by: userResponsible.id,
           school_id: 1,
           academic_id: 1,
           un_academic_id: 1,

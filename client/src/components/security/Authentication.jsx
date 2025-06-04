@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import Api from "../../api/Api";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import useRoleHook from "../../hooks/roleHook";
 
 
 export const UserContext = React.createContext(null);
@@ -9,10 +10,11 @@ export const UserContext = React.createContext(null);
 
 const AuthenticationProvider = ({ children }) => {
   const nav = useNavigate();
+  const {getRoles,loader} = useRoleHook()
   const [user, setUser] = React.useState({
     name: "", 
     email: "", 
-    roles: "", 
+    role: "", 
     loggedIn: 0
   });
   
@@ -26,7 +28,14 @@ const AuthenticationProvider = ({ children }) => {
           return;
         }
         console.log("checked");
-        setUser(response.data.user);
+        const theUser ={
+          ...response.data.user,
+          role: getRoles?.find((role) => {
+            return role.id == response.data.user.roles;
+          }).roles
+        } 
+        // console.log("theUser", theUser);
+        setUser(theUser);
       });
     } catch (error) {
       // nav("/auth/admin/login");
@@ -35,7 +44,7 @@ const AuthenticationProvider = ({ children }) => {
       );
       console.error("Authentication error:", error);
     }
-  }, []);
+  }, [loader, getRoles, nav]);
 
   
 
