@@ -54,37 +54,25 @@ jobs:
           provenance: true
           sbom: true
 
-        # Azure
-      # - name: Log in to Azure
-      #   uses: azure/login@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+  deploy-to-aws:
+    if: ${{github.event_name != 'pull_request'}}
+    needs: deploy
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{matrix.os}}
 
-    #   - name: Build and deploy Container App
-    #     id: build-deploy
-    #     uses: azure/container-apps-deploy-action@v1
-    #     with:
-    #       imageToDeploy: ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:${{ github.sha }}
-    #       registryUrl: docker.io
-    #       resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
-    #       containerAppName: ${{ vars.AZURE_CONTAINER_APP_NAME }}
-    #       location: ${{ vars.AZURE_LOCATION }}
-
-    # - name: Find pull request
-    #   id: find-pr
-    #   uses: juliangruber/find-pull-request-action@v1
-    #   with:
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
-
-    # - name: Comment on PR with the app URL
-    #   if: steps.find-pr.outputs.number != ''
-    #   uses: actions/github-script@v6
-    #   with:
-    #     github-token: ${{ secrets.GITHUB_TOKEN }}
-    #     script: |
-    #       await github.rest.issues.createComment({
-    #         issue_number: ${{ steps.find-pr.outputs.number }},
-    #         owner: context.repo.owner,
-    #         repo: context.repo.repo,
-    #         body: `🚀 Deployed to: ${{ steps.build-deploy.outputs.appUrl }}`
-    #       });
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            sudo docker stop nct-cbt || true
+            sudo docker rm -f nct-cbt || true
+            sudo docker rmi -f  ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main || true
+            sudo docker pull ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main
+            sudo docker run -d --env-file=./nct-cbt/env --name nct-cbt -p 3000:80 ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main
