@@ -75,4 +75,4 @@ jobs:
             sudo docker rm -f nct-cbt || true
             sudo docker rmi -f  ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main || true
             sudo docker pull ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main
-            sudo docker run -d --env-file=./nct-cbt/env --name nct-cbt -p 3000:80 ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main
+            sudo docker run -d --env-file=./cbt/.env --name nct-cbt -p 3000:80 ${{ vars.DOCKER_USERNAME }}/${{ vars.DOCKER_IMAGE_NAME }}:main
