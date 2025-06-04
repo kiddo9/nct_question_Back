@@ -156,7 +156,7 @@ const Nav = ({ children }) => {
               />
             </svg>
             <div className="flex   flex-col pl-4 gap-4 mt-20 lg:mt-20">
-              {menus.filter((menu) => user.role != 'admin' ? !menu.admin : true).map((menu) => (
+              {menus.filter((menu) => user && user.role && user.role.roles != 'admin' ? !menu.admin : true).map((menu) => (
                 <NavLink
                   key={menu.id}
                   to={menu.path}

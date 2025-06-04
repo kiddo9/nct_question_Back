@@ -3,12 +3,12 @@ import { ToastContainer } from 'react-toastify'
 import Loader from '../components/Loader'
 import AddButton from '../components/AddButton'
 import { Link } from 'react-router-dom'
-import { CircleDot, CircleX, LockKeyhole } from 'lucide-react'
+import { CircleDot, CircleX } from 'lucide-react'
 import useRoleHook from '../hooks/roleHook'
 import CreateRoles from '../components/CreateModals/CreateRoles'
 import DeleteEnum from '../components/DeleteModals/DeleteEnum'
 import Fetching from '../components/Fetching'
-import { useAuth } from '../components/security/Authentication'
+import useAdminBlock from '../components/security/AdminBlock'
 
 const Roles = () => {
     const { getRoles, loader: roleLoader } = useRoleHook()
@@ -62,19 +62,9 @@ const Roles = () => {
       };
 
 
-      const {user} = useAuth();
+  const {message, blocked} = useAdminBlock()
 
-  if (!user || !user.role || user.role != "admin") {
-    return (
-      <div className="flex flex-col items-center max-w-[100vw]  lg:w-[calc(100vw-245px)] justify-center h-[calc(100vh-100px)]">
-        <LockKeyhole className="w-16 h-16 text-black mb-4" />
-        <h1 className="text-2xl mx-auto text-center font-bold text-red-500">Access Denied</h1>
-        <div className="text-center text-gray-500">
-          You do not have permission to access this page. Please contact your administrator.
-        </div>
-      </div>
-    );
-  }
+  if(blocked) return message
   return (
     <div className="rounded-lg lg:px-2 py-8">
         <ToastContainer />

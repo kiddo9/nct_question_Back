@@ -32,7 +32,7 @@ const AuthenticationProvider = ({ children }) => {
           ...response.data.user,
           role: getRoles?.find((role) => {
             return role.id == response.data.user.roles;
-          }).roles
+          }),
         } 
         // console.log("theUser", theUser);
         setUser(theUser);
@@ -45,6 +45,9 @@ const AuthenticationProvider = ({ children }) => {
       console.error("Authentication error:", error);
     }
   }, [loader, getRoles, nav]);
+
+
+  
 
   
 
