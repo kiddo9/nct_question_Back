@@ -30,7 +30,7 @@ const UserActionsPanel = ({openUserActions, setOpenUserActions, setOpenNotificat
           <header className='user-actions-panel'>
             <p className="text-sm font-medium text-gray-900">{user.name}</p>
             <p className="text-sm text-gray-500">{user.email}</p>
-            <p className="text-xs text-blue-600 font-medium">{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</p>
+            <p className="text-xs text-blue-600 font-medium">{user.role &&  user.role.roles && user.role.roles.charAt(0).toUpperCase() + user.role.roles.slice(1)}</p>
           </header>
           <button
 
