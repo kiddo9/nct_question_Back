@@ -113,7 +113,7 @@ const Classes = () => {
                             <p className=' text-sm text-black justify-self-start'>{clas.class_name}</p>
                             <span className='text-sm'>{clas.pass_mark}</span>
                             <StatusBadge status={clas.active_status} />
-                            <p className=' text-sm  text-black justify-self-end'>{users?.find(user => user.id == 2).name}</p>
+                            <p className=' text-sm  text-black justify-self-end'>{users?.find(user => user.id == clas.updated_by) ? users?.find(user => user.id == clas.updated_by).name : 'N/A'}</p>
                             <div className='flex justify-end items-center gap-2 justify-self-end'>
                                 { user && user.role && user.role.roles != 'admin' && <CircleDot className='text-blue-600' size={18} /> }
                                 { user && user.role && user.role.roles == 'admin' && <Edit onClick={() => handleEdit(clas.id, clas.class_name, clas.pass_mark)} className='cursor-pointer text-green-600 hover:text-green-900' size={18} /> }
