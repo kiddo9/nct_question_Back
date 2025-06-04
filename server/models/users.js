@@ -63,10 +63,10 @@ const usersModel = connectDB.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
-    // tokenExpiredAt: {
-    //   type: DataTypes.DATE,
-    //   allowNull: true,
-    // },
+    tokenExpiredAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: "users",
