@@ -69,7 +69,7 @@ const Groups = () => {
                 </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
-                    { user.role == 'admin'  && <AddButton>Add Group</AddButton> }
+                    { user && user.role && user.role.roles == 'admin'  && <AddButton>Add Group</AddButton> }
                 </Link>
             </div>
             {groupLoader || loading ? <Fetching/> : 
@@ -80,7 +80,7 @@ const Groups = () => {
                           <h1 className='md:text-lg text-[16px]  text-black'>{group.title}</h1>
                           <div className='flex gap-10 items-center'>
                               <StatusBadge status={group.active_status} />
-                              { user.role == 'admin'  && <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' /> }
+                              { user && user.role && user.role.roles == 'admin'  && <CircleX onClick={() => handleDelete(group.id, group.title)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' /> }
                               
                           </div>
                                           

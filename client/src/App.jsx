@@ -8,7 +8,7 @@ import Verify from "./pages/Auth/verify";
 import Auth from "./components/auth";
 import { Admins } from "./pages/Admins";
 import CreateAdmins from "./pages/CreateAdmins";
-import AuthenticationProvider from "./components/security/Authentication";
+import AuthenticationProvider, { useAuth } from "./components/security/Authentication";
 import Preview from "./pages/Preview";
 import PasswordRest from "./pages/Auth/PasswordRest";
 import VerifyEmailButton from "./pages/Auth/VerifyEmailButton";
@@ -22,6 +22,7 @@ import EmailNotify from "./pages/Auth/EmailNotify";
 import Classes from "./pages/Classes";
 
 function App() {
+  useAuth()
   return (
     <>
       <BrowserRouter>

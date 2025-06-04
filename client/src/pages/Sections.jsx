@@ -72,7 +72,7 @@ const Sections = () => {
                 </div> */}
                 
                 <Link to={''} onClick={() => setOpenCreate(true)}>
-                    { user.role == 'admin'  && <AddButton>Add Section</AddButton> }
+                    { user && user.role && user.role.roles == 'admin'  && <AddButton>Add Section</AddButton> }
                 </Link>
             </div>
             {sectionLoader || loading ? <Fetching/> :
@@ -83,7 +83,7 @@ const Sections = () => {
                           <h1 className='md:text-lg text-[16px]  text-black'>{section.section_name}</h1>
                           <div className='flex gap-10 items-center'>
                               <StatusBadge status={section.active_status} />
-                              { user.role == 'admin'  && <CircleX onClick={() => handleDelete(section.id, section.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />}
+                              { user && user.role && user.role.roles == 'admin'  && <CircleX onClick={() => handleDelete(section.id, section.section_name)} className='cursor-pointer stroke-[#989898] hover:stroke-[#6674BB]' />}
                           </div>
                                               
                       </div>
