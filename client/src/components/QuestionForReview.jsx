@@ -1,7 +1,13 @@
 import { BadgeCheck, Flag } from 'lucide-react'
 import React from 'react'
 
-const QuestionForReview = ({question, setActiveNumber}) => {
+const QuestionForReview = ({question, setActiveNumber, questionUpdate}) => {
+    
+
+    const handleRadioChange = (e) => {
+        questionUpdate(e.target.id, question?.number)
+    }
+
   return (
     <div className='md:w-[calc(100vw-300px)] px-4 md:p-0 relative'>
         <div className='flex sm:flex-row flex-col justify-between gap-5'>
@@ -27,14 +33,14 @@ const QuestionForReview = ({question, setActiveNumber}) => {
                     </button>
                 </div>
                 <div className='flex gap-2 item-center'>
-                    <input className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status' type="radio" />
+                    <input id='reviewed'  checked={question && question["active_status"] == 1} onChange={(e) => handleRadioChange(e)} className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status'  type="radio" />
                     <span className='text-sm flex gap-2 text-green-500'>
                         <BadgeCheck className='w-4 h-4'/>
                         Mark as reviewed
                     </span>
                 </div> 
                 <div className='flex gap-2 item-center'>
-                    <input className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status' type="radio" />
+                    <input id='flag' checked={question && question["active_status"] == 0} onChange={(e) => handleRadioChange(e)} className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status'  type="radio" />
                     <span className='text-sm flex gap-2 text-red-500'>
                         <Flag className='w-4 h-4' />
                         Flag
