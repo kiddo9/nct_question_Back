@@ -17,11 +17,7 @@ body {
   scrollbar-color: #7291CA #fff;
 }
 
-.Scroll:hover {
-  /* Firefox */
-  scrollbar-width: thin;
-  scrollbar-color: #7291CA #fff;
-}
+
 
 /* Chrome, Edge, Safari */
 .Scroll::-webkit-scrollbar {
