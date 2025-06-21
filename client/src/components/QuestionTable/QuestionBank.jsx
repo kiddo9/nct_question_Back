@@ -51,7 +51,7 @@ export default function QuestionBank() {
   // If getQuestion is not an array, return an empty array
 
   // Combine questions with their respective groups and sections and filter based on query parameters
-  
+  console.log(questionsWithGroup);
   
 
   // const [questions, setQuestions] = useState([]);
