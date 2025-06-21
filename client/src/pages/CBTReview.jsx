@@ -50,6 +50,27 @@ const CBTReview = () => {
       }
 
     }
+
+    const handleQuestionDelete = (id) => {
+      {/* Make that question deleted */}
+      {/* ALSO SAVE THE CURRENT REVIEW TO THE BACKEND DURING FINISH, EDIT, DELETE... */}
+      
+    }
+
+    const saveReview = () => {
+      {/* API CALL GOES HERE */}
+      {/* REUSABLE FOR ALL RELATED API CALLS */}
+    }
+
+    const finishReview = () => {
+      try {
+        {/* API CALL GOES HERE */}
+      } catch (error) {
+        console.log(error);
+      }finally{
+        setLoading(false)
+      }
+    }
   return (
     <div className="rounded-lg lg:px-2 py-8">
         <ToastContainer />
