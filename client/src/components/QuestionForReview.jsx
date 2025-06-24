@@ -1,12 +1,17 @@
-import { BadgeCheck, Flag } from 'lucide-react'
+import { BadgeCheck, Edit, Flag, Trash, Trash2 } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const QuestionForReview = ({question, setActiveNumber, questionUpdate}) => {
+const QuestionForReview = ({question, setActiveNumber, questionUpdate, totalQuestions}) => {
     
 
     const handleRadioChange = (e) => {
         questionUpdate(e.target.id, question?.number)
     }
+
+    
+
+
 
   return (
     <div className='md:w-[calc(100vw-300px)] px-4 md:p-0 relative'>
@@ -17,38 +22,7 @@ const QuestionForReview = ({question, setActiveNumber, questionUpdate}) => {
                     {question?.question}
                 </div>
             </header>
-            <div className='flex flex-col gap-5 self-start border-2 border-black/30 px-3 py-3 rounded-xl sm:w-fit w-full'>
-                <div className='flex sm:flex-row flex-col gap-2 items-center'>
-                    <button
-                            onClick={() => question?.number > 1 && setActiveNumber(question?.number - 1)}
-                            className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-3 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl w-full sm:w-[120px]"
-                        >
-                            &lt; Previous
-                        </button>
-                        <button
-                            onClick={() => setActiveNumber(question?.number + 1)}
-                            className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white px-3 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl w-full sm:w-[120px]"
-                        >
-                            Next &gt;
-                    </button>
-                </div>
-                <div className='flex gap-2 item-center'>
-                    <input id='reviewed'  checked={question && question["active_status"] == 1} onChange={(e) => handleRadioChange(e)} className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status'  type="radio" />
-                    <span className='text-sm flex gap-2 text-green-500'>
-                        <BadgeCheck className='w-4 h-4'/>
-                        Mark as reviewed
-                    </span>
-                </div> 
-                <div className='flex gap-2 item-center'>
-                    <input id='flag' checked={question && question["active_status"] == 0} onChange={(e) => handleRadioChange(e)} className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status'  type="radio" />
-                    <span className='text-sm flex gap-2 text-red-500'>
-                        <Flag className='w-4 h-4' />
-                        Flag
-                    </span>
-                </div> 
-            </div> 
-              
-          
+            <Actions question={question} setActiveNumber={setActiveNumber} handleRadioChange={handleRadioChange} totalQuestions={totalQuestions}/>
         </div>
 
         <div>
@@ -58,7 +32,7 @@ const QuestionForReview = ({question, setActiveNumber, questionUpdate}) => {
                 <div className='flex flex-col md:grid grid-cols-2 gap-5'>
                   {question?.options?.map((option, index) => {
                     return (
-                      <div key={index} className={`${option?.status == 1 ? "border-2 border-[#0AC511] text-[#0AC511]" : "border-none text-black"} px-4 py-4 bg-[#D7DDFF] rounded-2xl text-sm flex gap-5 items-center`}>
+                      <div key={index} className={`${option?.status == 1 ? "border-2 border-[#0AC511] text-[#0AC511]" : "border-none text-black"} px-4 py-4 bg-[#D7DDFF] rounded-2xl text-sm flex gap-5 items-center shadow-lg`}>
                         <span className={`${option?.status == 1 ? "bg-[#0AC511] text-white" : "bg-[#7291CA] text-black"}  text-sm flex justify-center items-center min-w-[36px] min-h-[36px] rounded-full`}>
                           {index == 0? 'A' : index == 1? 'B' : index == 2? 'C' : 'D'}
                         </span>
@@ -102,3 +76,55 @@ const QuestionForReview = ({question, setActiveNumber, questionUpdate}) => {
 }
 
 export default QuestionForReview
+
+const Actions = ({question, setActiveNumber, handleRadioChange, totalQuestions}) => {
+  const nav = useNavigate();
+
+  const handleEdit = () => {
+      {/* Save the current question state */}
+      nav(`/admin/user/questions/edit/${question?.id}`);
+  }
+  return (
+    <div className='flex flex-col gap-5 self-start border-2 border-black/30 px-3 py-3 rounded-xl sm:w-fit w-full'>
+      <div className='flex sm:flex-row flex-col gap-2 items-center'>
+          <button
+              disabled={question?.number == 1}
+              onClick={() => question?.number > 1 && setActiveNumber(question?.number - 1)}
+              className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white disabled:cursor-not-allowed disabled:hover:bg-[#6674BB]/30 disabled:hover:shadow-none px-3 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl w-full sm:w-[120px]"
+          >
+              &lt; Previous
+          </button>
+          <button
+              disabled={question?.number >= totalQuestions}
+              onClick={() => setActiveNumber(question?.number + 1)}
+              className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white disabled:cursor-not-allowed disabled:hover:bg-[#6674BB]/30 disabled:hover:shadow-none px-3 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl w-full sm:w-[120px]"
+          >
+              Next &gt;
+          </button>
+      </div>
+      <div className='flex justify-between items-center'>
+        <form className='flex flex-col gap-2'>
+          <fieldset className='flex gap-2 item-center'>
+              <input id='reviewed'  checked={question && question["active_status"] == 1} onChange={(e) => handleRadioChange(e)} className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status'  type="radio" />
+              <span className='text-sm flex gap-2 text-green-500'>
+                  <BadgeCheck className='w-4 h-4'/>
+                  Mark as reviewed
+              </span>
+          </fieldset> 
+          <fieldset className='flex gap-2 item-center'>
+              <input id='flag' checked={question && question["active_status"] == 0} onChange={(e) => handleRadioChange(e)} className='w-4 h-4 rounded-lg border-2 border-[#6674BB] outline-none' name='status'  type="radio" />
+              <span className='text-sm flex gap-2 text-red-500'>
+                  <Flag className='w-4 h-4' />
+                  Flag
+              </span>
+          </fieldset> 
+        </form>
+        <div className='flex flex-col justify-center items-center'>
+          <Edit size={20} className=' text-[#6674BB] cursor-pointer' onClick={handleEdit}/>
+          <span className='text-black/70 text-sm'>Edit</span>
+        </div>
+      </div>
+      
+    </div> 
+  )
+}
