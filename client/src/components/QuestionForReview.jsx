@@ -2,7 +2,7 @@ import { BadgeCheck, Edit, Flag, Trash, Trash2 } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const QuestionForReview = ({question, setActiveNumber, questionUpdate, totalQuestions}) => {
+const QuestionForReview = ({question, setActiveNumber, questionUpdate, totalQuestions, save, finish}) => {
     
 
     const handleRadioChange = (e) => {
@@ -22,7 +22,7 @@ const QuestionForReview = ({question, setActiveNumber, questionUpdate, totalQues
                     {question?.question}
                 </div>
             </header>
-            <Actions question={question} setActiveNumber={setActiveNumber} handleRadioChange={handleRadioChange} totalQuestions={totalQuestions}/>
+            <Actions question={question} setActiveNumber={setActiveNumber} handleRadioChange={handleRadioChange} totalQuestions={totalQuestions} save={save}/>
         </div>
 
         <div>
@@ -63,7 +63,9 @@ const QuestionForReview = ({question, setActiveNumber, questionUpdate, totalQues
         </div>
         
         <div className='flex justify-end mt-10'>
-            <button className="border-2 border-[#6674BB] hover:bg-[#6674BB]/50 active:scale-90 text-white bg-[#6674BB] hover:text-white px-3 py-2 rounded-lg transition-all ease-in cursor-pointer w-[120px]">
+            <button 
+              onClick={finish}
+              className="border-2 border-[#6674BB] hover:bg-[#6674BB]/50 active:scale-90 text-white bg-[#6674BB] hover:text-white px-3 py-2 rounded-lg transition-all ease-in cursor-pointer w-[120px]">
                 Finish
             </button>
         </div>
@@ -77,26 +79,39 @@ const QuestionForReview = ({question, setActiveNumber, questionUpdate, totalQues
 
 export default QuestionForReview
 
-const Actions = ({question, setActiveNumber, handleRadioChange, totalQuestions}) => {
+const Actions = ({question, setActiveNumber, handleRadioChange, totalQuestions, save}) => {
   const nav = useNavigate();
 
   const handleEdit = () => {
+      localStorage.removeItem('cbt-question-state')
+      {/* Save to db */}
+      nav(`/admin/user/questions/edit/${question?.id}?review=reviewing`);
+  }
+
+  const handlePrevious = () => {
       {/* Save the current question state */}
-      nav(`/admin/user/questions/edit/${question?.id}`);
+      save();
+      question?.number > 1 && setActiveNumber(question?.number - 1);
+  }
+
+  const handleNext = () => {
+      {/* Save the current question state */}
+      save();
+      question?.number < totalQuestions && setActiveNumber(question?.number + 1);
   }
   return (
     <div className='flex flex-col gap-5 self-start border-2 border-black/30 px-3 py-3 rounded-xl sm:w-fit w-full'>
       <div className='flex sm:flex-row flex-col gap-2 items-center'>
           <button
               disabled={question?.number == 1}
-              onClick={() => question?.number > 1 && setActiveNumber(question?.number - 1)}
+              onClick={handlePrevious}
               className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white disabled:cursor-not-allowed disabled:hover:bg-[#6674BB]/30 disabled:hover:shadow-none px-3 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl w-full sm:w-[120px]"
           >
               &lt; Previous
           </button>
           <button
               disabled={question?.number >= totalQuestions}
-              onClick={() => setActiveNumber(question?.number + 1)}
+              onClick={handleNext}
               className="border-2 border-[#6674BB]  text-[#6674BB] hover:bg-[#6674BB] hover:text-white disabled:cursor-not-allowed disabled:hover:bg-[#6674BB]/30 disabled:hover:shadow-none px-3 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl w-full sm:w-[120px]"
           >
               Next &gt;
