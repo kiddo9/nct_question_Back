@@ -20,6 +20,8 @@ import Sections from "./pages/Sections";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EmailNotify from "./pages/Auth/EmailNotify";
 import Classes from "./pages/Classes";
+import CBTReview from "./pages/CBTReview";
+import CBTReviewForm from "./pages/CBTReviewForm";
 
 function App() {
   useAuth()
@@ -47,7 +49,8 @@ function App() {
                       <Route path="/roles" element={<Roles />} />
                       <Route path="/groups" element={<Groups />} />
                       <Route path="/classes" element={<Classes />} />
-                      <Route path="/cbt-qr" element={<Sections />} />
+                      <Route path="/cbt-qr" element={<CBTReviewForm />} />
+                      <Route path="/cbt-qr/start" element={<CBTReview />} />
                       <Route path="/cbt-sim" element={<Sections />} />
                       <Route path="/create_admin" element={<CreateAdmins />} />
                       <Route
