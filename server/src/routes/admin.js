@@ -19,6 +19,7 @@ import {
   getAllQuestions,
   getEachQuestionById,
   multiDeleteQuestion,
+  ReviewedQuestions,
   updateQuestion,
 } from "../controllers/questionBank.js";
 import {
@@ -127,6 +128,7 @@ router.put(
   [tokenVerify, roleBasedAuthenticationMiddleware],
   updateClass
 );
+router.put("/question/bank/reviewed", tokenVerify, ReviewedQuestions);
 
 router.delete("/questions/bank/delete/:id", tokenVerify, deleteQuestion);
 router.delete("/questions/bank/multi/delete", tokenVerify, multiDeleteQuestion);
