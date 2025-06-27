@@ -97,7 +97,7 @@ export const createQuestions = async (req, res) => {
       trueFalse: type == "T" ? answer : null, //check if the type is T for true or false question
       suitable_words: null,
       number_of_option: numberOfOptions,
-      active_status: 1,
+      active_status: -1,
       q_group_id: GroupId,
       class_id: ClassId,
       section_id: QuaterId,
@@ -385,5 +385,50 @@ export const updateQuestion = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ status: false, message: "internal error" });
+  }
+};
+
+export const ReviewedQuestions = async (req, res) => {
+  const { reviewedQuestions } = req.body;
+  if (!Array.isArray(reviewedQuestions)) {
+    return res
+      .status(304)
+      .json({ status: false, message: "unproccessable content or request" });
+  }
+
+  try {
+    if (reviewedQuestions.length <= 0) {
+      return res
+        .status(404)
+        .json({ status: false, message: "request returned an empty data" });
+    }
+
+    const updateQuestions = await Promise.all(
+      reviewedQuestions.map((reviewedQuestion) => {
+        questionBank.update(
+          {
+            active_status: reviewedQuestion.active_status,
+          },
+          { where: { id: reviewedQuestion.id } }
+        );
+      })
+    );
+
+    if (!updateQuestions) {
+      return res.status(401).json({
+        status: false,
+        message: "some questions where unable to update",
+      });
+    }
+
+    return res
+      .status(201)
+      .json({
+        status: true,
+        message: `you have reviwed ${reviewedQuestions.length}`,
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: "internal server error" });
   }
 };
