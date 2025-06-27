@@ -25,6 +25,7 @@ const CBTReviewForm = () => {
         } 
         const cbtQr = {group, className, section}
         localStorage.setItem('cbt-qr', JSON.stringify(cbtQr)) //for persistence on the browser
+        localStorage.removeItem('cbt-question-state') //removes the previous question from storage
         nav('/admin/user/cbt-qr/start')
     }
   return (

@@ -22,6 +22,7 @@ const CBTReview = () => {
     const nav = useNavigate()
 
     const cbtQR = JSON.parse(localStorage.getItem('cbt-qr'))
+    const savedQuestions = JSON.parse(localStorage.getItem('cbt-question-state'))
 
     
     {/* Check if cbt qr data from local storage is null and handle redirect */}
@@ -32,7 +33,7 @@ const CBTReview = () => {
       }
     }, [nav, cbtQR])
 
-    const transformedQuestions = getQuestion.map((question) => ({
+    const transformedQuestions = savedQuestions || getQuestion.map((question) => ({
       ...question,
       options: opt?.filter((option) => option?.question_bank_id == question?.id),
       group: questionGroups.find(group => group.id === question.q_group_id)?.title,
@@ -66,15 +67,11 @@ const CBTReview = () => {
 
     }
 
-    const handleQuestionDelete = (id) => {
-      {/* Make that question deleted */}
-      {/* ALSO SAVE THE CURRENT REVIEW TO THE BACKEND DURING FINISH, EDIT, DELETE... */}
-      
-    }
-
     const saveReview = () => {
       {/* API CALL GOES HERE */}
       {/* REUSABLE FOR ALL RELATED API CALLS */}
+      localStorage.setItem('cbt-question-state', JSON.stringify(questions))
+      toast.info('Saved')
     }
 
     const finishReview = () => {
@@ -84,6 +81,7 @@ const CBTReview = () => {
         console.log(error);
       }finally{
         setLoading(false)
+        localStorage.removeItem('cbt-question-state')
       }
     }
   return (
@@ -115,8 +113,19 @@ const CBTReview = () => {
                     </div>
 
                     <div className='flex flex-col md:flex-row gap-10'>
-                      <QuestionSelector questions={questions} activeNumber={activeNumber} setActiveNumber={setActiveNumber}/>
-                      <QuestionForReview question={questions.find((question) => question.number === activeNumber)} setActiveNumber={setActiveNumber} questionUpdate={handleQuestionUpdate} totalQuestions={questions.length}/>
+                      <QuestionSelector 
+                        questions={questions} 
+                        activeNumber={activeNumber} 
+                        setActiveNumber={setActiveNumber}
+                      />
+                      <QuestionForReview 
+                        question={questions.find((question) => question.number === activeNumber)} 
+                        setActiveNumber={setActiveNumber} 
+                        questionUpdate={handleQuestionUpdate} 
+                        totalQuestions={questions.length} 
+                        save={saveReview} 
+                        finish={finishReview}
+                      />
                     </div>
                   </div>
             }
