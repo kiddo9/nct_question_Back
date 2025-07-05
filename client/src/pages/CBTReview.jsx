@@ -119,6 +119,7 @@ const CBTReview = () => {
       }finally{
         setLoading(false)
         localStorage.removeItem('cbt-question-state')
+        localStorage.removeItem('cbt-qr')
       }
     }
   return (
