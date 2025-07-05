@@ -76,9 +76,9 @@ export default function QuestionBank() {
     if (query.quarter) {
       filtered = filtered.filter(question => question.section === query.quarter);
     }
-    // if (query.group) {
-      filtered = filtered.filter(question => question.group === query.group || question.group != 'Cybersecurity');
-    //}
+    if (query.group) {
+      filtered = filtered.filter(question => question.group === query.group);
+    }
     if (query.activeStatus) {
       const isActive = query.activeStatus.toLowerCase() === 'active';
       filtered = filtered.filter(question => question.active_status === Number(isActive));
