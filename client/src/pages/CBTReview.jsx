@@ -10,6 +10,7 @@ import useSectionHook from '../hooks/sectionHook'
 import { useQuestionGroupHook } from '../hooks/questionGroupHook'
 import { useNavigate } from 'react-router-dom'
 import CreateHeader from '../components/CreateHeader'
+import Api from '../api/Api'
 
 const CBTReview = () => {
     const [loading, setLoading] = useState(false)
@@ -67,16 +68,52 @@ const CBTReview = () => {
 
     }
 
-    const saveReview = () => {
-      {/* API CALL GOES HERE */}
-      {/* REUSABLE FOR ALL RELATED API CALLS */}
-      localStorage.setItem('cbt-question-state', JSON.stringify(questions))
-      toast.info('Saved')
+    const saveReview = async(type) => {
+      if(type == 'client'){
+        localStorage.setItem('cbt-question-state', JSON.stringify(questions))
+        toast.info('Saved')
+      }
+      else if(type == 'server'){
+        {/* API CALL GOES HERE */}
+        setLoading(true)
+        try {
+          const request = await Api.put(`/question/bank/reviewed`,  {
+            reviewedQuestions: questions.map((question) => ({
+              id: question.id,
+              active_status: question.active_status
+            }))
+          })
+
+          const response = request.data
+
+          if(response.status != true){
+            toast.error(response.message)
+            return
+          }
+          
+          toast.info(response.message + '. Questions saved Successful')
+        } catch (error) {
+          console.log(error);
+          toast.error('Error saving questions to the server')
+        }finally{
+          setLoading(false)
+        }
+      }
+      else{
+        toast.error('Invalid save type')
+        return
+      }
+      
     }
 
-    const finishReview = () => {
+    const finishReview = async() => {
+      setLoading(true)
       try {
         {/* API CALL GOES HERE */}
+        await saveReview('server')
+
+        toast.success('Question review completed')
+        setTimeout(() => nav('/admin/user/cbt-qr'), 2000)
       } catch (error) {
         console.log(error);
       }finally{

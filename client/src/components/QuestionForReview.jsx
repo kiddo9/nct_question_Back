@@ -82,21 +82,25 @@ export default QuestionForReview
 const Actions = ({question, setActiveNumber, handleRadioChange, totalQuestions, save}) => {
   const nav = useNavigate();
 
-  const handleEdit = () => {
-      localStorage.removeItem('cbt-question-state')
+  const handleEdit = async() => {
       {/* Save to db */}
-      nav(`/admin/user/questions/edit/${question?.id}?review=reviewing`);
+      await save('server')
+      localStorage.removeItem('cbt-question-state')
+      setTimeout(() => {
+        nav(`/admin/user/questions/edit/${question?.id}`);
+      }, 2000)
+      
   }
 
-  const handlePrevious = () => {
+  const handlePrevious = async() => {
       {/* Save the current question state */}
-      save();
+      await save('client');
       question?.number > 1 && setActiveNumber(question?.number - 1);
   }
 
-  const handleNext = () => {
+  const handleNext = async() => {
       {/* Save the current question state */}
-      save();
+      await save('client');
       question?.number < totalQuestions && setActiveNumber(question?.number + 1);
   }
   return (

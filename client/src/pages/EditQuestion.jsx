@@ -34,7 +34,7 @@ const EditQuestions = () => {
   }
   
 
-  console.log(fullQuestion)
+  // console.log(fullQuestion)
   
 
   const [group, setGroup] = useState('')
