@@ -113,13 +113,15 @@ const CBTReview = () => {
         await saveReview('server')
 
         toast.success('Question review completed')
-        setTimeout(() => nav('/admin/user/cbt-qr'), 2000)
+        setTimeout(() => {
+          nav('/admin/user/cbt-qr')
+          localStorage.removeItem('cbt-qr')
+        }, 2000)
       } catch (error) {
         console.log(error);
       }finally{
         setLoading(false)
         localStorage.removeItem('cbt-question-state')
-        localStorage.removeItem('cbt-qr')
       }
     }
   return (
