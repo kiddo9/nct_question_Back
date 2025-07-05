@@ -113,7 +113,9 @@ const CBTReview = () => {
         await saveReview('server')
 
         toast.success('Question review completed')
-        setTimeout(() => nav('/admin/user/cbt-qr'), 2000)
+        setTimeout(() => {
+          nav('/admin/user/cbt-qr')
+        }, 2000)
       } catch (error) {
         console.log(error);
       }finally{
@@ -127,7 +129,7 @@ const CBTReview = () => {
         <ToastContainer />
         <div className="flex flex-col  bg-white rounded-2xl mx-auto shadow py-2 w-[100vw] lg:w-[calc(100vw-270px)] h-[calc(100vh-160px)] ">
             <CreateHeader>
-              <p className='text-lg text-center mx-auto lg:text-2xl font-bold'>{cbtQR.group} - {cbtQR.className} - {cbtQR.section}</p>
+              <p className='text-lg text-center mx-auto lg:text-2xl font-bold'>{cbtQR?.group} - {cbtQR?.className} - {cbtQR?.section}</p>
             </CreateHeader>
             {
                 loading || optLoader || questionLoader || groupLoader || classLoader || sectionLoader
