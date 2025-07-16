@@ -1,14 +1,34 @@
+import questionBankModel from "../../models/Question_Bank.js";
 import questionBank from "../../models/Question_Bank.js";
 import questionOptionModel from "../../models/question_options.js";
+import rolesModel from "../../models/roles.js";
 import usersModel from "../../models/users.js";
 
 //controller to get all questions
 export const getAllQuestions = async (req, res) => {
+  const { id } = req.user;
   let fetchQuestions;
   //using the try catch block
   try {
+    const user = await usersModel.findOne({
+      where: { encryptedId: id },
+    });
+
+    if (!user) {
+      return res.json({ status: false, message: "Unknown user" });
+    }
+
+    const requestInternRole = await rolesModel.findOne({
+      where: { roles: "intern" },
+    });
     //fetch all data from the database
-    fetchQuestions = await questionBank.findAll();
+    if (Number(user.roles) == requestInternRole.id) {
+      fetchQuestions = await questionBankModel.findAll({
+        where: { created_by: user.id },
+      });
+    } else {
+      fetchQuestions = await questionBankModel.findAll();
+    }
 
     //check if the table is empty
     if (fetchQuestions.length <= 0) {
@@ -421,12 +441,10 @@ export const ReviewedQuestions = async (req, res) => {
       });
     }
 
-    return res
-      .status(201)
-      .json({
-        status: true,
-        message: `you have reviwed ${reviewedQuestions.length}`,
-      });
+    return res.status(201).json({
+      status: true,
+      message: `you have reviwed ${reviewedQuestions.length}`,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ status: false, message: "internal server error" });
