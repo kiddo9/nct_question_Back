@@ -1,9 +1,31 @@
 import questionGroups from "../../models/question_groups.js";
+import rolesModel from "../../models/roles.js";
 import usersModel from "../../models/users.js";
 
 export const getAllQuestionGroups = async (req, res) => {
+  const { id } = req.user;
   try {
-    const fetchQuestionGroups = await questionGroups.findAll();
+    const user = await usersModel.findOne({
+      where: { encryptedId: id },
+    });
+
+    if (!user) {
+      return res.json({ status: false, message: "Unknown user" });
+    }
+
+    const requestInternRole = await rolesModel.findOne({
+      where: { roles: "intern" },
+    });
+
+    let fetchQuestionGroups;
+
+    if (Number(user.roles) == requestInternRole.id) {
+      fetchQuestionGroups = await questionGroups.findAll({
+        where: { created_by: user.id },
+      });
+    } else {
+      fetchQuestionGroups = await questionGroups.findAll();
+    }
 
     if (fetchQuestionGroups.length <= 0) {
       return res.json({ status: false, message: "No data at the moment" });
