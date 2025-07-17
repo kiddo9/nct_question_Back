@@ -108,9 +108,9 @@ const UserRow = ({ user, selectedRows, toggleSelectRow }) => {
         <button onClick={() => nav(`/admin/user/admins/edit/${user.id}`)} className="text-green-600 hover:text-green-900">
           <Edit size={18} />
         </button>
-        <button className="text-red-600 hover:text-red-900">
+        {/* <button className="text-red-600 hover:text-red-900">
           <Trash2 size={18} />
-        </button>
+        </button> */}
       </div>
     </td>
   </tr>

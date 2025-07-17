@@ -71,7 +71,7 @@ const CBTReview = () => {
     const saveReview = async(type) => {
       if(type == 'client'){
         localStorage.setItem('cbt-question-state', JSON.stringify(questions))
-        toast.info('Saved')
+        // toast.info('Saved')
       }
       else if(type == 'server'){
         {/* API CALL GOES HERE */}

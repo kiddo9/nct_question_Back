@@ -18,7 +18,7 @@ const Nav = ({ children }) => {
     { id: 5, name: "Groups", path: "/admin/user/groups" },
     { id: 8, name: "Classes", path: "/admin/user/classes" },
     { id: 6, name: "Cbt-QR", path: "/admin/user/cbt-qr" },
-    { id: 7, name: "CbtSim", path: "/admin/user/cbt-sim" },
+    // { id: 7, name: "CbtSim", path: "/admin/user/cbt-sim" },
   ];
 
   const [open, setOpen] = React.useState(false);
