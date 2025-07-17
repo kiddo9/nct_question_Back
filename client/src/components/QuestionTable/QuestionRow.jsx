@@ -14,12 +14,12 @@ const QuestionRow = ({ question, selectedRows, toggleSelectRow }) => {
             statusText = 'Active';
             break;
           case 0:
-            bgColor = 'bg-yellow-100 text-yellow-800';
-            statusText = 'Inactive';
-            break;
-          case -1:
             bgColor = 'bg-gray-100 text-gray-800';
             statusText = 'Deleted';
+            break;
+          case -1:
+            bgColor = 'bg-yellow-100 text-yellow-800';
+            statusText = 'Inactive';
             break;
           default:
             bgColor = 'bg-blue-100 text-blue-800';
