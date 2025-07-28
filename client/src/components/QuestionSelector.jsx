@@ -1,6 +1,11 @@
 import React from 'react'
 
-const QuestionSelector = ({questions, activeNumber, setActiveNumber}) => {
+const QuestionSelector = ({questions, activeNumber, setActiveNumber, save}) => {
+  const handleNumberClick = async(num) => {
+    await save('client')
+    setActiveNumber(num)
+    
+  }
   return (
     <div className='rounded-xl flex flex-col items-center p-4 ml-4 h-fit bg-[#D7DDFF]/10 min-w-[320px] shadow-lg hover:shadow-xl transition-all border-2 border-black/30'>
         <p className='mb-2 font-semibold text-black self-start'>Questions</p>
@@ -9,7 +14,7 @@ const QuestionSelector = ({questions, activeNumber, setActiveNumber}) => {
             {questions.map((question) => (
             <button 
                 id={question.number} 
-                onClick={() => setActiveNumber(question.number)} 
+                onClick={() => handleNumberClick(question.number)} 
                 key={question.number} 
                 className={`
                     ${activeNumber === question.number ? 
