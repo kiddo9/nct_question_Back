@@ -157,6 +157,7 @@ const CBTReview = () => {
                         questions={questions} 
                         activeNumber={activeNumber} 
                         setActiveNumber={setActiveNumber}
+                        save={saveReview} 
                       />
                       <QuestionForReview 
                         question={questions.find((question) => question.number === activeNumber)} 
