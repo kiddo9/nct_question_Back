@@ -18,10 +18,10 @@ const Notfound = () => {
       </header>
 
       <Link
-        to="/admin/user/questions"
+        to="/"
         className="flex justify-center items-center bg-[#6699ff] text-white px-2 py-4 font-semibold hover:shadow-2xl transition duration-300 ease-in rounded-lg mx-auto mt-4"
       >
-        GO TO DASHBOARD
+        RETURN
       </Link>
     </div>
   );
