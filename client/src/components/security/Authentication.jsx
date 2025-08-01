@@ -3,6 +3,7 @@ import Api from "../../api/Api";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import useRoleHook from "../../hooks/roleHook";
+import Loader from "../Loader";
 
 
 export const UserContext = React.createContext(null);
@@ -11,12 +12,8 @@ export const UserContext = React.createContext(null);
 const AuthenticationProvider = ({ children }) => {
   const nav = useNavigate();
   const {getRoles,loader} = useRoleHook()
-  const [user, setUser] = React.useState({
-    name: "", 
-    email: "", 
-    role: "", 
-    loggedIn: 0
-  });
+  const [checkingAuth, setCheckingAuth] = React.useState(true);
+  const [user, setUser] = React.useState(null);
   
   useEffect(() => {
     try {
@@ -43,14 +40,23 @@ const AuthenticationProvider = ({ children }) => {
         "Seems like you have lost internet connection. Try again later."
       );
       console.error("Authentication error:", error);
+    }finally{
+      setCheckingAuth(false);
     }
-  }, [loader, getRoles, nav]);
+  }, [loader, getRoles, nav, checkingAuth]);
 
+  if (checkingAuth) {
+    return (
+      <Loader preload={true}/>
+    );
+  }
 
+  if (!user) {
+    return (
+      <Loader preload={true}/>
+    );
+  }
   
-
-  
-
   return (
     <UserContext.Provider value={{ user }}>
       {children}
