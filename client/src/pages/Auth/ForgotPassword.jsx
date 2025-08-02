@@ -24,7 +24,7 @@ const ForgotPassword = () => {
       });
       const response = request.data;
       if (response.status !== true) {
-        toast.error(response.message);
+        toast.error('Invalid Request');
         return;
       }
 
