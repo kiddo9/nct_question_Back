@@ -14,7 +14,7 @@ export const emailVerification = async (req, res) => {
     if (!validatedEmail) {
       res.json({
         status: false,
-        message: "invalid email or email does not exist",
+        message: "Error status code 404",
       });
       return;
     }

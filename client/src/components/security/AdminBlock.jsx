@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAuth } from './Authentication';
 import { LockKeyhole } from 'lucide-react';
+import Loader from '../Loader';
 
 const useAdminBlock = () => {
     const { user } = useAuth();
@@ -15,7 +16,14 @@ const useAdminBlock = () => {
         </div>
     ) 
 
-    if (!user || !user.role || user.role.roles != "admin") {
+    if (!user || !user.role) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <Loader preload={true} />
+            </div>
+        )
+    }
+    if (user.role.roles != "admin") {
         return { message, blocked: true };
     } else {
         return { message: null, blocked: false };
