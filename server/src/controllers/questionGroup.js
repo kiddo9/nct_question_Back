@@ -55,7 +55,7 @@ export const createGroup = async (req, res) => {
     }
 
     const userResponsible = await usersModel.findOne({
-      where: { encrypedId: user.id },
+      where: { encryptedId: user.id },
     });
 
     // Create groups
