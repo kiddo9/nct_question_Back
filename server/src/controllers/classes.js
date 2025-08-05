@@ -37,7 +37,7 @@ export const createNewClass = async (req, res) => {
     }
 
     const userResponsble = await usersModel.findOne({
-      where: { encrypedId: user.id },
+      where: { encryptedId: user.id },
     });
 
     const createTheClass = await Promise.all(
@@ -80,7 +80,7 @@ export const updateClass = async (req, res) => {
     }
 
     const userResponsble = await usersModel.findOne({
-      where: { encrypedId: user.id },
+      where: { encryptedId: user.id },
     });
 
     const update = await classesModel.update(
