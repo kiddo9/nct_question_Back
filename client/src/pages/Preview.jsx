@@ -38,6 +38,17 @@ const Preview = () => {
     }),
   }
 
+  const goReview = () => {
+    const cbtQr = {
+      group: fullQuestion?.group?.title, 
+      className: fullQuestion?.class?.class_name, 
+      section: fullQuestion?.section?.section_name,
+    }
+    localStorage.setItem('cbt-qr', JSON.stringify(cbtQr)) //for persistence on the browser
+    localStorage.removeItem('cbt-question-state') //removes the previous question from storage
+    nav('/admin/user/cbt-qr/start')
+  }
+
 
 
 
@@ -133,9 +144,16 @@ const Preview = () => {
                   >
                     New
                 </button>
+                {fullQuestion?.active_status == -1 &&
+                  <button
+                      onClick={goReview}
+                      type="submit"
+                      className="justify-self-end border-2 border-gray-500  text-gray-500 hover:bg-gray-500/70 hover:text-white px-5 py-2 rounded-lg transition duration-300 ease-in cursor-pointer hover:shadow-2xl"
+                    >
+                      Begin Review
+                  </button>
+                }
               </div>
-              
-              
             </div>
         }
         
