@@ -39,7 +39,7 @@ export default function Fetching({ preload }) {
 
   return (
     <div
-      className={`inset-0 flex justify-center items-center z-50 mt-20 ${
+      className={`inset-0 flex justify-center items-center z-40 mt-20 ${
         preload == true ? "bg-[#ffffffb7]" : "bg-white"
       }`}
     >

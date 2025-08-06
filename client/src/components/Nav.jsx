@@ -42,6 +42,8 @@ const Nav = ({ children }) => {
     }
   }, [openNotification, setOpenUserActions]);
 
+  
+
   async function LogoutAdmin() {
     setLoader(true);
     try {
@@ -136,9 +138,9 @@ const Nav = ({ children }) => {
       <div className="flex flex-1 lg:gap-56">
         <nav className="relative">
           <aside
-            className={`fixed h-full z-40 bg-[#6674BB] ${
-              open == true ? "translate-x-0 " : "-translate-x-[100%]"
-            }  lg:translate-x-0 top-0 lg:top-22 w-52 transition-all duration-200 ease-in-out justify-between items-center `}
+            className={`fixed right-0 h-full z-50 bg-[#6674BB] mobile-nav ${
+              open == true ? "translate-x-0" : "translate-x-[100%]"
+            }  lg:translate-x-0 lg:left-0 top-0 lg:top-22 w-52 transition-all duration-200 ease-in-out justify-between items-center rounded-tl-2xl rounded-bl-2xl lg:rounded-tl-none lg:rounded-bl-none shadow-2xl`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +148,7 @@ const Nav = ({ children }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="size-6 fixed right-0 lg:hidden items-center gap-2 hover:bg-red-600 transition duration-300 ease-in-out hover:drop-shadow-2xl  cursor-pointer bg-red-500 text-white w-8 px-1 py-1 h-8 rounded-lg"
+              className="size-6 fixed right-2 top-2 lg:hidden items-center gap-2 hover:text-[#D7DDFF] transition duration-300 ease-in-out hover:drop-shadow-2xl  cursor-pointer text-white w-8 px-1 py-1 h-8 rounded-lg"
               onClick={() => setOpen(false)}
             >
               <path
