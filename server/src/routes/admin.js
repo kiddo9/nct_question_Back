@@ -49,6 +49,7 @@ import {
   updateClass,
 } from "../controllers/classes.js";
 import getAllUserName from "../controllers/Auth/usersName.js";
+import { exportDbAutomatically } from "../controllers/dbRequestPopulation.js";
 
 router.get("/", tokenVerify, loggedInUsers);
 router.get("/validate", credValidation, async (req, res) => {
@@ -162,5 +163,7 @@ router.delete(
   [tokenVerify, roleBasedAuthenticationMiddleware],
   deleteClass
 );
+
+router.post("/db/dump/data", [], exportDbAutomatically);
 
 export default router;
