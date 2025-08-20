@@ -64,6 +64,9 @@ export default function QuestionBank() {
   const [queryFilteredQuestions, setQueryFilteredQuestions] = useState([]);
   const [load, setLoad] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  
+
+  
 
 
   useEffect(() => {

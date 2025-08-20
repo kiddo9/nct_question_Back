@@ -7,9 +7,12 @@ import NotificationPanel from "./NotificationPanel";
 import UserActionsPanel from "./UserActionsPanel";
 import { ChevronDown, Plus } from "lucide-react";
 import { useAuth } from "./security/Authentication";
+import useAdminBlock from "./security/AdminBlock";
+import DBDump from "./DBDump";
 
 const Nav = ({ children }) => {
   const {user} = useAuth()
+  const {blocked} = useAdminBlock()
   const menus = [
     { id: 1, name: "Questions", path: "/admin/user/questions" },
     { id: 2, name: "Section", path: "/admin/user/section" },
@@ -63,24 +66,30 @@ const Nav = ({ children }) => {
       setLoader(false);
     }
   }
+
+  
   return (
     <div className="">
       {loader && <Loader />}
       <header className="flex justify-between items-center p-4 bg-white sticky top-0 left-0 right-0  z-10 shadow-xl">
         <div className="flex items-center gap-4">
-          <img src="/logo.svg" className="w-56 h-14 object-cover" alt="logo" />
+          <img src="/logo.svg" className={`${!blocked && !open && "hidden sm:block"} w-56 h-14 object-cover`} alt="logo" />
         </div>
 
         <div className="flex items-center gap-4">
           {/* notification icon */}
-          <button
+          {/* <button
               // onClick={() => setShowQuickActions(!showQuickActions)}
               className="flex items-center space-x-1 px-3 py-2 text-sm bg-[#6674BB] text-white rounded-lg hover:bg-[#6674BB]/80 transition-colors cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Quick Actions</span>
               <ChevronDown className="w-4 h-4" />
-           </button>
+           </button> */}
+           {!blocked && !open && (
+              <DBDump/>
+           )}
+          
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
