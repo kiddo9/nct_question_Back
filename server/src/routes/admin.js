@@ -164,6 +164,10 @@ router.delete(
   deleteClass
 );
 
-router.post("/db/dump/data", [], exportDbAutomatically);
+router.post(
+  "/db/dump/data",
+  [tokenVerify, roleBasedAuthenticationMiddleware],
+  exportDbAutomatically
+);
 
 export default router;
