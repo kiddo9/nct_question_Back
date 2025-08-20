@@ -21,8 +21,8 @@ const DBDump = () => {
         }
         try {
           const request = await Api.post("/db/dump/data", {
-            lastQuestionIndexId,
-            lastQuestionOptionIndexId
+            LastQuestionIndexId: lastQuestionIndexId,
+            LastQuestionOptionIndexId: lastQuestionOptionIndexId
           });
           const response = request.data;
     
@@ -36,7 +36,7 @@ const DBDump = () => {
           toast.error(response.message);
         } catch (error) {
           console.log(error);
-          toast.error("unable to logout. check your network connection");
+          toast.error(error.response.data.message);
         } finally {
           setLoader(false);
         }
